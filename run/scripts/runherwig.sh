@@ -16,8 +16,9 @@ Hadronization=$6
 FileName="Energy_${Energy}_NEvt_${Events}_Seed_${Seed}_PtWindow_${Window}_PDF_${PDF}_${Hadronization}.in"
 FileName2="Energy_${Energy}_NEvt_${Events}_Seed_${Seed}_PtWindow_${Window}_PDF_${PDF}_${Hadronization}"
 
-mkdir /data/QGjets/QGjetsPetr/run/${FileName2}
-cd /data/QGjets/QGjetsPetr/run/$FileName2
+rm -rf /data/QGjets/QGjetsPetr/run/files/${FileName2} 
+mkdir /data/QGjets/QGjetsPetr/run/files/${FileName2}
+cd /data/QGjets/QGjetsPetr/run/files/$FileName2
 
 echo "Creating File: ${FileName}"
 echo "# -*- ThePEG-repository -*-" > $FileName
@@ -138,13 +139,30 @@ echo "# insert SubProcess:MatrixElements[0] MEHiggsJet" >> $FileName
 echo "# set MEHiggsJet:Process qqbar" >> $FileName
 
 if [ "$Hadronization" = "hadr" ]; then
+    # change for low pt
     echo "Running hadronization, pt cut > 25.0 GeV."
     echo "set /Herwig/Cuts/JetKtCut:MinKT 25.0*GeV" >> $FileName
 else 
-    WindowMax="$(($Window + 25))"
-    echo "Running no_hadronization, ${Window}.0 < pt cut < ${WindowMax}.0  GeV."
-    echo "set /Herwig/Cuts/JetKtCut:MinKT ${Window}.0*GeV" >> $FileName
-    echo "set /Herwig/Cuts/JetKtCut:MaxKT ${WindowMax}.0*GeV" >> $FileName
+    given_Pt=(0 25 50 75 100 125 150 175)
+    lower_Pt=(0 15 40 65 90 115 140 165)
+    upper_Pt=(35 60 85 110 135 160 185 210)
+    k=0
+    for i in "${given_Pt[@]}"
+    do
+        if [ $i -eq $Window ]
+            then
+            echo "Window is: "
+            echo $i
+            index=$k
+            echo "Index is: "
+            echo $index
+        fi
+        let "k++"
+    done
+    echo "Pt block is ${Window} GeV "
+    echo "Running no_hadronization, ${lower_Pt[$index]}.0 < pt cut < ${upper_Pt[$index]}.0  GeV."
+    echo "set /Herwig/Cuts/JetKtCut:MinKT ${lower_Pt[$index]}.0*GeV" >> $FileName
+    echo "set /Herwig/Cuts/JetKtCut:MaxKT ${upper_Pt[$index]}.0*GeV" >> $FileName
 fi
 
 echo "##set /Herwig/Cuts/JetKtCut:MinEta 0" >> $FileName

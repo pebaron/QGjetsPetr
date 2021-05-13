@@ -601,7 +601,9 @@ void analyze(const Event& event) {
       _histOthersThenGluonAndQuarkMulti->fill(NumberOfOthersThanGluonsAndQuars,event.weight());
       _histPartonMulti->fill(NumberOfPartons,event.weight());
 
-      double ptmin_jet = 2*JET_MIN_PT_FRACTION/(1+JET_MIN_PT_FRACTION)*JET_AVG_PTMINS[0];
+      double ptmin_jet = 2*JET_MIN_PT_FRACTION/(1+JET_MIN_PT_FRACTION)*JET_AVG_PTMINS[0]; // = cca 44 GeV, 
+      //// for low pt double ptmin_jet = 0.0;
+
 
       for (size_t i = 0; i < NumberOfRadiuses; ++i) {
       JetDefinition jet_def(antikt_algorithm, radius[i]);
@@ -614,7 +616,7 @@ void analyze(const Event& event) {
         PseudoJet orig_jet2 = jets[1];
 
         // make sure we have something enough symmetric and close in rapidity
-        if (orig_jet2.pt() / orig_jet1.pt() < JET_MIN_PT_FRACTION) continue;
+        if (orig_jet2.pt() / orig_jet1.pt() < JET_MIN_PT_FRACTION) continue; // comment for low pt
         if (std::abs(orig_jet1.rap()-orig_jet2.rap())>DELTA_RAP_MAX_DIJET) continue;
 
         // we need to pass the avgpt cut
@@ -670,7 +672,7 @@ void analyze(const Event& event) {
             ArrayOfHist2[i][10]->fill(lambdaPt   , avgpt, event.weight());
             ArrayOfHist2[i][11]->fill(lambdaLha  , avgpt, event.weight());
             ArrayOfHist2[i][12]->fill(lambdaWidth, avgpt, event.weight());
-            ArrayOfHist2[i][13]->fill(lambdaMass , avgpt, event.weight());
+            ArrayOfHist2[i][13]->fill(lambdaMass , avgpt, event.weight()); // average is good for now, maybee highest
 
             if (nQ == 1){
 
