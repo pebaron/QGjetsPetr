@@ -77,9 +77,10 @@ namespace Rivet {
       mmdt->set_grooming_mode();
       mmdt->set_reclustering(false);
       
-      double Nbins = 250;
+      double Nbins = 100;
+      //double NbinsMulti = 100;
       double NbinsMulti = 250;
-      double MaxMulti = 250;
+      double MaxMulti = 100;
       double NbinsPt = 20;
       double MaxPt = 200; 
       _histGluonFractionPt = bookHisto1D("GluonFractionPt", 200, 0, 200);
@@ -623,7 +624,7 @@ void analyze(const Event& event) {
         double avgpt = 0.5*(orig_jet1.pt() + orig_jet2.pt());
         unsigned int nQ=0;
         while ((nQ<nQs) && (avgpt>=JET_AVG_PTMINS[nQ])) nQ++;
-        // PB DEBUG adding scatter plot if (nQ == 0) continue;
+        if (nQ == 0) continue;
         
         // grooming
         PseudoJet jet1 = ca_wta_recluster(orig_jet1);
@@ -675,7 +676,11 @@ void analyze(const Event& event) {
             ArrayOfHist2[i][13]->fill(lambdaMass , avgpt, event.weight()); // average is good for now, maybee highest
 
             if (nQ == 1){
-
+              //ArrayOfHist2[i][9]->fill(lambdaMult  , avgpt, event.weight());
+              //ArrayOfHist2[i][10]->fill(lambdaPt   , avgpt, event.weight());
+              //ArrayOfHist2[i][11]->fill(lambdaLha  , avgpt, event.weight());
+              //ArrayOfHist2[i][12]->fill(lambdaWidth, avgpt, event.weight());
+              //ArrayOfHist2[i][13]->fill(lambdaMass , avgpt, event.weight()); 
               //CheckEvent << "lambdaMult: " << lambdaMult << "\n" ;
               //CheckEvent << "lambdaLha: " << lambdaLha << "\n" ;
               //CheckEvent << "lambdaWidth: " << lambdaWidth << "\n" ;
@@ -950,11 +955,11 @@ void analyze(const Event& event) {
       normalize({_histFastJets08PtReclust,_histFastJets08PtSubLeading,_histFastJets08PtLeading,_histFastJets08Pt, _histFastJets08Mult, _histFastJets08E, _histFastJets08Eta, _histFastJets08Rapidity, _histFastJets08Phi});
       normalize({_histFastJets10PtReclust,_histFastJets10PtSubLeading,_histFastJets10PtLeading,_histFastJets10Pt, _histFastJets10Mult, _histFastJets10E, _histFastJets10Eta, _histFastJets10Rapidity, _histFastJets10Phi});
 
-      normalize({_histFastJets02MultLam,_histFastJets02PtLam,_histFastJets02LhaLam,_histFastJets02WidthLam,_histFastJets02MassLam});
-      normalize({_histFastJets04MultLam,_histFastJets04PtLam,_histFastJets04LhaLam,_histFastJets04WidthLam,_histFastJets04MassLam});
-      normalize({_histFastJets06MultLam,_histFastJets06PtLam,_histFastJets06LhaLam,_histFastJets06WidthLam,_histFastJets06MassLam});
-      normalize({_histFastJets08MultLam,_histFastJets08PtLam,_histFastJets08LhaLam,_histFastJets08WidthLam,_histFastJets08MassLam});
-      normalize({_histFastJets10MultLam,_histFastJets10PtLam,_histFastJets10LhaLam,_histFastJets10WidthLam,_histFastJets10MassLam});
+      //normalize({_histFastJets02MultLam,_histFastJets02PtLam,_histFastJets02LhaLam,_histFastJets02WidthLam,_histFastJets02MassLam});
+      //normalize({_histFastJets04MultLam,_histFastJets04PtLam,_histFastJets04LhaLam,_histFastJets04WidthLam,_histFastJets04MassLam});
+      //normalize({_histFastJets06MultLam,_histFastJets06PtLam,_histFastJets06LhaLam,_histFastJets06WidthLam,_histFastJets06MassLam});
+      //normalize({_histFastJets08MultLam,_histFastJets08PtLam,_histFastJets08LhaLam,_histFastJets08WidthLam,_histFastJets08MassLam});
+      //normalize({_histFastJets10MultLam,_histFastJets10PtLam,_histFastJets10LhaLam,_histFastJets10WidthLam,_histFastJets10MassLam});
 
       normalize({_histFastJets02MultLam50, _histFastJets02PtLam50,_histFastJets02LhaLam50,_histFastJets02WidthLam50,_histFastJets02MassLam50});
       normalize({_histFastJets04MultLam50, _histFastJets04PtLam50,_histFastJets04LhaLam50,_histFastJets04WidthLam50,_histFastJets04MassLam50});

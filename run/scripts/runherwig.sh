@@ -67,9 +67,9 @@ echo "########################" >> $FileName
 echo "cd /Herwig/Partons" >> $FileName
 echo "create ThePEG::LHAPDF PDFSet ThePEGLHAPDF.so" >> $FileName
 echo "set PDFSet:PDFName ${PDF}" >> $FileName
-echo "#set PDFSet:RemnantHandler HadronRemnants" >> $FileName
-echo "#set /Herwig/Particles/p+:PDF PDFSet" >> $FileName
-echo "#set /Herwig/Particles/pbar-:PDF PDFSet" >> $FileName
+echo "set PDFSet:RemnantHandler HadronRemnants" >> $FileName
+echo "set /Herwig/Particles/p+:PDF PDFSet" >> $FileName
+echo "set /Herwig/Particles/pbar-:PDF PDFSet" >> $FileName
 echo "cd /" >> $FileName
 echo "" >> $FileName
 echo "##################################################" >> $FileName
