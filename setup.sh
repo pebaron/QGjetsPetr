@@ -1,5 +1,5 @@
 #!/bin/bash
 
-source /data/QGjets/Programs/Herwig7/bin/activate 
-export RIVET_ANALYSIS_PATH="/data/QGjets/QGjetsPetr/rivet-analysis/:${RIVET_ANALYSIS_PATH}"
+source /disk0/Herwig7/bin/activate 
+export RIVET_ANALYSIS_PATH="/disk0/QGjetsPetr/rivet-analysis/:${RIVET_ANALYSIS_PATH}"
 

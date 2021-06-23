@@ -16,19 +16,19 @@
 
 #seeds: 61972970 23354883 88615218 70896900 18669684 71917516 25202807 62914023 20426705 23209777
 
-N=5000000
+N=50
 index=0
 #for j in 61972970 23354883 88615218 70896900 18669684 71917516 25202807 62914023 20426705 23209777; do 
 # i run for 5 seeds for now 61972970 23354883 88615218 70896900 18669684
 for j in 61972970; do
-    for PDF in MMHT2014lo68cl CT14lo; do 
+    for PDF in MMHT2014lo68cl; do 
         #CT14 MMHT2014 NNPDF3.0 NNPDF31_lo_as_0118 NNPDF30_lo_as_0118 NNPDF31_nlo_as_0118 CT18NLO; do
-        for e in 900 2360 7000 13000;do
+        for e in 900 ;do
             sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_${e}_${N}_${j}_0_${PDF}_hadr ./runherwig.sh $e $N $j 0 $PDF hadr
-            for i in 0 25 50 75 100 125 150 175;do 
-                sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_${e}_${N}_${j}_${i}_${PDF}_nohadr ./runherwig.sh $e $N $j $i $PDF nohadr;
-                let "index++"
-                done;
+            #for i in 0 25 50 75 100 125 150 175;do 
+            #    sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_${e}_${N}_${j}_${i}_${PDF}_nohadr ./runherwig.sh $e $N $j $i $PDF nohadr;
+            #    let "index++"
+            #    done;
         done;
         #a=$(squeue | wc -l)
         #if [ "$a" -gt 100 ]; then
@@ -38,7 +38,7 @@ for j in 61972970; do
         #fi
     done;
 done;
-
+let "index++"
 echo "Summited ${index} jobs."
 
 #source /disk0/QGjetsPetr/run/scripts/runherwig.sh 2360  100000 23209777 0 MMHT2014lo68cl hadr

@@ -78,8 +78,8 @@ namespace Rivet {
       mmdt->set_reclustering(false);
       
       double Nbins = 100;
-      //double NbinsMulti = 100;
-      double NbinsMulti = 250;
+      double NbinsMulti = 100;
+      //double NbinsMulti = 250;
       double MaxMulti = 100;
       double NbinsPt = 20;
       double MaxPt = 200; 

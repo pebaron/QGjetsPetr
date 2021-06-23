@@ -1,6 +1,6 @@
 #!/bin/bash
 source /root/.bashrc
-source /data/QGjets/QGjetsPetr/setup.sh
+source /disk0/QGjetsPetr/setup.sh
 echo "Arguments are: Energy [900, 2360, 7000, 13000], "
 echo "               Events [1-10000000], "
 echo "               Seed [61972970 23354883 88615218 70896900 18669684 71917516 25202807 62914023 20426705 23209777],"
@@ -16,9 +16,9 @@ Hadronization=$6
 FileName="Energy_${Energy}_NEvt_${Events}_Seed_${Seed}_PtWindow_${Window}_PDF_${PDF}_${Hadronization}.in"
 FileName2="Energy_${Energy}_NEvt_${Events}_Seed_${Seed}_PtWindow_${Window}_PDF_${PDF}_${Hadronization}"
 
-rm -rf /data/QGjets/QGjetsPetr/run/files/${FileName2} 
-mkdir /data/QGjets/QGjetsPetr/run/files/${FileName2}
-cd /data/QGjets/QGjetsPetr/run/files/$FileName2
+rm -rf /disk0/QGjetsPetr/run/files/${FileName2} 
+mkdir /disk0/QGjetsPetr/run/files/${FileName2}
+cd /disk0/QGjetsPetr/run/files/$FileName2
 
 echo "Creating File: ${FileName}"
 echo "# -*- ThePEG-repository -*-" > $FileName
