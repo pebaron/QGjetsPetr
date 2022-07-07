@@ -16,9 +16,9 @@ Hadronization=$6
 FileName="Energy_${Energy}_NEvt_${Events}_Seed_${Seed}_PtWindow_${Window}_PDF_${PDF}_${Hadronization}.in"
 FileName2="Energy_${Energy}_NEvt_${Events}_Seed_${Seed}_PtWindow_${Window}_PDF_${PDF}_${Hadronization}"
 
-rm -rf /disk0/QGjetsPetr/run/files/${FileName2} 
-mkdir /disk0/QGjetsPetr/run/files/${FileName2}
-cd /disk0/QGjetsPetr/run/files/$FileName2
+rm -rf /disk0/QGjetsPetr/run/files_no_MPI/${FileName2} 
+mkdir /disk0/QGjetsPetr/run/files_no_MPI/${FileName2}
+cd /disk0/QGjetsPetr/run/files_no_MPI/$FileName2
 
 echo "Creating File: ${FileName}"
 echo "# -*- ThePEG-repository -*-" > $FileName
@@ -56,7 +56,7 @@ if [ "$Hadronization" = "hadr" ]; then
     echo "#set EventGenerator:EventHandler:CascadeHandler NULL" >> $FileName
     #echo "set EventGenerator:EventHandler:CascadeHandler:DoISR No" >> $FileName
     echo "cd /Herwig/EventHandlers" >> $FileName
-    #echo "set EventHandler:CascadeHandler:MPIHandler NULL" >> $FileName #PB ADDED RECENTLY 22.9.2021
+    echo "set EventHandler:CascadeHandler:MPIHandler NULL" >> $FileName #PB ADDED RECENTLY 22.9.2021
     #echo "set EventGenerator:EventHandler:CascadeHandler:DoISR No" >> $FileName
     #echo "set /Herwig/Shower/SplittingGenerator:ISR No" >> $FileName
 else 
@@ -66,7 +66,7 @@ else
     echo "set EventGenerator:EventHandler:CascadeHandler NULL" >> $FileName
     #echo "set EventGenerator:EventHandler:CascadeHandler:DoISR No" >> $FileName
     echo "cd /Herwig/EventHandlers" >> $FileName
-    #echo "set EventHandler:CascadeHandler:MPIHandler NULL" >> $FileName #PB ADDED RECENTLY 22.9.2021
+    echo "set EventHandler:CascadeHandler:MPIHandler NULL" >> $FileName #PB ADDED RECENTLY 22.9.2021
     #echo "set EventGenerator:EventHandler:CascadeHandler:DoISR No" >> $FileName
     #echo "set /Herwig/Shower/SplittingGenerator:ISR No" >> $FileName
 fi

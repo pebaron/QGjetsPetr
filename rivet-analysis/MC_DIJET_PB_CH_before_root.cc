@@ -18,7 +18,6 @@
 #include "TFile.h"
 #include "TH1D.h"
 #include "TString.h"
-#include "TBranch.h"
 
 #include <sstream>
 #include <stdio.h> 
@@ -35,6 +34,7 @@ using namespace std;
 using namespace fastjet; 
 using namespace ThePEG;
 //using namespace ROOT;
+TFile * rfile;
 
 namespace Rivet {
 
@@ -68,7 +68,7 @@ namespace Rivet {
         JET_RAPMAX(1.5)
     {
       // avg of the two hardest has that minimum
-      JET_AVG_PTMINS.push_back( 50.0);//just for now, was 50 originaly
+      JET_AVG_PTMINS.push_back( 20.0);//just for now, was 50 originaly
       JET_AVG_PTMINS.push_back(100.0);
       JET_AVG_PTMINS.push_back(200.0);
       JET_AVG_PTMINS.push_back(400.0);
@@ -86,606 +86,7 @@ namespace Rivet {
       //cout << "FilePath = " << FilePath.Data() << endl;
       rfile = new TFile(FileName.c_str(),"recreate");
       rfile->cd();
-      ttree = new TTree("MC_DIJET_PB_CH", "MC_DIJET_PB_CH");
       
-      
- ttree->Branch("weight", &v_weight);
- ttree->Branch("PDGID", &v_PDGID);
- ttree->Branch("GluonFractionPt", &v_GluonFractionPt);
- ttree->Branch("QuarkFractionPt", &v_QuarkFractionPt);
- ttree->Branch("GluonAndQuarkFractionPt", &v_GluonAndQuarkFractionPt);
- ttree->Branch("GluonFractionEta", &v_GluonFractionEta );
- ttree->Branch("QuarkFractionEta", &v_QuarkFractionEta );
- ttree->Branch("GluonAndQuarkFractionEta", &v_GluonAndQuarkFractionEta );
- ttree->Branch("OthersThenGluonAndQuarkFractionPt", &v_OthersThenGluonAndQuarkFractionPt);
- ttree->Branch("PartonFractionPt", &v_PartonFractionPt);
- ttree->Branch("GluonMulti", &v_GluonMulti);
- ttree->Branch("QuarkMulti", &v_QuarkMulti);
- ttree->Branch("GluonAndQuarkMulti", &v_GluonAndQuarkMulti);
- ttree->Branch("OthersThenGluonAndQuarkMulti", &v_OthersThenGluonAndQuarkMulti);
- ttree->Branch("PartonMulti", &v_PartonMulti);
-      ttree->Branch("no_cut_FastJets02Pt", &v_no_cut_ArrayOfHist[0][0]);
-      ttree->Branch("no_cut_FastJets02Eta", &v_no_cut_ArrayOfHist[0][1]);
-      ttree->Branch("no_cut_FastJets02Phi", &v_no_cut_ArrayOfHist[0][2]);
-      ttree->Branch("no_cut_FastJets02E", &v_no_cut_ArrayOfHist[0][3]);
-      ttree->Branch("no_cut_FastJets02MultLam", &v_no_cut_ArrayOfHist[0][4]);
-      ttree->Branch("no_cut_FastJets02PtLam", &v_no_cut_ArrayOfHist[0][5]);
-      ttree->Branch("no_cut_FastJets02LhaLam", &v_no_cut_ArrayOfHist[0][6]);
-      ttree->Branch("no_cut_FastJets02WidthLam", &v_no_cut_ArrayOfHist[0][7]);
-      ttree->Branch("no_cut_FastJets02MassLam", &v_no_cut_ArrayOfHist[0][8]);
-      ttree->Branch("no_cut_FastJets04Pt", &v_no_cut_ArrayOfHist[1][0]);
-      ttree->Branch("no_cut_FastJets04Eta", &v_no_cut_ArrayOfHist[1][1]);
-      ttree->Branch("no_cut_FastJets04Phi", &v_no_cut_ArrayOfHist[1][2]);
-      ttree->Branch("no_cut_FastJets04E", &v_no_cut_ArrayOfHist[1][3]);
-      ttree->Branch("no_cut_FastJets04MultLam", &v_no_cut_ArrayOfHist[1][4]);
-      ttree->Branch("no_cut_FastJets04PtLam", &v_no_cut_ArrayOfHist[1][5]);
-      ttree->Branch("no_cut_FastJets04LhaLam", &v_no_cut_ArrayOfHist[1][6]);
-      ttree->Branch("no_cut_FastJets04WidthLam", &v_no_cut_ArrayOfHist[1][7]);
-      ttree->Branch("no_cut_FastJets04MassLam", &v_no_cut_ArrayOfHist[1][8]);
-      ttree->Branch("no_cut_FastJets06Pt", &v_no_cut_ArrayOfHist[2][0]);
-      ttree->Branch("no_cut_FastJets06Eta", &v_no_cut_ArrayOfHist[2][1]);
-      ttree->Branch("no_cut_FastJets06Phi", &v_no_cut_ArrayOfHist[2][2]);
-      ttree->Branch("no_cut_FastJets06E", &v_no_cut_ArrayOfHist[2][3]);
-      ttree->Branch("no_cut_FastJets06MultLam", &v_no_cut_ArrayOfHist[2][4]);
-      ttree->Branch("no_cut_FastJets06PtLam", &v_no_cut_ArrayOfHist[2][5]);
-      ttree->Branch("no_cut_FastJets06LhaLam", &v_no_cut_ArrayOfHist[2][6]);
-      ttree->Branch("no_cut_FastJets06WidthLam", &v_no_cut_ArrayOfHist[2][7]);
-      ttree->Branch("no_cut_FastJets06MassLam", &v_no_cut_ArrayOfHist[2][8]);
-      ttree->Branch("no_cut_FastJets08Pt", &v_no_cut_ArrayOfHist[3][0]);
-      ttree->Branch("no_cut_FastJets08Eta", &v_no_cut_ArrayOfHist[3][1]);
-      ttree->Branch("no_cut_FastJets08Phi", &v_no_cut_ArrayOfHist[3][2]);
-      ttree->Branch("no_cut_FastJets08E", &v_no_cut_ArrayOfHist[3][3]);
-      ttree->Branch("no_cut_FastJets08MultLam", &v_no_cut_ArrayOfHist[3][4]);
-      ttree->Branch("no_cut_FastJets08PtLam", &v_no_cut_ArrayOfHist[3][5]);
-      ttree->Branch("no_cut_FastJets08LhaLam", &v_no_cut_ArrayOfHist[3][6]);
-      ttree->Branch("no_cut_FastJets08WidthLam", &v_no_cut_ArrayOfHist[3][7]);
-      ttree->Branch("no_cut_FastJets08MassLam", &v_no_cut_ArrayOfHist[3][8]);
-      ttree->Branch("no_cut_FastJets10Pt", &v_no_cut_ArrayOfHist[4][0]);
-      ttree->Branch("no_cut_FastJets10Eta", &v_no_cut_ArrayOfHist[4][1]);
-      ttree->Branch("no_cut_FastJets10Phi", &v_no_cut_ArrayOfHist[4][2]);
-      ttree->Branch("no_cut_FastJets10E", &v_no_cut_ArrayOfHist[4][3]);
-      ttree->Branch("no_cut_FastJets10MultLam", &v_no_cut_ArrayOfHist[4][4]);
-      ttree->Branch("no_cut_FastJets10PtLam", &v_no_cut_ArrayOfHist[4][5]);
-      ttree->Branch("no_cut_FastJets10LhaLam", &v_no_cut_ArrayOfHist[4][6]);
-      ttree->Branch("no_cut_FastJets10WidthLam", &v_no_cut_ArrayOfHist[4][7]);
-      ttree->Branch("no_cut_FastJets10MassLam", &v_no_cut_ArrayOfHist[4][8]);
-      ttree->Branch("no_cut_mmdt_FastJets02Pt", &v_no_cut_mmdt_ArrayOfHist[0][0]);
-      ttree->Branch("no_cut_mmdt_FastJets02Eta", &v_no_cut_mmdt_ArrayOfHist[0][1]);
-      ttree->Branch("no_cut_mmdt_FastJets02Phi", &v_no_cut_mmdt_ArrayOfHist[0][2]);
-      ttree->Branch("no_cut_mmdt_FastJets02E", &v_no_cut_mmdt_ArrayOfHist[0][3]);
-      ttree->Branch("no_cut_mmdt_FastJets02MultLam", &v_no_cut_mmdt_ArrayOfHist[0][4]);
-      ttree->Branch("no_cut_mmdt_FastJets02PtLam", &v_no_cut_mmdt_ArrayOfHist[0][5]);
-      ttree->Branch("no_cut_mmdt_FastJets02LhaLam", &v_no_cut_mmdt_ArrayOfHist[0][6]);
-      ttree->Branch("no_cut_mmdt_FastJets02WidthLam", &v_no_cut_mmdt_ArrayOfHist[0][7]);
-      ttree->Branch("no_cut_mmdt_FastJets02MassLam", &v_no_cut_mmdt_ArrayOfHist[0][8]);
-      ttree->Branch("no_cut_mmdt_FastJets04Pt", &v_no_cut_mmdt_ArrayOfHist[1][0]);
-      ttree->Branch("no_cut_mmdt_FastJets04Eta", &v_no_cut_mmdt_ArrayOfHist[1][1]);
-      ttree->Branch("no_cut_mmdt_FastJets04Phi", &v_no_cut_mmdt_ArrayOfHist[1][2]);
-      ttree->Branch("no_cut_mmdt_FastJets04E", &v_no_cut_mmdt_ArrayOfHist[1][3]);
-      ttree->Branch("no_cut_mmdt_FastJets04MultLam", &v_no_cut_mmdt_ArrayOfHist[1][4]);
-      ttree->Branch("no_cut_mmdt_FastJets04PtLam", &v_no_cut_mmdt_ArrayOfHist[1][5]);
-      ttree->Branch("no_cut_mmdt_FastJets04LhaLam", &v_no_cut_mmdt_ArrayOfHist[1][6]);
-      ttree->Branch("no_cut_mmdt_FastJets04WidthLam", &v_no_cut_mmdt_ArrayOfHist[1][7]);
-      ttree->Branch("no_cut_mmdt_FastJets04MassLam", &v_no_cut_mmdt_ArrayOfHist[1][8]);
-      ttree->Branch("no_cut_mmdt_FastJets06Pt", &v_no_cut_mmdt_ArrayOfHist[2][0]);
-      ttree->Branch("no_cut_mmdt_FastJets06Eta", &v_no_cut_mmdt_ArrayOfHist[2][1]);
-      ttree->Branch("no_cut_mmdt_FastJets06Phi", &v_no_cut_mmdt_ArrayOfHist[2][2]);
-      ttree->Branch("no_cut_mmdt_FastJets06E", &v_no_cut_mmdt_ArrayOfHist[2][3]);
-      ttree->Branch("no_cut_mmdt_FastJets06MultLam", &v_no_cut_mmdt_ArrayOfHist[2][4]);
-      ttree->Branch("no_cut_mmdt_FastJets06PtLam", &v_no_cut_mmdt_ArrayOfHist[2][5]);
-      ttree->Branch("no_cut_mmdt_FastJets06LhaLam", &v_no_cut_mmdt_ArrayOfHist[2][6]);
-      ttree->Branch("no_cut_mmdt_FastJets06WidthLam", &v_no_cut_mmdt_ArrayOfHist[2][7]);
-      ttree->Branch("no_cut_mmdt_FastJets06MassLam", &v_no_cut_mmdt_ArrayOfHist[2][8]);
-      ttree->Branch("no_cut_mmdt_FastJets08Pt", &v_no_cut_mmdt_ArrayOfHist[3][0]);
-      ttree->Branch("no_cut_mmdt_FastJets08Eta", &v_no_cut_mmdt_ArrayOfHist[3][1]);
-      ttree->Branch("no_cut_mmdt_FastJets08Phi", &v_no_cut_mmdt_ArrayOfHist[3][2]);
-      ttree->Branch("no_cut_mmdt_FastJets08E", &v_no_cut_mmdt_ArrayOfHist[3][3]);
-      ttree->Branch("no_cut_mmdt_FastJets08MultLam", &v_no_cut_mmdt_ArrayOfHist[3][4]);
-      ttree->Branch("no_cut_mmdt_FastJets08PtLam", &v_no_cut_mmdt_ArrayOfHist[3][5]);
-      ttree->Branch("no_cut_mmdt_FastJets08LhaLam", &v_no_cut_mmdt_ArrayOfHist[3][6]);
-      ttree->Branch("no_cut_mmdt_FastJets08WidthLam", &v_no_cut_mmdt_ArrayOfHist[3][7]);
-      ttree->Branch("no_cut_mmdt_FastJets08MassLam", &v_no_cut_mmdt_ArrayOfHist[3][8]);
-      ttree->Branch("no_cut_mmdt_FastJets10Pt", &v_no_cut_mmdt_ArrayOfHist[4][0]);
-      ttree->Branch("no_cut_mmdt_FastJets10Eta", &v_no_cut_mmdt_ArrayOfHist[4][1]);
-      ttree->Branch("no_cut_mmdt_FastJets10Phi", &v_no_cut_mmdt_ArrayOfHist[4][2]);
-      ttree->Branch("no_cut_mmdt_FastJets10E", &v_no_cut_mmdt_ArrayOfHist[4][3]);
-      ttree->Branch("no_cut_mmdt_FastJets10MultLam", &v_no_cut_mmdt_ArrayOfHist[4][4]);
-      ttree->Branch("no_cut_mmdt_FastJets10PtLam", &v_no_cut_mmdt_ArrayOfHist[4][5]);
-      ttree->Branch("no_cut_mmdt_FastJets10LhaLam", &v_no_cut_mmdt_ArrayOfHist[4][6]);
-      ttree->Branch("no_cut_mmdt_FastJets10WidthLam", &v_no_cut_mmdt_ArrayOfHist[4][7]);
-      ttree->Branch("no_cut_mmdt_FastJets10MassLam", &v_no_cut_mmdt_ArrayOfHist[4][8]);
-
- ttree->Branch("FastJets02PtSubLeading", &v_ArrayOfHist[0][0]);
- ttree->Branch("FastJets02PtLeading", &v_ArrayOfHist[0][1]);
- ttree->Branch("FastJets02PtReclust", &v_ArrayOfHist[0][2]);
- ttree->Branch("FastJets02Pt", &v_ArrayOfHist[0][3]);
- ttree->Branch("FastJets02Mult", &v_ArrayOfHist[0][4]);
- ttree->Branch("FastJets02E", &v_ArrayOfHist[0][5]);
- ttree->Branch("FastJets02Eta", &v_ArrayOfHist[0][6]);
- ttree->Branch("FastJets02Rapidity", &v_ArrayOfHist[0][7]);
- ttree->Branch("FastJets02Phi", &v_ArrayOfHist[0][8]);
- ttree->Branch("FastJets02MultLam50", &v_ArrayOfHist[0][14]);
- ttree->Branch("FastJets02PtLam50", &v_ArrayOfHist[0][15]);
- ttree->Branch("FastJets02LhaLam50", &v_ArrayOfHist[0][16]);
- ttree->Branch("FastJets02WidthLam50", &v_ArrayOfHist[0][17]);
- ttree->Branch("FastJets02MassLam50", &v_ArrayOfHist[0][18]);
- ttree->Branch("FastJets02MultLam100", &v_ArrayOfHist[0][19]);
- ttree->Branch("FastJets02PtLam100", &v_ArrayOfHist[0][20]);
- ttree->Branch("FastJets02LhaLam100", &v_ArrayOfHist[0][21]);
- ttree->Branch("FastJets02WidthLam100", &v_ArrayOfHist[0][22]);
- ttree->Branch("FastJets02MassLam100", &v_ArrayOfHist[0][23]);
- ttree->Branch("FastJets02MultLam200", &v_ArrayOfHist[0][24]);
- ttree->Branch("FastJets02PtLam200", &v_ArrayOfHist[0][25]);
- ttree->Branch("FastJets02LhaLam200", &v_ArrayOfHist[0][26]);
- ttree->Branch("FastJets02WidthLam200", &v_ArrayOfHist[0][27]);
- ttree->Branch("FastJets02MassLam200", &v_ArrayOfHist[0][28]);
- ttree->Branch("FastJets02MultLam400", &v_ArrayOfHist[0][29]);
- ttree->Branch("FastJets02PtLam400", &v_ArrayOfHist[0][30]);
- ttree->Branch("FastJets02LhaLam400", &v_ArrayOfHist[0][31]);
- ttree->Branch("FastJets02WidthLam400", &v_ArrayOfHist[0][32]);
- ttree->Branch("FastJets02MassLam400", &v_ArrayOfHist[0][33]);
- ttree->Branch("FastJets02MultLam800", &v_ArrayOfHist[0][34]);
- ttree->Branch("FastJets02PtLam800", &v_ArrayOfHist[0][35]);
- ttree->Branch("FastJets02LhaLam800", &v_ArrayOfHist[0][36]);
- ttree->Branch("FastJets02WidthLam800", &v_ArrayOfHist[0][37]);
- ttree->Branch("FastJets02MassLam800", &v_ArrayOfHist[0][38]);
- ttree->Branch("FastJets02PtSubLeadingQ50", &v_ArrayOfHist[0][39]);
- ttree->Branch("FastJets02PtLeadingQ50", &v_ArrayOfHist[0][40]);
- ttree->Branch("FastJets02PtReclustQ50", &v_ArrayOfHist[0][41]);
- ttree->Branch("FastJets02PtSubLeadingQ100", &v_ArrayOfHist[0][42]);
- ttree->Branch("FastJets02PtLeadingQ100", &v_ArrayOfHist[0][43]);
- ttree->Branch("FastJets02PtReclustQ100", &v_ArrayOfHist[0][44]);
- ttree->Branch("FastJets02PtSubLeadingQ200", &v_ArrayOfHist[0][45]);
- ttree->Branch("FastJets02PtLeadingQ200", &v_ArrayOfHist[0][46]);
- ttree->Branch("FastJets02PtReclustQ200", &v_ArrayOfHist[0][47]);
- ttree->Branch("FastJets02PtSubLeadingQ400", &v_ArrayOfHist[0][48]);
- ttree->Branch("FastJets02PtLeadingQ400", &v_ArrayOfHist[0][49]);
- ttree->Branch("FastJets02PtReclustQ400", &v_ArrayOfHist[0][50]);
- ttree->Branch("FastJets02PtSubLeadingQ800", &v_ArrayOfHist[0][51]);
- ttree->Branch("FastJets02PtLeadingQ800", &v_ArrayOfHist[0][52]);
- ttree->Branch("FastJets02PtReclustQ800", &v_ArrayOfHist[0][53]);    
- ttree->Branch("FastJets04PtSubLeading", &v_ArrayOfHist[1][0]);
- ttree->Branch("FastJets04PtLeading", &v_ArrayOfHist[1][1]);
- ttree->Branch("FastJets04PtReclust", &v_ArrayOfHist[1][2]);
- ttree->Branch("FastJets04Pt", &v_ArrayOfHist[1][3]);
- ttree->Branch("FastJets04Mult", &v_ArrayOfHist[1][4]);
- ttree->Branch("FastJets04E", &v_ArrayOfHist[1][5]);
- ttree->Branch("FastJets04Eta", &v_ArrayOfHist[1][6]);
- ttree->Branch("FastJets04Rapidity", &v_ArrayOfHist[1][7]);
- ttree->Branch("FastJets04Phi", &v_ArrayOfHist[1][8]);
- ttree->Branch("FastJets04MultLam50", &v_ArrayOfHist[1][14]);
- ttree->Branch("FastJets04PtLam50", &v_ArrayOfHist[1][15]);
- ttree->Branch("FastJets04LhaLam50", &v_ArrayOfHist[1][16]);
- ttree->Branch("FastJets04WidthLam50", &v_ArrayOfHist[1][17]);
- ttree->Branch("FastJets04MassLam50", &v_ArrayOfHist[1][18]);
- ttree->Branch("FastJets04MultLam100", &v_ArrayOfHist[1][19]);
- ttree->Branch("FastJets04PtLam100", &v_ArrayOfHist[1][20]);
- ttree->Branch("FastJets04LhaLam100", &v_ArrayOfHist[1][21]);
- ttree->Branch("FastJets04WidthLam100", &v_ArrayOfHist[1][22]);
- ttree->Branch("FastJets04MassLam100", &v_ArrayOfHist[1][23]);
- ttree->Branch("FastJets04MultLam200", &v_ArrayOfHist[1][24]);
- ttree->Branch("FastJets04PtLam200", &v_ArrayOfHist[1][25]);
- ttree->Branch("FastJets04LhaLam200", &v_ArrayOfHist[1][26]);
- ttree->Branch("FastJets04WidthLam200", &v_ArrayOfHist[1][27]);
- ttree->Branch("FastJets04MassLam200", &v_ArrayOfHist[1][28]);
- ttree->Branch("FastJets04MultLam400", &v_ArrayOfHist[1][29]);
- ttree->Branch("FastJets04PtLam400", &v_ArrayOfHist[1][30]);
- ttree->Branch("FastJets04LhaLam400", &v_ArrayOfHist[1][31]);
- ttree->Branch("FastJets04WidthLam400", &v_ArrayOfHist[1][32]);
- ttree->Branch("FastJets04MassLam400", &v_ArrayOfHist[1][33]);
- ttree->Branch("FastJets04MultLam800", &v_ArrayOfHist[1][34]);
- ttree->Branch("FastJets04PtLam800", &v_ArrayOfHist[1][35]);
- ttree->Branch("FastJets04LhaLam800", &v_ArrayOfHist[1][36]);
- ttree->Branch("FastJets04WidthLam800", &v_ArrayOfHist[1][37]);
- ttree->Branch("FastJets04MassLam800", &v_ArrayOfHist[1][38]);
- ttree->Branch("FastJets04PtSubLeadingQ50", &v_ArrayOfHist[1][39]);
- ttree->Branch("FastJets04PtLeadingQ50", &v_ArrayOfHist[1][40]);
- ttree->Branch("FastJets04PtReclustQ50", &v_ArrayOfHist[1][41]);
- ttree->Branch("FastJets04PtSubLeadingQ100", &v_ArrayOfHist[1][42]);
- ttree->Branch("FastJets04PtLeadingQ100", &v_ArrayOfHist[1][43]);
- ttree->Branch("FastJets04PtReclustQ100", &v_ArrayOfHist[1][44]);
- ttree->Branch("FastJets04PtSubLeadingQ200", &v_ArrayOfHist[1][45]);
- ttree->Branch("FastJets04PtLeadingQ200", &v_ArrayOfHist[1][46]);
- ttree->Branch("FastJets04PtReclustQ200", &v_ArrayOfHist[1][47]);
- ttree->Branch("FastJets04PtSubLeadingQ400", &v_ArrayOfHist[1][48]);
- ttree->Branch("FastJets04PtLeadingQ400", &v_ArrayOfHist[1][49]);
- ttree->Branch("FastJets04PtReclustQ400", &v_ArrayOfHist[1][50]);
- ttree->Branch("FastJets04PtSubLeadingQ800", &v_ArrayOfHist[1][51]);
- ttree->Branch("FastJets04PtLeadingQ800", &v_ArrayOfHist[1][52]);
- ttree->Branch("FastJets04PtReclustQ800", &v_ArrayOfHist[1][53]);
- ttree->Branch("FastJets06PtSubLeading", &v_ArrayOfHist[2][0]);
- ttree->Branch("FastJets06PtLeading", &v_ArrayOfHist[2][1]);
- ttree->Branch("FastJets06PtReclust", &v_ArrayOfHist[2][2]);
- ttree->Branch("FastJets06Pt", &v_ArrayOfHist[2][3]);
- ttree->Branch("FastJets06Mult", &v_ArrayOfHist[2][4]);
- ttree->Branch("FastJets06E", &v_ArrayOfHist[2][5]);
- ttree->Branch("FastJets06Eta", &v_ArrayOfHist[2][6]);
- ttree->Branch("FastJets06Rapidity", &v_ArrayOfHist[2][7]);
- ttree->Branch("FastJets06Phi", &v_ArrayOfHist[2][8]);
- ttree->Branch("FastJets06MultLam50", &v_ArrayOfHist[2][14]);
- ttree->Branch("FastJets06PtLam50", &v_ArrayOfHist[2][15]);
- ttree->Branch("FastJets06LhaLam50", &v_ArrayOfHist[2][16]);
- ttree->Branch("FastJets06WidthLam50", &v_ArrayOfHist[2][17]);
- ttree->Branch("FastJets06MassLam50", &v_ArrayOfHist[2][18]);
- ttree->Branch("FastJets06MultLam100", &v_ArrayOfHist[2][19]);
- ttree->Branch("FastJets06PtLam100", &v_ArrayOfHist[2][20]);
- ttree->Branch("FastJets06LhaLam100", &v_ArrayOfHist[2][21]);
- ttree->Branch("FastJets06WidthLam100", &v_ArrayOfHist[2][22]);
- ttree->Branch("FastJets06MassLam100", &v_ArrayOfHist[2][23]);
- ttree->Branch("FastJets06MultLam200", &v_ArrayOfHist[2][24]);
- ttree->Branch("FastJets06PtLam200", &v_ArrayOfHist[2][25]);
- ttree->Branch("FastJets06LhaLam200", &v_ArrayOfHist[2][26]);
- ttree->Branch("FastJets06WidthLam200", &v_ArrayOfHist[2][27]);
- ttree->Branch("FastJets06MassLam200", &v_ArrayOfHist[2][28]);
- ttree->Branch("FastJets06MultLam400", &v_ArrayOfHist[2][29]);
- ttree->Branch("FastJets06PtLam400", &v_ArrayOfHist[2][30]);
- ttree->Branch("FastJets06LhaLam400", &v_ArrayOfHist[2][31]);
- ttree->Branch("FastJets06WidthLam400", &v_ArrayOfHist[2][32]);
- ttree->Branch("FastJets06MassLam400", &v_ArrayOfHist[2][33]);
- ttree->Branch("FastJets06MultLam800", &v_ArrayOfHist[2][34]);
- ttree->Branch("FastJets06PtLam800", &v_ArrayOfHist[2][35]);
- ttree->Branch("FastJets06LhaLam800", &v_ArrayOfHist[2][36]);
- ttree->Branch("FastJets06WidthLam800", &v_ArrayOfHist[2][37]);
- ttree->Branch("FastJets06MassLam800", &v_ArrayOfHist[2][38]);
- ttree->Branch("FastJets06PtSubLeadingQ50", &v_ArrayOfHist[2][39]);
- ttree->Branch("FastJets06PtLeadingQ50", &v_ArrayOfHist[2][40]);
- ttree->Branch("FastJets06PtReclustQ50", &v_ArrayOfHist[2][41]);
- ttree->Branch("FastJets06PtSubLeadingQ100", &v_ArrayOfHist[2][42]);
- ttree->Branch("FastJets06PtLeadingQ100", &v_ArrayOfHist[2][43]);
- ttree->Branch("FastJets06PtReclustQ100", &v_ArrayOfHist[2][44]);
- ttree->Branch("FastJets06PtSubLeadingQ200", &v_ArrayOfHist[2][45]);
- ttree->Branch("FastJets06PtLeadingQ200", &v_ArrayOfHist[2][46]);
- ttree->Branch("FastJets06PtReclustQ200", &v_ArrayOfHist[2][47]);
- ttree->Branch("FastJets06PtSubLeadingQ400", &v_ArrayOfHist[2][48]);
- ttree->Branch("FastJets06PtLeadingQ400", &v_ArrayOfHist[2][49]);
- ttree->Branch("FastJets06PtReclustQ400", &v_ArrayOfHist[2][50]);
- ttree->Branch("FastJets06PtSubLeadingQ800", &v_ArrayOfHist[2][51]);
- ttree->Branch("FastJets06PtLeadingQ800", &v_ArrayOfHist[2][52]);
- ttree->Branch("FastJets06PtReclustQ800", &v_ArrayOfHist[2][53]);
- ttree->Branch("FastJets08PtSubLeading", &v_ArrayOfHist[3][0]);
- ttree->Branch("FastJets08PtLeading", &v_ArrayOfHist[3][1]);
- ttree->Branch("FastJets08PtReclust", &v_ArrayOfHist[3][2]);
- ttree->Branch("FastJets08Pt", &v_ArrayOfHist[3][3]);
- ttree->Branch("FastJets08Mult", &v_ArrayOfHist[3][4]);
- ttree->Branch("FastJets08E", &v_ArrayOfHist[3][5]);
- ttree->Branch("FastJets08Eta", &v_ArrayOfHist[3][6]);
- ttree->Branch("FastJets08Rapidity", &v_ArrayOfHist[3][7]);
- ttree->Branch("FastJets08Phi", &v_ArrayOfHist[3][8]);
- ttree->Branch("FastJets08MultLam50", &v_ArrayOfHist[3][14]);
- ttree->Branch("FastJets08PtLam50", &v_ArrayOfHist[3][15]);
- ttree->Branch("FastJets08LhaLam50", &v_ArrayOfHist[3][16]);
- ttree->Branch("FastJets08WidthLam50", &v_ArrayOfHist[3][17]);
- ttree->Branch("FastJets08MassLam50", &v_ArrayOfHist[3][18]);
- ttree->Branch("FastJets08MultLam100", &v_ArrayOfHist[3][19]);
- ttree->Branch("FastJets08PtLam100", &v_ArrayOfHist[3][20]);
- ttree->Branch("FastJets08LhaLam100", &v_ArrayOfHist[3][21]);
- ttree->Branch("FastJets08WidthLam100", &v_ArrayOfHist[3][22]);
- ttree->Branch("FastJets08MassLam100", &v_ArrayOfHist[3][23]);
- ttree->Branch("FastJets08MultLam200", &v_ArrayOfHist[3][24]);
- ttree->Branch("FastJets08PtLam200", &v_ArrayOfHist[3][25]);
- ttree->Branch("FastJets08LhaLam200", &v_ArrayOfHist[3][26]);
- ttree->Branch("FastJets08WidthLam200", &v_ArrayOfHist[3][27]);
- ttree->Branch("FastJets08MassLam200", &v_ArrayOfHist[3][28]);
- ttree->Branch("FastJets08MultLam400", &v_ArrayOfHist[3][29]);
- ttree->Branch("FastJets08PtLam400", &v_ArrayOfHist[3][30]);
- ttree->Branch("FastJets08LhaLam400", &v_ArrayOfHist[3][31]);
- ttree->Branch("FastJets08WidthLam400", &v_ArrayOfHist[3][32]);
- ttree->Branch("FastJets08MassLam400", &v_ArrayOfHist[3][33]);
- ttree->Branch("FastJets08MultLam800", &v_ArrayOfHist[3][34]);
- ttree->Branch("FastJets08PtLam800", &v_ArrayOfHist[3][35]);
- ttree->Branch("FastJets08LhaLam800", &v_ArrayOfHist[3][36]);
- ttree->Branch("FastJets08WidthLam800", &v_ArrayOfHist[3][37]);
- ttree->Branch("FastJets08MassLam800", &v_ArrayOfHist[3][38]);
- ttree->Branch("FastJets08PtSubLeadingQ50", &v_ArrayOfHist[3][39]);
- ttree->Branch("FastJets08PtLeadingQ50", &v_ArrayOfHist[3][40]);
- ttree->Branch("FastJets08PtReclustQ50", &v_ArrayOfHist[3][41]);
- ttree->Branch("FastJets08PtSubLeadingQ100", &v_ArrayOfHist[3][42]);
- ttree->Branch("FastJets08PtLeadingQ100", &v_ArrayOfHist[3][43]);
- ttree->Branch("FastJets08PtReclustQ100", &v_ArrayOfHist[3][44]);
- ttree->Branch("FastJets08PtSubLeadingQ200", &v_ArrayOfHist[3][45]);
- ttree->Branch("FastJets08PtLeadingQ200", &v_ArrayOfHist[3][46]);
- ttree->Branch("FastJets08PtReclustQ200", &v_ArrayOfHist[3][47]);
- ttree->Branch("FastJets08PtSubLeadingQ400", &v_ArrayOfHist[3][48]);
- ttree->Branch("FastJets08PtLeadingQ400", &v_ArrayOfHist[3][49]);
- ttree->Branch("FastJets08PtReclustQ400", &v_ArrayOfHist[3][50]);
- ttree->Branch("FastJets08PtSubLeadingQ800", &v_ArrayOfHist[3][51]);
- ttree->Branch("FastJets08PtLeadingQ800", &v_ArrayOfHist[3][52]);
- ttree->Branch("FastJets08PtReclustQ800", &v_ArrayOfHist[3][53]);
- ttree->Branch("FastJets10PtSubLeading", &v_ArrayOfHist[4][0]);
- ttree->Branch("FastJets10PtLeading", &v_ArrayOfHist[4][1]);
- ttree->Branch("FastJets10PtReclust", &v_ArrayOfHist[4][2]);
- ttree->Branch("FastJets10Pt", &v_ArrayOfHist[4][3]);
- ttree->Branch("FastJets10Mult", &v_ArrayOfHist[4][4]);
- ttree->Branch("FastJets10E", &v_ArrayOfHist[4][5]);
- ttree->Branch("FastJets10Eta", &v_ArrayOfHist[4][6]);
- ttree->Branch("FastJets10Rapidity", &v_ArrayOfHist[4][7]);
- ttree->Branch("FastJets10Phi", &v_ArrayOfHist[4][8]);
- ttree->Branch("FastJets10MultLam50", &v_ArrayOfHist[4][14]);
- ttree->Branch("FastJets10PtLam50", &v_ArrayOfHist[4][15]);
- ttree->Branch("FastJets10LhaLam50", &v_ArrayOfHist[4][16]);
- ttree->Branch("FastJets10WidthLam50", &v_ArrayOfHist[4][17]);
- ttree->Branch("FastJets10MassLam50", &v_ArrayOfHist[4][18]);
- ttree->Branch("FastJets10MultLam100", &v_ArrayOfHist[4][19]);
- ttree->Branch("FastJets10PtLam100", &v_ArrayOfHist[4][20]);
- ttree->Branch("FastJets10LhaLam100", &v_ArrayOfHist[4][21]);
- ttree->Branch("FastJets10WidthLam100", &v_ArrayOfHist[4][22]);
- ttree->Branch("FastJets10MassLam100", &v_ArrayOfHist[4][23]);
- ttree->Branch("FastJets10MultLam200", &v_ArrayOfHist[4][24]);
- ttree->Branch("FastJets10PtLam200", &v_ArrayOfHist[4][25]);
- ttree->Branch("FastJets10LhaLam200", &v_ArrayOfHist[4][26]);
- ttree->Branch("FastJets10WidthLam200", &v_ArrayOfHist[4][27]);
- ttree->Branch("FastJets10MassLam200", &v_ArrayOfHist[4][28]);
- ttree->Branch("FastJets10MultLam400", &v_ArrayOfHist[4][29]);
- ttree->Branch("FastJets10PtLam400", &v_ArrayOfHist[4][30]);
- ttree->Branch("FastJets10LhaLam400", &v_ArrayOfHist[4][31]);
- ttree->Branch("FastJets10WidthLam400", &v_ArrayOfHist[4][32]);
- ttree->Branch("FastJets10MassLam400", &v_ArrayOfHist[4][33]);
- ttree->Branch("FastJets10MultLam800", &v_ArrayOfHist[4][34]);
- ttree->Branch("FastJets10PtLam800", &v_ArrayOfHist[4][35]);
- ttree->Branch("FastJets10LhaLam800", &v_ArrayOfHist[4][36]);
- ttree->Branch("FastJets10WidthLam800", &v_ArrayOfHist[4][37]);
- ttree->Branch("FastJets10MassLam800", &v_ArrayOfHist[4][38]);
- ttree->Branch("FastJets10PtSubLeadingQ50", &v_ArrayOfHist[4][39]);
- ttree->Branch("FastJets10PtLeadingQ50", &v_ArrayOfHist[4][40]);
- ttree->Branch("FastJets10PtReclustQ50", &v_ArrayOfHist[4][41]);
- ttree->Branch("FastJets10PtSubLeadingQ100", &v_ArrayOfHist[4][42]);
- ttree->Branch("FastJets10PtLeadingQ100", &v_ArrayOfHist[4][43]);
- ttree->Branch("FastJets10PtReclustQ100", &v_ArrayOfHist[4][44]);
- ttree->Branch("FastJets10PtSubLeadingQ200", &v_ArrayOfHist[4][45]);
- ttree->Branch("FastJets10PtLeadingQ200", &v_ArrayOfHist[4][46]);
- ttree->Branch("FastJets10PtReclustQ200", &v_ArrayOfHist[4][47]);
- ttree->Branch("FastJets10PtSubLeadingQ400", &v_ArrayOfHist[4][48]);
- ttree->Branch("FastJets10PtLeadingQ400", &v_ArrayOfHist[4][49]);
- ttree->Branch("FastJets10PtReclustQ400", &v_ArrayOfHist[4][50]);
- ttree->Branch("FastJets10PtSubLeadingQ800", &v_ArrayOfHist[4][51]);
- ttree->Branch("FastJets10PtLeadingQ800", &v_ArrayOfHist[4][52]);
- ttree->Branch("FastJets10PtReclustQ800", &v_ArrayOfHist[4][53]);
- ttree->Branch("mmdt_FastJets02PtSubLeading", &v_mmdt_ArrayOfHist[0][0]);
- ttree->Branch("mmdt_FastJets02PtLeading", &v_mmdt_ArrayOfHist[0][1]);
- ttree->Branch("mmdt_FastJets02PtReclust", &v_mmdt_ArrayOfHist[0][2]);
- ttree->Branch("mmdt_FastJets02Pt", &v_mmdt_ArrayOfHist[0][3]);
- ttree->Branch("mmdt_FastJets02Mult", &v_mmdt_ArrayOfHist[0][4]);
- ttree->Branch("mmdt_FastJets02E", &v_mmdt_ArrayOfHist[0][5]);
- ttree->Branch("mmdt_FastJets02Eta", &v_mmdt_ArrayOfHist[0][6]);
- ttree->Branch("mmdt_FastJets02Rapidity", &v_mmdt_ArrayOfHist[0][7]);
- ttree->Branch("mmdt_FastJets02Phi", &v_mmdt_ArrayOfHist[0][8]);
- ttree->Branch("mmdt_FastJets02MultLam50", &v_mmdt_ArrayOfHist[0][14]);
- ttree->Branch("mmdt_FastJets02PtLam50", &v_mmdt_ArrayOfHist[0][15]);
- ttree->Branch("mmdt_FastJets02LhaLam50", &v_mmdt_ArrayOfHist[0][16]);
- ttree->Branch("mmdt_FastJets02WidthLam50", &v_mmdt_ArrayOfHist[0][17]);
- ttree->Branch("mmdt_FastJets02MassLam50", &v_mmdt_ArrayOfHist[0][18]);
- ttree->Branch("mmdt_FastJets02MultLam100", &v_mmdt_ArrayOfHist[0][19]);
- ttree->Branch("mmdt_FastJets02PtLam100", &v_mmdt_ArrayOfHist[0][20]);
- ttree->Branch("mmdt_FastJets02LhaLam100", &v_mmdt_ArrayOfHist[0][21]);
- ttree->Branch("mmdt_FastJets02WidthLam100", &v_mmdt_ArrayOfHist[0][22]);
- ttree->Branch("mmdt_FastJets02MassLam100", &v_mmdt_ArrayOfHist[0][23]);
- ttree->Branch("mmdt_FastJets02MultLam200", &v_mmdt_ArrayOfHist[0][24]);
- ttree->Branch("mmdt_FastJets02PtLam200", &v_mmdt_ArrayOfHist[0][25]);
- ttree->Branch("mmdt_FastJets02LhaLam200", &v_mmdt_ArrayOfHist[0][26]);
- ttree->Branch("mmdt_FastJets02WidthLam200", &v_mmdt_ArrayOfHist[0][27]);
- ttree->Branch("mmdt_FastJets02MassLam200", &v_mmdt_ArrayOfHist[0][28]);
- ttree->Branch("mmdt_FastJets02MultLam400", &v_mmdt_ArrayOfHist[0][29]);
- ttree->Branch("mmdt_FastJets02PtLam400", &v_mmdt_ArrayOfHist[0][30]);
- ttree->Branch("mmdt_FastJets02LhaLam400", &v_mmdt_ArrayOfHist[0][31]);
- ttree->Branch("mmdt_FastJets02WidthLam400", &v_mmdt_ArrayOfHist[0][32]);
- ttree->Branch("mmdt_FastJets02MassLam400", &v_mmdt_ArrayOfHist[0][33]);
- ttree->Branch("mmdt_FastJets02MultLam800", &v_mmdt_ArrayOfHist[0][34]);
- ttree->Branch("mmdt_FastJets02PtLam800", &v_mmdt_ArrayOfHist[0][35]);
- ttree->Branch("mmdt_FastJets02LhaLam800", &v_mmdt_ArrayOfHist[0][36]);
- ttree->Branch("mmdt_FastJets02WidthLam800", &v_mmdt_ArrayOfHist[0][37]);
- ttree->Branch("mmdt_FastJets02MassLam800", &v_mmdt_ArrayOfHist[0][38]);
- ttree->Branch("mmdt_FastJets02PtSubLeadingQ50", &v_mmdt_ArrayOfHist[0][39]);
- ttree->Branch("mmdt_FastJets02PtLeadingQ50", &v_mmdt_ArrayOfHist[0][40]);
- ttree->Branch("mmdt_FastJets02PtReclustQ50", &v_mmdt_ArrayOfHist[0][41]);
- ttree->Branch("mmdt_FastJets02PtSubLeadingQ100", &v_mmdt_ArrayOfHist[0][42]);
- ttree->Branch("mmdt_FastJets02PtLeadingQ100", &v_mmdt_ArrayOfHist[0][43]);
- ttree->Branch("mmdt_FastJets02PtReclustQ100", &v_mmdt_ArrayOfHist[0][44]);
- ttree->Branch("mmdt_FastJets02PtSubLeadingQ200", &v_mmdt_ArrayOfHist[0][45]);
- ttree->Branch("mmdt_FastJets02PtLeadingQ200", &v_mmdt_ArrayOfHist[0][46]);
- ttree->Branch("mmdt_FastJets02PtReclustQ200", &v_mmdt_ArrayOfHist[0][47]);
- ttree->Branch("mmdt_FastJets02PtSubLeadingQ400", &v_mmdt_ArrayOfHist[0][48]);
- ttree->Branch("mmdt_FastJets02PtLeadingQ400", &v_mmdt_ArrayOfHist[0][49]);
- ttree->Branch("mmdt_FastJets02PtReclustQ400", &v_mmdt_ArrayOfHist[0][50]);
- ttree->Branch("mmdt_FastJets02PtSubLeadingQ800", &v_mmdt_ArrayOfHist[0][51]);
- ttree->Branch("mmdt_FastJets02PtLeadingQ800", &v_mmdt_ArrayOfHist[0][52]);
- ttree->Branch("mmdt_FastJets02PtReclustQ800", &v_mmdt_ArrayOfHist[0][53]);
- ttree->Branch("mmdt_FastJets04PtSubLeading", &v_mmdt_ArrayOfHist[1][0]);
- ttree->Branch("mmdt_FastJets04PtLeading", &v_mmdt_ArrayOfHist[1][1]);
- ttree->Branch("mmdt_FastJets04PtReclust", &v_mmdt_ArrayOfHist[1][2]);
- ttree->Branch("mmdt_FastJets04Pt", &v_mmdt_ArrayOfHist[1][3]);
- ttree->Branch("mmdt_FastJets04Mult", &v_mmdt_ArrayOfHist[1][4]);
- ttree->Branch("mmdt_FastJets04E", &v_mmdt_ArrayOfHist[1][5]);
- ttree->Branch("mmdt_FastJets04Eta", &v_mmdt_ArrayOfHist[1][6]);
- ttree->Branch("mmdt_FastJets04Rapidity", &v_mmdt_ArrayOfHist[1][7]);
- ttree->Branch("mmdt_FastJets04Phi", &v_mmdt_ArrayOfHist[1][8]);
- ttree->Branch("mmdt_FastJets04MultLam50", &v_mmdt_ArrayOfHist[1][14]);
- ttree->Branch("mmdt_FastJets04PtLam50", &v_mmdt_ArrayOfHist[1][15]);
- ttree->Branch("mmdt_FastJets04LhaLam50", &v_mmdt_ArrayOfHist[1][16]);
- ttree->Branch("mmdt_FastJets04WidthLam50", &v_mmdt_ArrayOfHist[1][17]);
- ttree->Branch("mmdt_FastJets04MassLam50", &v_mmdt_ArrayOfHist[1][18]);
- ttree->Branch("mmdt_FastJets04MultLam100", &v_mmdt_ArrayOfHist[1][19]);
- ttree->Branch("mmdt_FastJets04PtLam100", &v_mmdt_ArrayOfHist[1][20]);
- ttree->Branch("mmdt_FastJets04LhaLam100", &v_mmdt_ArrayOfHist[1][21]);
- ttree->Branch("mmdt_FastJets04WidthLam100", &v_mmdt_ArrayOfHist[1][22]);
- ttree->Branch("mmdt_FastJets04MassLam100", &v_mmdt_ArrayOfHist[1][23]);
- ttree->Branch("mmdt_FastJets04MultLam200", &v_mmdt_ArrayOfHist[1][24]);
- ttree->Branch("mmdt_FastJets04PtLam200", &v_mmdt_ArrayOfHist[1][25]);
- ttree->Branch("mmdt_FastJets04LhaLam200", &v_mmdt_ArrayOfHist[1][26]);
- ttree->Branch("mmdt_FastJets04WidthLam200", &v_mmdt_ArrayOfHist[1][27]);
- ttree->Branch("mmdt_FastJets04MassLam200", &v_mmdt_ArrayOfHist[1][28]);
- ttree->Branch("mmdt_FastJets04MultLam400", &v_mmdt_ArrayOfHist[1][29]);
- ttree->Branch("mmdt_FastJets04PtLam400", &v_mmdt_ArrayOfHist[1][30]);
- ttree->Branch("mmdt_FastJets04LhaLam400", &v_mmdt_ArrayOfHist[1][31]);
- ttree->Branch("mmdt_FastJets04WidthLam400", &v_mmdt_ArrayOfHist[1][32]);
- ttree->Branch("mmdt_FastJets04MassLam400", &v_mmdt_ArrayOfHist[1][33]);
- ttree->Branch("mmdt_FastJets04MultLam800", &v_mmdt_ArrayOfHist[1][34]);
- ttree->Branch("mmdt_FastJets04PtLam800", &v_mmdt_ArrayOfHist[1][35]);
- ttree->Branch("mmdt_FastJets04LhaLam800", &v_mmdt_ArrayOfHist[1][36]);
- ttree->Branch("mmdt_FastJets04WidthLam800", &v_mmdt_ArrayOfHist[1][37]);
- ttree->Branch("mmdt_FastJets04MassLam800", &v_mmdt_ArrayOfHist[1][38]);
- ttree->Branch("mmdt_FastJets04PtSubLeadingQ50", &v_mmdt_ArrayOfHist[1][39]);
- ttree->Branch("mmdt_FastJets04PtLeadingQ50", &v_mmdt_ArrayOfHist[1][40]);
- ttree->Branch("mmdt_FastJets04PtReclustQ50", &v_mmdt_ArrayOfHist[1][41]);
- ttree->Branch("mmdt_FastJets04PtSubLeadingQ100", &v_mmdt_ArrayOfHist[1][42]);
- ttree->Branch("mmdt_FastJets04PtLeadingQ100", &v_mmdt_ArrayOfHist[1][43]);
- ttree->Branch("mmdt_FastJets04PtReclustQ100", &v_mmdt_ArrayOfHist[1][44]);
- ttree->Branch("mmdt_FastJets04PtSubLeadingQ200", &v_mmdt_ArrayOfHist[1][45]);
- ttree->Branch("mmdt_FastJets04PtLeadingQ200", &v_mmdt_ArrayOfHist[1][46]);
- ttree->Branch("mmdt_FastJets04PtReclustQ200", &v_mmdt_ArrayOfHist[1][47]);
- ttree->Branch("mmdt_FastJets04PtSubLeadingQ400", &v_mmdt_ArrayOfHist[1][48]);
- ttree->Branch("mmdt_FastJets04PtLeadingQ400", &v_mmdt_ArrayOfHist[1][49]);
- ttree->Branch("mmdt_FastJets04PtReclustQ400", &v_mmdt_ArrayOfHist[1][50]);
- ttree->Branch("mmdt_FastJets04PtSubLeadingQ800", &v_mmdt_ArrayOfHist[1][51]);
- ttree->Branch("mmdt_FastJets04PtLeadingQ800", &v_mmdt_ArrayOfHist[1][52]);
- ttree->Branch("mmdt_FastJets04PtReclustQ800", &v_mmdt_ArrayOfHist[1][53]);
- ttree->Branch("mmdt_FastJets06PtSubLeading", &v_mmdt_ArrayOfHist[2][0]);
- ttree->Branch("mmdt_FastJets06PtLeading", &v_mmdt_ArrayOfHist[2][1]);
- ttree->Branch("mmdt_FastJets06PtReclust", &v_mmdt_ArrayOfHist[2][2]);
- ttree->Branch("mmdt_FastJets06Pt", &v_mmdt_ArrayOfHist[2][3]);
- ttree->Branch("mmdt_FastJets06Mult", &v_mmdt_ArrayOfHist[2][4]);
- ttree->Branch("mmdt_FastJets06E", &v_mmdt_ArrayOfHist[2][5]);
- ttree->Branch("mmdt_FastJets06Eta", &v_mmdt_ArrayOfHist[2][6]);
- ttree->Branch("mmdt_FastJets06Rapidity", &v_mmdt_ArrayOfHist[2][7]);
- ttree->Branch("mmdt_FastJets06Phi", &v_mmdt_ArrayOfHist[2][8]);
- ttree->Branch("mmdt_FastJets06MultLam50", &v_mmdt_ArrayOfHist[2][14]);
- ttree->Branch("mmdt_FastJets06PtLam50", &v_mmdt_ArrayOfHist[2][15]);
- ttree->Branch("mmdt_FastJets06LhaLam50", &v_mmdt_ArrayOfHist[2][16]);
- ttree->Branch("mmdt_FastJets06WidthLam50", &v_mmdt_ArrayOfHist[2][17]);
- ttree->Branch("mmdt_FastJets06MassLam50", &v_mmdt_ArrayOfHist[2][18]);
- ttree->Branch("mmdt_FastJets06MultLam100", &v_mmdt_ArrayOfHist[2][19]);
- ttree->Branch("mmdt_FastJets06PtLam100", &v_mmdt_ArrayOfHist[2][20]);
- ttree->Branch("mmdt_FastJets06LhaLam100", &v_mmdt_ArrayOfHist[2][21]);
- ttree->Branch("mmdt_FastJets06WidthLam100", &v_mmdt_ArrayOfHist[2][22]);
- ttree->Branch("mmdt_FastJets06MassLam100", &v_mmdt_ArrayOfHist[2][23]);
- ttree->Branch("mmdt_FastJets06MultLam200", &v_mmdt_ArrayOfHist[2][24]);
- ttree->Branch("mmdt_FastJets06PtLam200", &v_mmdt_ArrayOfHist[2][25]);
- ttree->Branch("mmdt_FastJets06LhaLam200", &v_mmdt_ArrayOfHist[2][26]);
- ttree->Branch("mmdt_FastJets06WidthLam200", &v_mmdt_ArrayOfHist[2][27]);
- ttree->Branch("mmdt_FastJets06MassLam200", &v_mmdt_ArrayOfHist[2][28]);
- ttree->Branch("mmdt_FastJets06MultLam400", &v_mmdt_ArrayOfHist[2][29]);
- ttree->Branch("mmdt_FastJets06PtLam400", &v_mmdt_ArrayOfHist[2][30]);
- ttree->Branch("mmdt_FastJets06LhaLam400", &v_mmdt_ArrayOfHist[2][31]);
- ttree->Branch("mmdt_FastJets06WidthLam400", &v_mmdt_ArrayOfHist[2][32]);
- ttree->Branch("mmdt_FastJets06MassLam400", &v_mmdt_ArrayOfHist[2][33]);
- ttree->Branch("mmdt_FastJets06MultLam800", &v_mmdt_ArrayOfHist[2][34]);
- ttree->Branch("mmdt_FastJets06PtLam800", &v_mmdt_ArrayOfHist[2][35]);
- ttree->Branch("mmdt_FastJets06LhaLam800", &v_mmdt_ArrayOfHist[2][36]);
- ttree->Branch("mmdt_FastJets06WidthLam800", &v_mmdt_ArrayOfHist[2][37]);
- ttree->Branch("mmdt_FastJets06MassLam800", &v_mmdt_ArrayOfHist[2][38]);
- ttree->Branch("mmdt_FastJets06PtSubLeadingQ50", &v_mmdt_ArrayOfHist[2][39]);
- ttree->Branch("mmdt_FastJets06PtLeadingQ50", &v_mmdt_ArrayOfHist[2][40]);
- ttree->Branch("mmdt_FastJets06PtReclustQ50", &v_mmdt_ArrayOfHist[2][41]);
- ttree->Branch("mmdt_FastJets06PtSubLeadingQ100", &v_mmdt_ArrayOfHist[2][42]);
- ttree->Branch("mmdt_FastJets06PtLeadingQ100", &v_mmdt_ArrayOfHist[2][43]);
- ttree->Branch("mmdt_FastJets06PtReclustQ100", &v_mmdt_ArrayOfHist[2][44]);
- ttree->Branch("mmdt_FastJets06PtSubLeadingQ200", &v_mmdt_ArrayOfHist[2][45]);
- ttree->Branch("mmdt_FastJets06PtLeadingQ200", &v_mmdt_ArrayOfHist[2][46]);
- ttree->Branch("mmdt_FastJets06PtReclustQ200", &v_mmdt_ArrayOfHist[2][47]);
- ttree->Branch("mmdt_FastJets06PtSubLeadingQ400", &v_mmdt_ArrayOfHist[2][48]);
- ttree->Branch("mmdt_FastJets06PtLeadingQ400", &v_mmdt_ArrayOfHist[2][49]);
- ttree->Branch("mmdt_FastJets06PtReclustQ400", &v_mmdt_ArrayOfHist[2][50]);
- ttree->Branch("mmdt_FastJets06PtSubLeadingQ800", &v_mmdt_ArrayOfHist[2][51]);
- ttree->Branch("mmdt_FastJets06PtLeadingQ800", &v_mmdt_ArrayOfHist[2][52]);
- ttree->Branch("mmdt_FastJets06PtReclustQ800", &v_mmdt_ArrayOfHist[2][53]);
- ttree->Branch("mmdt_FastJets08PtSubLeading", &v_mmdt_ArrayOfHist[3][0]);
- ttree->Branch("mmdt_FastJets08PtLeading", &v_mmdt_ArrayOfHist[3][1]);
- ttree->Branch("mmdt_FastJets08PtReclust", &v_mmdt_ArrayOfHist[3][2]);
- ttree->Branch("mmdt_FastJets08Pt", &v_mmdt_ArrayOfHist[3][3]);
- ttree->Branch("mmdt_FastJets08Mult", &v_mmdt_ArrayOfHist[3][4]);
- ttree->Branch("mmdt_FastJets08E", &v_mmdt_ArrayOfHist[3][5]);
- ttree->Branch("mmdt_FastJets08Eta", &v_mmdt_ArrayOfHist[3][6]);
- ttree->Branch("mmdt_FastJets08Rapidity", &v_mmdt_ArrayOfHist[3][7]);
- ttree->Branch("mmdt_FastJets08Phi", &v_mmdt_ArrayOfHist[3][8]);
- ttree->Branch("mmdt_FastJets08MultLam50", &v_mmdt_ArrayOfHist[3][14]);
- ttree->Branch("mmdt_FastJets08PtLam50", &v_mmdt_ArrayOfHist[3][15]);
- ttree->Branch("mmdt_FastJets08LhaLam50", &v_mmdt_ArrayOfHist[3][16]);
- ttree->Branch("mmdt_FastJets08WidthLam50", &v_mmdt_ArrayOfHist[3][17]);
- ttree->Branch("mmdt_FastJets08MassLam50", &v_mmdt_ArrayOfHist[3][18]);
- ttree->Branch("mmdt_FastJets08MultLam100", &v_mmdt_ArrayOfHist[3][19]);
- ttree->Branch("mmdt_FastJets08PtLam100", &v_mmdt_ArrayOfHist[3][20]);
- ttree->Branch("mmdt_FastJets08LhaLam100", &v_mmdt_ArrayOfHist[3][21]);
- ttree->Branch("mmdt_FastJets08WidthLam100", &v_mmdt_ArrayOfHist[3][22]);
- ttree->Branch("mmdt_FastJets08MassLam100", &v_mmdt_ArrayOfHist[3][23]);
- ttree->Branch("mmdt_FastJets08MultLam200", &v_mmdt_ArrayOfHist[3][24]);
- ttree->Branch("mmdt_FastJets08PtLam200", &v_mmdt_ArrayOfHist[3][25]);
- ttree->Branch("mmdt_FastJets08LhaLam200", &v_mmdt_ArrayOfHist[3][26]);
- ttree->Branch("mmdt_FastJets08WidthLam200", &v_mmdt_ArrayOfHist[3][27]);
- ttree->Branch("mmdt_FastJets08MassLam200", &v_mmdt_ArrayOfHist[3][28]);
- ttree->Branch("mmdt_FastJets08MultLam400", &v_mmdt_ArrayOfHist[3][29]);
- ttree->Branch("mmdt_FastJets08PtLam400", &v_mmdt_ArrayOfHist[3][30]);
- ttree->Branch("mmdt_FastJets08LhaLam400", &v_mmdt_ArrayOfHist[3][31]);
- ttree->Branch("mmdt_FastJets08WidthLam400", &v_mmdt_ArrayOfHist[3][32]);
- ttree->Branch("mmdt_FastJets08MassLam400", &v_mmdt_ArrayOfHist[3][33]);
- ttree->Branch("mmdt_FastJets08MultLam800", &v_mmdt_ArrayOfHist[3][34]);
- ttree->Branch("mmdt_FastJets08PtLam800", &v_mmdt_ArrayOfHist[3][35]);
- ttree->Branch("mmdt_FastJets08LhaLam800", &v_mmdt_ArrayOfHist[3][36]);
- ttree->Branch("mmdt_FastJets08WidthLam800", &v_mmdt_ArrayOfHist[3][37]);
- ttree->Branch("mmdt_FastJets08MassLam800", &v_mmdt_ArrayOfHist[3][38]);
- ttree->Branch("mmdt_FastJets08PtSubLeadingQ50", &v_mmdt_ArrayOfHist[3][39]);
- ttree->Branch("mmdt_FastJets08PtLeadingQ50", &v_mmdt_ArrayOfHist[3][40]);
- ttree->Branch("mmdt_FastJets08PtReclustQ50", &v_mmdt_ArrayOfHist[3][41]);
- ttree->Branch("mmdt_FastJets08PtSubLeadingQ100", &v_mmdt_ArrayOfHist[3][42]);
- ttree->Branch("mmdt_FastJets08PtLeadingQ100", &v_mmdt_ArrayOfHist[3][43]);
- ttree->Branch("mmdt_FastJets08PtReclustQ100", &v_mmdt_ArrayOfHist[3][44]);
- ttree->Branch("mmdt_FastJets08PtSubLeadingQ200", &v_mmdt_ArrayOfHist[3][45]);
- ttree->Branch("mmdt_FastJets08PtLeadingQ200", &v_mmdt_ArrayOfHist[3][46]);
- ttree->Branch("mmdt_FastJets08PtReclustQ200", &v_mmdt_ArrayOfHist[3][47]);
- ttree->Branch("mmdt_FastJets08PtSubLeadingQ400", &v_mmdt_ArrayOfHist[3][48]);
- ttree->Branch("mmdt_FastJets08PtLeadingQ400", &v_mmdt_ArrayOfHist[3][49]);
- ttree->Branch("mmdt_FastJets08PtReclustQ400", &v_mmdt_ArrayOfHist[3][50]);
- ttree->Branch("mmdt_FastJets08PtSubLeadingQ800", &v_mmdt_ArrayOfHist[3][51]);
- ttree->Branch("mmdt_FastJets08PtLeadingQ800", &v_mmdt_ArrayOfHist[3][52]);
- ttree->Branch("mmdt_FastJets08PtReclustQ800", &v_mmdt_ArrayOfHist[3][53]);
- ttree->Branch("mmdt_FastJets10PtSubLeading", &v_mmdt_ArrayOfHist[4][0]);
- ttree->Branch("mmdt_FastJets10PtLeading", &v_mmdt_ArrayOfHist[4][1]);
- ttree->Branch("mmdt_FastJets10PtReclust", &v_mmdt_ArrayOfHist[4][2]);
- ttree->Branch("mmdt_FastJets10Pt", &v_mmdt_ArrayOfHist[4][3]);
- ttree->Branch("mmdt_FastJets10Mult", &v_mmdt_ArrayOfHist[4][4]);
- ttree->Branch("mmdt_FastJets10E", &v_mmdt_ArrayOfHist[4][5]);
- ttree->Branch("mmdt_FastJets10Eta", &v_mmdt_ArrayOfHist[4][6]);
- ttree->Branch("mmdt_FastJets10Rapidity", &v_mmdt_ArrayOfHist[4][7]);
- ttree->Branch("mmdt_FastJets10Phi", &v_mmdt_ArrayOfHist[4][8]);
- ttree->Branch("mmdt_FastJets10MultLam50", &v_mmdt_ArrayOfHist[4][14]);
- ttree->Branch("mmdt_FastJets10PtLam50", &v_mmdt_ArrayOfHist[4][15]);
- ttree->Branch("mmdt_FastJets10LhaLam50", &v_mmdt_ArrayOfHist[4][16]);
- ttree->Branch("mmdt_FastJets10WidthLam50", &v_mmdt_ArrayOfHist[4][17]);
- ttree->Branch("mmdt_FastJets10MassLam50", &v_mmdt_ArrayOfHist[4][18]);
- ttree->Branch("mmdt_FastJets10MultLam100", &v_mmdt_ArrayOfHist[4][19]);
- ttree->Branch("mmdt_FastJets10PtLam100", &v_mmdt_ArrayOfHist[4][20]);
- ttree->Branch("mmdt_FastJets10LhaLam100", &v_mmdt_ArrayOfHist[4][21]);
- ttree->Branch("mmdt_FastJets10WidthLam100", &v_mmdt_ArrayOfHist[4][22]);
- ttree->Branch("mmdt_FastJets10MassLam100", &v_mmdt_ArrayOfHist[4][23]);
- ttree->Branch("mmdt_FastJets10MultLam200", &v_mmdt_ArrayOfHist[4][24]);
- ttree->Branch("mmdt_FastJets10PtLam200", &v_mmdt_ArrayOfHist[4][25]);
- ttree->Branch("mmdt_FastJets10LhaLam200", &v_mmdt_ArrayOfHist[4][26]);
- ttree->Branch("mmdt_FastJets10WidthLam200", &v_mmdt_ArrayOfHist[4][27]);
- ttree->Branch("mmdt_FastJets10MassLam200", &v_mmdt_ArrayOfHist[4][28]);
- ttree->Branch("mmdt_FastJets10MultLam400", &v_mmdt_ArrayOfHist[4][29]);
- ttree->Branch("mmdt_FastJets10PtLam400", &v_mmdt_ArrayOfHist[4][30]);
- ttree->Branch("mmdt_FastJets10LhaLam400", &v_mmdt_ArrayOfHist[4][31]);
- ttree->Branch("mmdt_FastJets10WidthLam400", &v_mmdt_ArrayOfHist[4][32]);
- ttree->Branch("mmdt_FastJets10MassLam400", &v_mmdt_ArrayOfHist[4][33]);
- ttree->Branch("mmdt_FastJets10MultLam800", &v_mmdt_ArrayOfHist[4][34]);
- ttree->Branch("mmdt_FastJets10PtLam800", &v_mmdt_ArrayOfHist[4][35]);
- ttree->Branch("mmdt_FastJets10LhaLam800", &v_mmdt_ArrayOfHist[4][36]);
- ttree->Branch("mmdt_FastJets10WidthLam800", &v_mmdt_ArrayOfHist[4][37]);
- ttree->Branch("mmdt_FastJets10MassLam800", &v_mmdt_ArrayOfHist[4][38]);
- ttree->Branch("mmdt_FastJets10PtSubLeadingQ50", &v_mmdt_ArrayOfHist[4][39]);
- ttree->Branch("mmdt_FastJets10PtLeadingQ50", &v_mmdt_ArrayOfHist[4][40]);
- ttree->Branch("mmdt_FastJets10PtReclustQ50", &v_mmdt_ArrayOfHist[4][41]);
- ttree->Branch("mmdt_FastJets10PtSubLeadingQ100", &v_mmdt_ArrayOfHist[4][42]);
- ttree->Branch("mmdt_FastJets10PtLeadingQ100", &v_mmdt_ArrayOfHist[4][43]);
- ttree->Branch("mmdt_FastJets10PtReclustQ100", &v_mmdt_ArrayOfHist[4][44]);
- ttree->Branch("mmdt_FastJets10PtSubLeadingQ200", &v_mmdt_ArrayOfHist[4][45]);
- ttree->Branch("mmdt_FastJets10PtLeadingQ200", &v_mmdt_ArrayOfHist[4][46]);
- ttree->Branch("mmdt_FastJets10PtReclustQ200", &v_mmdt_ArrayOfHist[4][47]);
- ttree->Branch("mmdt_FastJets10PtSubLeadingQ400", &v_mmdt_ArrayOfHist[4][48]);
- ttree->Branch("mmdt_FastJets10PtLeadingQ400", &v_mmdt_ArrayOfHist[4][49]);
- ttree->Branch("mmdt_FastJets10PtReclustQ400", &v_mmdt_ArrayOfHist[4][50]);
- ttree->Branch("mmdt_FastJets10PtSubLeadingQ800", &v_mmdt_ArrayOfHist[4][51]);
- ttree->Branch("mmdt_FastJets10PtLeadingQ800", &v_mmdt_ArrayOfHist[4][52]);
- ttree->Branch("mmdt_FastJets10PtReclustQ800", &v_mmdt_ArrayOfHist[4][53]);
-        
       //
       FinalState fs(-PARTICLE_RAPMAX, PARTICLE_RAPMAX, 0.0*GeV);
       
@@ -1968,41 +1369,31 @@ void analyze(const Event& event) {
         if (p.pdgId() == 21) {
           NumberOfGluons++;
           _histGluonFractionPt->fill(p.pT(),event.weight());
-          v_GluonFractionPt.push_back(p.pT());
-          v_GluonFractionEta.push_back(p.eta());
         } else if (abs(p.pdgId()) < 7) {              
           NumberOfQuarks++;
           _histQuarkFractionPt->fill(p.pT(),event.weight());
-          v_QuarkFractionPt.push_back(p.pT());
-          v_QuarkFractionEta.push_back(p.eta());
         } else{
           NumberOfOthersThanGluonsAndQuars++;
           //if (p.pdgId() != 82){
           //  myfile << p.pdgId() <<"\n";
           //  }
           _histOthersThenGluonAndQuarkFractionPt->fill(p.pT(),event.weight());                      
-          v_OthersThenGluonAndQuarkFractionPt.push_back(p.pT());                      
         }
         if ((p.pdgId() == 21) || (abs(p.pdgId()) < 7)){
                 NumberOfGluonAndQuark++;
                 _histGluonAndQuarkFractionPt->fill(p.pT(), event.weight());          
-                v_GluonAndQuarkFractionPt.push_back(p.pT());
-                v_GluonAndQuarkFractionEta.push_back(p.eta());
         }
         NumberOfPartons++;
         _histPartonFractionPt->fill(p.pT(), event.weight());
-        v_PartonFractionPt.push_back(p.pT());
         if (p.pdgId() == 9922212){
-            _histPDGID->fill(30);
-            v_PDGID.push_back(30);
+            _histPDGID->fill(30, event.weight());
         } else{
             _histPDGID->fill(p.pdgId(), event.weight());
-            v_PDGID.push_back(p.pdgId());
         }
       }
 
       //if (NumberOfPartons != 0.0){
-      //  _histGluonFractionPt->fill(Q,NumberOfGluons/NumberOfPartons);
+      //  _histGluonFractionPt->fill(Q,event.weight()*NumberOfGluons/NumberOfPartons);
       //}
       _histGluonMulti->fill(NumberOfGluons,event.weight());
       _histQuarkMulti->fill(NumberOfQuarks,event.weight());
@@ -2010,237 +1401,35 @@ void analyze(const Event& event) {
       _histOthersThenGluonAndQuarkMulti->fill(NumberOfOthersThanGluonsAndQuars,event.weight());
       _histPartonMulti->fill(NumberOfPartons,event.weight());
 
-      v_GluonMulti.push_back(NumberOfGluons);
-      v_QuarkMulti.push_back(NumberOfQuarks);
-      v_GluonAndQuarkMulti.push_back(NumberOfGluonAndQuark);
-      v_OthersThenGluonAndQuarkMulti.push_back(NumberOfOthersThanGluonsAndQuars);
-      v_PartonMulti.push_back(NumberOfPartons);
-
-      v_weight.push_back(event.weight());
-
       double ptmin_jet = 2*JET_MIN_PT_FRACTION/(1+JET_MIN_PT_FRACTION)*JET_AVG_PTMINS[0]; // = cca 44 GeV, 
       //// for low pt double ptmin_jet = 0.0;
-      double lambdaMult;
-      double lambdaPt;
-      double lambdaLha;
-      double lambdaWidth;
-      double lambdaMass;
+
 
       for (size_t i = 0; i < NumberOfRadiuses; ++i) {
       JetDefinition jet_def(antikt_algorithm, radius[i]);
       vector<PseudoJet> jets = (SelectorNHardest(2) * SelectorAbsRapMax(JET_RAPMAX) * SelectorPtMin(ptmin_jet))(jet_def(particles));
       vector<PseudoJet> jets_no_pt_cut = (SelectorNHardest(2) * SelectorAbsRapMax(JET_RAPMAX) * SelectorPtMin(0.0))(jet_def(particles));
-
       if(jets_no_pt_cut.size()>=2){
-        // impose the cuts
-        PseudoJet no_cut_orig_jet1 = jets_no_pt_cut[0];
-        PseudoJet no_cut_orig_jet2 = jets_no_pt_cut[1];
-        PseudoJet no_cut_jet1 = ca_wta_recluster(no_cut_orig_jet1);
-        PseudoJet no_cut_jet2 = ca_wta_recluster(no_cut_orig_jet2);
-        vector<PseudoJet> no_cut_JetPair(2);
-        if (no_cut_jet1.pt() >= no_cut_jet2.pt() ){
-            no_cut_JetPair[0]=no_cut_jet1;
-            no_cut_JetPair[1]=no_cut_jet2;
-        } else{
-            no_cut_JetPair[0]=no_cut_jet2;
-            no_cut_JetPair[1]=no_cut_jet1;
-        }
+        ArrayOfHist[i][0]->fill(jets_no_pt_cut[0].pt());
+        ArrayOfHist[i][1]->fill(jets_no_pt_cut[1].pt());
 
-        PseudoJet no_cut_mmdt_jet1 = (*mmdt)(no_cut_jet1);
-        PseudoJet no_cut_mmdt_jet2 = (*mmdt)(no_cut_jet2);
-        vector<PseudoJet> no_cut_mmdt_JetPair(2);
-        no_cut_mmdt_JetPair[0]=no_cut_mmdt_jet1;
-        no_cut_mmdt_JetPair[1]=no_cut_mmdt_jet2;
-
-        if (no_cut_mmdt_jet1.pt() >= no_cut_mmdt_jet2.pt() ){
-            no_cut_mmdt_JetPair[0]=no_cut_mmdt_jet1;
-            no_cut_mmdt_JetPair[1]=no_cut_mmdt_jet2;
-        } else{
-            no_cut_mmdt_JetPair[0]=no_cut_mmdt_jet2;
-            no_cut_mmdt_JetPair[1]=no_cut_mmdt_jet1;
-        }
-            //fill no cut variables
-        for (long unsigned int l = 0; l<no_cut_JetPair.size(); l++){
-              v_no_cut_ArrayOfHist[i][0].push_back(no_cut_JetPair[l].pt()/GeV);
-              v_no_cut_ArrayOfHist[i][1].push_back(no_cut_JetPair[l].eta());
-              v_no_cut_ArrayOfHist[i][2].push_back(no_cut_JetPair[l].phi());
-              v_no_cut_ArrayOfHist[i][3].push_back(no_cut_JetPair[l].E()/GeV);
-              lambdaMult = 0.0;
-              lambdaPt = 0.0;
-              lambdaLha = 0.0;
-              lambdaWidth = 0.0;
-              lambdaMass = 0.0;
-              for (const PseudoJet& p : no_cut_JetPair[l].constituents()) {
-                        lambdaLha=lambdaLha+(p.pt()/no_cut_JetPair[l].pt())*pow(sqrt(p.squared_distance(no_cut_JetPair[l]))/radius[i] ,0.5);
-                        lambdaMult=lambdaMult+1.0; //ok 
-                        lambdaPt=lambdaPt+(p.pt()/no_cut_JetPair[l].pt())*(p.pt()/no_cut_JetPair[l].pt()); // ok
-                        lambdaWidth=lambdaWidth+(p.pt()/no_cut_JetPair[l].pt())*(sqrt(p.squared_distance(no_cut_JetPair[l]))/radius[i]);
-                        lambdaMass=lambdaMass+(p.pt()/no_cut_JetPair[l].pt())*pow(sqrt(p.squared_distance(no_cut_JetPair[l]))/radius[i],2.0);
-		  }
-              v_no_cut_ArrayOfHist[i][4].push_back(lambdaMult);
-              v_no_cut_ArrayOfHist[i][5].push_back(lambdaPt);
-              v_no_cut_ArrayOfHist[i][6].push_back(lambdaLha);
-              v_no_cut_ArrayOfHist[i][7].push_back(lambdaMass);
-              v_no_cut_ArrayOfHist[i][8].push_back(lambdaWidth);
-        }
-
-        //fill no cut mmdt variables
-
-        for (long unsigned int l = 0; l<no_cut_mmdt_JetPair.size(); l++){
-              v_no_cut_mmdt_ArrayOfHist[i][0].push_back(no_cut_mmdt_JetPair[l].pt()/GeV);
-              v_no_cut_mmdt_ArrayOfHist[i][1].push_back(no_cut_mmdt_JetPair[l].eta());
-              v_no_cut_mmdt_ArrayOfHist[i][2].push_back(no_cut_mmdt_JetPair[l].phi());
-              v_no_cut_mmdt_ArrayOfHist[i][3].push_back(no_cut_mmdt_JetPair[l].E()/GeV);
-              lambdaMult = 0.0;
-              lambdaPt = 0.0;
-              lambdaLha = 0.0;
-              lambdaWidth = 0.0;
-              lambdaMass = 0.0;
-              for (const PseudoJet& p : no_cut_mmdt_JetPair[l].constituents()) {
-                        lambdaLha=lambdaLha+(p.pt()/no_cut_mmdt_JetPair[l].pt())*pow(sqrt(p.squared_distance(no_cut_mmdt_JetPair[l]))/radius[i] ,0.5);
-                        lambdaMult=lambdaMult+1.0; //ok 
-                        lambdaPt=lambdaPt+(p.pt()/no_cut_mmdt_JetPair[l].pt())*(p.pt()/no_cut_mmdt_JetPair[l].pt()); // ok
-                        lambdaWidth=lambdaWidth+(p.pt()/no_cut_mmdt_JetPair[l].pt())*(sqrt(p.squared_distance(no_cut_mmdt_JetPair[l]))/radius[i]);
-                        lambdaMass=lambdaMass+(p.pt()/no_cut_mmdt_JetPair[l].pt())*pow(sqrt(p.squared_distance(no_cut_mmdt_JetPair[l]))/radius[i],2.0);
-		  }
-              v_no_cut_mmdt_ArrayOfHist[i][4].push_back(lambdaMult);
-              v_no_cut_mmdt_ArrayOfHist[i][5].push_back(lambdaPt);
-              v_no_cut_mmdt_ArrayOfHist[i][6].push_back(lambdaLha);
-              v_no_cut_mmdt_ArrayOfHist[i][7].push_back(lambdaMass);
-              v_no_cut_mmdt_ArrayOfHist[i][8].push_back(lambdaWidth);
-        }
-        
-        //from old code
-
-        if (jets_no_pt_cut[1].pt()>=jets_no_pt_cut[0].pt()){
-              ArrayOfHist[i][0]->fill(jets_no_pt_cut[0].pt()/GeV);
-              ArrayOfHist[i][1]->fill(jets_no_pt_cut[1].pt()/GeV);
-              v_ArrayOfHist[i][0].push_back(jets_no_pt_cut[0].pt()/GeV);
-              v_ArrayOfHist[i][1].push_back(jets_no_pt_cut[1].pt()/GeV);
-        } else{
-              ArrayOfHist[i][0]->fill(jets_no_pt_cut[1].pt()/GeV);
-              ArrayOfHist[i][1]->fill(jets_no_pt_cut[0].pt()/GeV);
-              v_ArrayOfHist[i][0].push_back(jets_no_pt_cut[1].pt()/GeV);
-              v_ArrayOfHist[i][1].push_back(jets_no_pt_cut[0].pt()/GeV);
-        }
-
-      } else{
-      ttree->Fill();
-
-      // clearing vercots
-      v_weight.clear();
-      v_PDGID.clear();
-      v_GluonFractionPt.clear();
-      v_QuarkFractionPt.clear();
-      v_GluonAndQuarkFractionPt.clear();
-      v_GluonFractionEta.clear();
-      v_QuarkFractionEta.clear();
-      v_GluonAndQuarkFractionEta.clear();
-      v_OthersThenGluonAndQuarkFractionPt.clear();
-      v_PartonFractionPt.clear();
-      v_GluonMulti.clear();
-      v_QuarkMulti.clear();
-      v_GluonAndQuarkMulti.clear();
-      v_OthersThenGluonAndQuarkMulti.clear();
-      v_PartonMulti.clear();
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=53;k++){
-            v_ArrayOfHist[l][k].clear();
-            v_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=9;k++){
-            v_no_cut_ArrayOfHist[l][k].clear();
-            v_no_cut_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      continue;
       }
 
-        if(jets.size()<2) {
-              ttree->Fill();
-
-      // clearing vercots
-      v_weight.clear();
-      v_PDGID.clear();
-      v_GluonFractionPt.clear();
-      v_QuarkFractionPt.clear();
-      v_GluonAndQuarkFractionPt.clear();
-      v_GluonFractionEta.clear();
-      v_QuarkFractionEta.clear();
-      v_GluonAndQuarkFractionEta.clear();
-      v_OthersThenGluonAndQuarkFractionPt.clear();
-      v_PartonFractionPt.clear();
-      v_GluonMulti.clear();
-      v_QuarkMulti.clear();
-      v_GluonAndQuarkMulti.clear();
-      v_OthersThenGluonAndQuarkMulti.clear();
-      v_PartonMulti.clear();
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=53;k++){
-            v_ArrayOfHist[l][k].clear();
-            v_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=9;k++){
-            v_no_cut_ArrayOfHist[l][k].clear();
-            v_no_cut_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      continue;
-        }
+        if(jets.size()<2) continue;
 
         // impose the cuts
         PseudoJet orig_jet1 = jets[0];
         PseudoJet orig_jet2 = jets[1];
 
         // make sure we have something enough symmetric and close in rapidity
-        //if (orig_jet2.pt() / orig_jet1.pt() < JET_MIN_PT_FRACTION) continue; // comment for low pt
-        //if (std::abs(orig_jet1.rap()-orig_jet2.rap())>DELTA_RAP_MAX_DIJET) continue;
+        if (orig_jet2.pt() / orig_jet1.pt() < JET_MIN_PT_FRACTION) continue; // comment for low pt
+        if (std::abs(orig_jet1.rap()-orig_jet2.rap())>DELTA_RAP_MAX_DIJET) continue;
 
         // we need to pass the avgpt cut
         double avgpt = 0.5*(orig_jet1.pt() + orig_jet2.pt());
         unsigned int nQ=0;
         while ((nQ<nQs) && (avgpt>=JET_AVG_PTMINS[nQ])) nQ++;
-        if ( (nQ == 0) ||
-            (orig_jet2.pt() / orig_jet1.pt() < JET_MIN_PT_FRACTION) ||
-            (std::abs(orig_jet1.rap()-orig_jet2.rap())>DELTA_RAP_MAX_DIJET) )
-             {
-              
-            ttree->Fill();
-
-      // clearing vercots
-      v_weight.clear();
-      v_PDGID.clear();
-      v_GluonFractionPt.clear();
-      v_QuarkFractionPt.clear();
-      v_GluonAndQuarkFractionPt.clear();
-      v_GluonFractionEta.clear();
-      v_QuarkFractionEta.clear();
-      v_GluonAndQuarkFractionEta.clear();
-      v_OthersThenGluonAndQuarkFractionPt.clear();
-      v_PartonFractionPt.clear();
-      v_GluonMulti.clear();
-      v_QuarkMulti.clear();
-      v_GluonAndQuarkMulti.clear();
-      v_OthersThenGluonAndQuarkMulti.clear();
-      v_PartonMulti.clear();
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=53;k++){
-            v_ArrayOfHist[l][k].clear();
-            v_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=9;k++){
-            v_no_cut_ArrayOfHist[l][k].clear();
-            v_no_cut_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      continue;
-      }
+        if (nQ == 0) continue;
         
         // grooming
         PseudoJet jet1 = ca_wta_recluster(orig_jet1);
@@ -2255,6 +1444,12 @@ void analyze(const Event& event) {
         mmdt_JetPair[0]=mmdt_jet1;
         mmdt_JetPair[1]=mmdt_jet2;
 
+        double lambdaMult;
+        double lambdaPt;
+        double lambdaLha;
+        double lambdaWidth;
+        double lambdaMass;
+
         //
         for (int k=0; k<=1; k++) {
         ArrayOfHist[i][3]->fill(JetPair[k].pt()/GeV, event.weight());
@@ -2262,12 +1457,6 @@ void analyze(const Event& event) {
         ArrayOfHist[i][6]->fill(JetPair[k].eta() , event.weight());
         ArrayOfHist[i][5]->fill(JetPair[k].E()/GeV , event.weight());
         ArrayOfHist[i][7]->fill(JetPair[k].rap() , event.weight());
-
-        v_ArrayOfHist[i][3].push_back( JetPair[k].pt()/GeV);
-        v_ArrayOfHist[i][8].push_back( JetPair[k].phi());
-        v_ArrayOfHist[i][6].push_back( JetPair[k].eta() );
-        v_ArrayOfHist[i][5].push_back( JetPair[k].E()/GeV );
-        v_ArrayOfHist[i][7].push_back( JetPair[k].rap() );
         lambdaMult = 0.0;
         lambdaPt = 0.0;
         lambdaLha = 0.0;
@@ -2286,6 +1475,8 @@ void analyze(const Event& event) {
                   lambdaPt=lambdaPt+(p.pt()/JetPair[k].pt())*(p.pt()/JetPair[k].pt()); // ok
                   lambdaWidth=lambdaWidth+(p.pt()/JetPair[k].pt())*(sqrt(p.squared_distance(JetPair[k]))/radius[i]);
                   lambdaMass=lambdaMass+(p.pt()/JetPair[k].pt())*pow(sqrt(p.squared_distance(JetPair[k]))/radius[i],2.0);
+              
+
 					}
 
           
@@ -2312,19 +1503,9 @@ void analyze(const Event& event) {
               ArrayOfHist[i][17]->fill(lambdaWidth,event.weight());
               ArrayOfHist[i][18]->fill(lambdaMass,event.weight());
 
-              v_ArrayOfHist[i][14].push_back( lambdaMult );
-              v_ArrayOfHist[i][15].push_back( lambdaPt );
-              v_ArrayOfHist[i][16].push_back( lambdaLha );
-              v_ArrayOfHist[i][17].push_back( lambdaWidth );
-              v_ArrayOfHist[i][18].push_back( lambdaMass );
-
               if (k == 1 ) ArrayOfHist[i][39]->fill(JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) ArrayOfHist[i][40]->fill(JetPair[k].pt()/GeV, event.weight());
               ArrayOfHist[i][41]->fill(JetPair[k].pt()/GeV, event.weight());
-
-              if (k == 1 ) v_ArrayOfHist[i][39].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][40].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][41].push_back( JetPair[k].pt()/GeV );
 
             } else if (nQ == 2){
 
@@ -2358,25 +1539,6 @@ void analyze(const Event& event) {
               if (k == 1 ) ArrayOfHist[i][42]->fill(JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) ArrayOfHist[i][43]->fill(JetPair[k].pt()/GeV, event.weight());
               ArrayOfHist[i][44]->fill(JetPair[k].pt()/GeV, event.weight());
-
-              v_ArrayOfHist[i][14].push_back( lambdaMult );
-              v_ArrayOfHist[i][15].push_back( lambdaPt );
-              v_ArrayOfHist[i][16].push_back( lambdaLha );
-              v_ArrayOfHist[i][17].push_back( lambdaWidth );
-              v_ArrayOfHist[i][18].push_back( lambdaMass );
-              v_ArrayOfHist[i][19].push_back( lambdaMult );
-              v_ArrayOfHist[i][20].push_back( lambdaPt );
-              v_ArrayOfHist[i][21].push_back( lambdaLha );
-              v_ArrayOfHist[i][22].push_back( lambdaWidth );
-              v_ArrayOfHist[i][23].push_back( lambdaMass );
-
-              if (k == 1 ) v_ArrayOfHist[i][39].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][40].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][41] .push_back( JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_ArrayOfHist[i][42].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][43].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][44].push_back( JetPair[k].pt()/GeV );
 
 
             } else if (nQ == 3){
@@ -2425,35 +1587,6 @@ void analyze(const Event& event) {
               if (k == 1 ) ArrayOfHist[i][45]->fill(JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) ArrayOfHist[i][46]->fill(JetPair[k].pt()/GeV, event.weight());
               ArrayOfHist[i][47]->fill(JetPair[k].pt()/GeV, event.weight());
-
-              //
-              v_ArrayOfHist[i][14].push_back( lambdaMult );
-              v_ArrayOfHist[i][15].push_back( lambdaPt );
-              v_ArrayOfHist[i][16].push_back( lambdaLha );
-              v_ArrayOfHist[i][17].push_back( lambdaWidth );
-              v_ArrayOfHist[i][18].push_back( lambdaMass );
-              v_ArrayOfHist[i][19].push_back( lambdaMult );
-              v_ArrayOfHist[i][20].push_back( lambdaPt );
-              v_ArrayOfHist[i][21].push_back( lambdaLha );
-              v_ArrayOfHist[i][22].push_back( lambdaWidth );
-              v_ArrayOfHist[i][23].push_back( lambdaMass );
-              v_ArrayOfHist[i][24].push_back( lambdaMult );
-              v_ArrayOfHist[i][25].push_back( lambdaPt );
-              v_ArrayOfHist[i][26].push_back( lambdaLha );
-              v_ArrayOfHist[i][27].push_back( lambdaWidth );
-              v_ArrayOfHist[i][28].push_back( lambdaMass );
-
-              if (k == 1 ) v_ArrayOfHist[i][39].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][40].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][41] .push_back( JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_ArrayOfHist[i][42].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][43].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][44].push_back( JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_ArrayOfHist[i][45].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][46].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][47].push_back( JetPair[k].pt()/GeV );
 
             } else if (nQ == 4){
 
@@ -2517,43 +1650,6 @@ void analyze(const Event& event) {
               if (k == 1 ) ArrayOfHist[i][48]->fill(JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) ArrayOfHist[i][49]->fill(JetPair[k].pt()/GeV, event.weight());
               ArrayOfHist[i][50]->fill(JetPair[k].pt()/GeV, event.weight());
-
-              v_ArrayOfHist[i][14].push_back( lambdaMult );
-              v_ArrayOfHist[i][15].push_back( lambdaPt );
-              v_ArrayOfHist[i][16].push_back( lambdaLha );
-              v_ArrayOfHist[i][17].push_back( lambdaWidth );
-              v_ArrayOfHist[i][18].push_back( lambdaMass );
-              v_ArrayOfHist[i][19].push_back( lambdaMult );
-              v_ArrayOfHist[i][20].push_back( lambdaPt );
-              v_ArrayOfHist[i][21].push_back( lambdaLha );
-              v_ArrayOfHist[i][22].push_back( lambdaWidth );
-              v_ArrayOfHist[i][23].push_back( lambdaMass );
-              v_ArrayOfHist[i][24].push_back( lambdaMult );
-              v_ArrayOfHist[i][25].push_back( lambdaPt );
-              v_ArrayOfHist[i][26].push_back( lambdaLha );
-              v_ArrayOfHist[i][27].push_back( lambdaWidth );
-              v_ArrayOfHist[i][28].push_back( lambdaMass );
-              v_ArrayOfHist[i][29].push_back( lambdaMult );
-              v_ArrayOfHist[i][30].push_back( lambdaPt );
-              v_ArrayOfHist[i][31].push_back( lambdaLha );
-              v_ArrayOfHist[i][32].push_back( lambdaWidth );
-              v_ArrayOfHist[i][33].push_back( lambdaMass );
-
-              if (k == 1 ) v_ArrayOfHist[i][39].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][40].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][41] .push_back( JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_ArrayOfHist[i][42].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][43].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][44].push_back( JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_ArrayOfHist[i][45].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][46].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][47].push_back( JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_ArrayOfHist[i][48].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][49].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][50].push_back( JetPair[k].pt()/GeV );
 
             } else if (nQ == 5){
 
@@ -2633,53 +1729,6 @@ void analyze(const Event& event) {
               if (k == 0 ) ArrayOfHist[i][52]->fill(JetPair[k].pt()/GeV, event.weight());
               ArrayOfHist[i][53]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              v_ArrayOfHist[i][14].push_back( lambdaMult );
-              v_ArrayOfHist[i][15].push_back( lambdaPt );
-              v_ArrayOfHist[i][16].push_back( lambdaLha );
-              v_ArrayOfHist[i][17].push_back( lambdaWidth );
-              v_ArrayOfHist[i][18].push_back( lambdaMass );
-              v_ArrayOfHist[i][19].push_back( lambdaMult );
-              v_ArrayOfHist[i][20].push_back( lambdaPt );
-              v_ArrayOfHist[i][21].push_back( lambdaLha );
-              v_ArrayOfHist[i][22].push_back( lambdaWidth );
-              v_ArrayOfHist[i][23].push_back( lambdaMass );
-              v_ArrayOfHist[i][24].push_back( lambdaMult );
-              v_ArrayOfHist[i][25].push_back( lambdaPt );
-              v_ArrayOfHist[i][26].push_back( lambdaLha );
-              v_ArrayOfHist[i][27].push_back( lambdaWidth );
-              v_ArrayOfHist[i][28].push_back( lambdaMass );
-              v_ArrayOfHist[i][29].push_back( lambdaMult );
-              v_ArrayOfHist[i][30].push_back( lambdaPt );
-              v_ArrayOfHist[i][31].push_back( lambdaLha );
-              v_ArrayOfHist[i][32].push_back( lambdaWidth );
-              v_ArrayOfHist[i][33].push_back( lambdaMass );
-              v_ArrayOfHist[i][34].push_back( lambdaMult );
-              v_ArrayOfHist[i][35].push_back( lambdaPt );
-              v_ArrayOfHist[i][36].push_back( lambdaLha );
-              v_ArrayOfHist[i][37].push_back( lambdaWidth );
-              v_ArrayOfHist[i][38].push_back( lambdaMass );
-
-              if (k == 1 ) v_ArrayOfHist[i][39].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][40].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][41] .push_back( JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_ArrayOfHist[i][42].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][43].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][44].push_back( JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_ArrayOfHist[i][45].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][46].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][47].push_back( JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_ArrayOfHist[i][48].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][49].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][50].push_back( JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_ArrayOfHist[i][51].push_back( JetPair[k].pt()/GeV );
-              if (k == 0 ) v_ArrayOfHist[i][52].push_back( JetPair[k].pt()/GeV );
-              v_ArrayOfHist[i][53].push_back( JetPair[k].pt()/GeV );
-
-
             }
          
           }
@@ -2692,12 +1741,6 @@ void analyze(const Event& event) {
         mmdt_ArrayOfHist[i][6]->fill(mmdt_JetPair[k].eta() , event.weight());
         mmdt_ArrayOfHist[i][5]->fill(mmdt_JetPair[k].E()/GeV , event.weight());
         mmdt_ArrayOfHist[i][7]->fill(mmdt_JetPair[k].rap() , event.weight());
-
-        v_mmdt_ArrayOfHist[i][3].push_back( mmdt_JetPair[k].pt()/GeV);
-        v_mmdt_ArrayOfHist[i][8].push_back( mmdt_JetPair[k].phi());
-        v_mmdt_ArrayOfHist[i][6].push_back( mmdt_JetPair[k].eta() );
-        v_mmdt_ArrayOfHist[i][5].push_back( mmdt_JetPair[k].E()/GeV );
-        v_mmdt_ArrayOfHist[i][7].push_back( mmdt_JetPair[k].rap() );
         lambdaMult = 0.0;
         lambdaPt = 0.0;
         lambdaLha = 0.0;
@@ -2728,19 +1771,9 @@ void analyze(const Event& event) {
               mmdt_ArrayOfHist[i][17]->fill(lambdaWidth,event.weight());
               mmdt_ArrayOfHist[i][18]->fill(lambdaMass,event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][39]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][40]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][41]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-
-              v_mmdt_ArrayOfHist[i][14].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][15].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][16].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][17].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][18].push_back( lambdaMass );
-              
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][39].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][40].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][41] .push_back( mmdt_JetPair[k].pt()/GeV );
+              if (k == 1 ) ArrayOfHist[i][39]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][40]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][41]->fill(JetPair[k].pt()/GeV, event.weight());
 
             } else if (nQ == 2){
 
@@ -2756,34 +1789,14 @@ void analyze(const Event& event) {
               mmdt_ArrayOfHist[i][22]->fill(lambdaWidth,event.weight());
               mmdt_ArrayOfHist[i][23]->fill(lambdaMass,event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][39]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][40]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][41]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][39]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][40]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][41]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][42]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][43]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][44]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][42]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][43]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][44]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              v_mmdt_ArrayOfHist[i][14].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][15].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][16].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][17].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][18].push_back( lambdaMass );
-              v_mmdt_ArrayOfHist[i][19].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][20].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][21].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][22].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][23].push_back( lambdaMass );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][39].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][40].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][41] .push_back( mmdt_JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][42].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][43].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][44].push_back( mmdt_JetPair[k].pt()/GeV );
-
-              
             } else if (nQ == 3){
 
               mmdt_ArrayOfHist[i][14]->fill(lambdaMult,event.weight());
@@ -2804,49 +1817,18 @@ void analyze(const Event& event) {
               mmdt_ArrayOfHist[i][27]->fill(lambdaWidth,event.weight());
               mmdt_ArrayOfHist[i][28]->fill(lambdaMass,event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][39]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][40]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][41]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][39]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][40]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][41]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][42]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][43]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][44]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][42]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][43]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][44]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][45]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][46]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][47]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][45]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][46]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][47]->fill(JetPair[k].pt()/GeV, event.weight());
 
-                            v_mmdt_ArrayOfHist[i][14].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][15].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][16].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][17].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][18].push_back( lambdaMass );
-              v_mmdt_ArrayOfHist[i][19].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][20].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][21].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][22].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][23].push_back( lambdaMass );
-              v_mmdt_ArrayOfHist[i][24].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][25].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][26].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][27].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][28].push_back( lambdaMass );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][39].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][40].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][41] .push_back( mmdt_JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][42].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][43].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][44].push_back( mmdt_JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][45].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][46].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][47].push_back( mmdt_JetPair[k].pt()/GeV );
-
-
-
-              
             } else if (nQ == 4){
 
               mmdt_ArrayOfHist[i][14]->fill(lambdaMult,event.weight());
@@ -2873,61 +1855,22 @@ void analyze(const Event& event) {
               mmdt_ArrayOfHist[i][32]->fill(lambdaWidth,event.weight());
               mmdt_ArrayOfHist[i][33]->fill(lambdaMass,event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][39]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][40]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][41]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][39]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][40]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][41]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][42]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][43]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][44]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][42]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][43]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][44]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][45]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][46]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][47]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][45]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][46]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][47]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][48]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][49]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][50]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][48]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][49]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][50]->fill(JetPair[k].pt()/GeV, event.weight());
 
-                            v_mmdt_ArrayOfHist[i][14].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][15].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][16].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][17].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][18].push_back( lambdaMass );
-              v_mmdt_ArrayOfHist[i][19].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][20].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][21].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][22].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][23].push_back( lambdaMass );
-              v_mmdt_ArrayOfHist[i][24].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][25].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][26].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][27].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][28].push_back( lambdaMass );
-              v_mmdt_ArrayOfHist[i][29].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][30].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][31].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][32].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][33].push_back( lambdaMass );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][39].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][40].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][41] .push_back( mmdt_JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][42].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][43].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][44].push_back( mmdt_JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][45].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][46].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][47].push_back( mmdt_JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][48].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][49].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][50].push_back( mmdt_JetPair[k].pt()/GeV );
-
-
-              
             } else if (nQ == 5){
 
               mmdt_ArrayOfHist[i][14]->fill(lambdaMult,event.weight());
@@ -2960,72 +1903,25 @@ void analyze(const Event& event) {
               mmdt_ArrayOfHist[i][37]->fill(lambdaWidth,event.weight());
               mmdt_ArrayOfHist[i][38]->fill(lambdaMass,event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][39]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][40]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][41]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][39]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][40]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][41]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][42]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][43]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][44]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][42]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][43]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][44]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][45]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][46]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][47]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][45]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][46]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][47]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][48]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][49]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][50]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 1 ) ArrayOfHist[i][48]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][49]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][50]->fill(JetPair[k].pt()/GeV, event.weight());
 
-              if (k == 1 ) mmdt_ArrayOfHist[i][51]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              if (k == 0 ) mmdt_ArrayOfHist[i][52]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-              mmdt_ArrayOfHist[i][53]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
-
-                            v_mmdt_ArrayOfHist[i][14].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][15].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][16].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][17].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][18].push_back( lambdaMass );
-              v_mmdt_ArrayOfHist[i][19].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][20].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][21].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][22].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][23].push_back( lambdaMass );
-              v_mmdt_ArrayOfHist[i][24].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][25].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][26].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][27].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][28].push_back( lambdaMass );
-              v_mmdt_ArrayOfHist[i][29].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][30].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][31].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][32].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][33].push_back( lambdaMass );
-              v_mmdt_ArrayOfHist[i][34].push_back( lambdaMult );
-              v_mmdt_ArrayOfHist[i][35].push_back( lambdaPt );
-              v_mmdt_ArrayOfHist[i][36].push_back( lambdaLha );
-              v_mmdt_ArrayOfHist[i][37].push_back( lambdaWidth );
-              v_mmdt_ArrayOfHist[i][38].push_back( lambdaMass );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][39].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][40].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][41] .push_back( mmdt_JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][42].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][43].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][44].push_back( mmdt_JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][45].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][46].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][47].push_back( mmdt_JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][48].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][49].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][50].push_back( mmdt_JetPair[k].pt()/GeV );
-
-              if (k == 1 ) v_mmdt_ArrayOfHist[i][51].push_back( mmdt_JetPair[k].pt()/GeV );
-              if (k == 0 ) v_mmdt_ArrayOfHist[i][52].push_back( mmdt_JetPair[k].pt()/GeV );
-              v_mmdt_ArrayOfHist[i][53].push_back( mmdt_JetPair[k].pt()/GeV );
-
+              if (k == 1 ) ArrayOfHist[i][51]->fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) ArrayOfHist[i][52]->fill(JetPair[k].pt()/GeV, event.weight());
+              ArrayOfHist[i][53]->fill(JetPair[k].pt()/GeV, event.weight());
 
             }
          
@@ -3107,41 +2003,6 @@ void analyze(const Event& event) {
           }
 
           */
-
-          //end of loop over events
-      //filling ttree
-      ttree->Fill();
-
-      // clearing vercots
-      v_weight.clear();
-      v_PDGID.clear();
-      v_GluonFractionPt.clear();
-      v_QuarkFractionPt.clear();
-      v_GluonAndQuarkFractionPt.clear();
-      v_GluonFractionEta.clear();
-      v_QuarkFractionEta.clear();
-      v_GluonAndQuarkFractionEta.clear();
-      v_OthersThenGluonAndQuarkFractionPt.clear();
-      v_PartonFractionPt.clear();
-      v_GluonMulti.clear();
-      v_QuarkMulti.clear();
-      v_GluonAndQuarkMulti.clear();
-      v_OthersThenGluonAndQuarkMulti.clear();
-      v_PartonMulti.clear();
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=53;k++){
-            v_ArrayOfHist[l][k].clear();
-            v_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=9;k++){
-            v_no_cut_ArrayOfHist[l][k].clear();
-            v_no_cut_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-
-
      }
 
 
@@ -3363,34 +2224,6 @@ void analyze(const Event& event) {
     Histo2DPtr ArrayOfHist2[5][39];
     Histo1DPtr mmdt_ArrayOfHist[5][53];
     Histo2DPtr mmdt_ArrayOfHist2[5][39];
-
-    ////root stuff
-    TFile * rfile;
-    TTree * ttree;
-
-    vector<double> v_ArrayOfHist[5][53];
-    vector<double> v_mmdt_ArrayOfHist[5][53];
-
-    vector<double> v_no_cut_ArrayOfHist[5][9];
-    vector<double> v_no_cut_mmdt_ArrayOfHist[5][9];
-
-    vector<double> v_PDGID;
-    vector<double> v_GluonFractionPt;
-    vector<double> v_QuarkFractionPt;
-    vector<double> v_GluonAndQuarkFractionPt;
-    vector<double> v_GluonFractionEta;
-    vector<double> v_QuarkFractionEta;
-    vector<double> v_GluonAndQuarkFractionEta;
-    vector<double> v_OthersThenGluonAndQuarkFractionPt;
-    vector<double> v_PartonFractionPt;
-    vector<double> v_GluonMulti;
-    vector<double> v_QuarkMulti;
-    vector<double> v_GluonAndQuarkMulti;
-    vector<double> v_OthersThenGluonAndQuarkMulti;
-    vector<double> v_PartonMulti;
-
-    vector<double> v_weight;
-
   };
 
   DECLARE_RIVET_PLUGIN(MC_DIJET_PB_CH);

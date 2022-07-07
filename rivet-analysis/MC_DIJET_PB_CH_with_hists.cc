@@ -17,6 +17,7 @@
 #include "TTree.h"
 #include "TFile.h"
 #include "TH1D.h"
+#include "TH2D.h"
 #include "TString.h"
 #include "TBranch.h"
 
@@ -68,7 +69,7 @@ namespace Rivet {
         JET_RAPMAX(1.5)
     {
       // avg of the two hardest has that minimum
-      JET_AVG_PTMINS.push_back( 50.0);//just for now, was 50 originaly
+      JET_AVG_PTMINS.push_back( 20.0);//just for now, was 50 originaly
       JET_AVG_PTMINS.push_back(100.0);
       JET_AVG_PTMINS.push_back(200.0);
       JET_AVG_PTMINS.push_back(400.0);
@@ -76,6 +77,12 @@ namespace Rivet {
     }
 
     void init() {
+      double Nbins = 100;
+      double NbinsMulti = 100;
+      //double NbinsMulti = 250;
+      double MaxMulti = 100;
+      double NbinsPt = 20;
+      double MaxPt = 200; 
       cout << "FileName = " << CurrentGenerator::current().filename() << endl;
       cout << "FilePath = " << CurrentGenerator::current().path() << endl;
       string FileName = CurrentGenerator::current().filename();
@@ -89,14 +96,11 @@ namespace Rivet {
       ttree = new TTree("MC_DIJET_PB_CH", "MC_DIJET_PB_CH");
       
       
- ttree->Branch("weight", &v_weight);
+      ttree->Branch("weight", &v_weight);
  ttree->Branch("PDGID", &v_PDGID);
  ttree->Branch("GluonFractionPt", &v_GluonFractionPt);
  ttree->Branch("QuarkFractionPt", &v_QuarkFractionPt);
  ttree->Branch("GluonAndQuarkFractionPt", &v_GluonAndQuarkFractionPt);
- ttree->Branch("GluonFractionEta", &v_GluonFractionEta );
- ttree->Branch("QuarkFractionEta", &v_QuarkFractionEta );
- ttree->Branch("GluonAndQuarkFractionEta", &v_GluonAndQuarkFractionEta );
  ttree->Branch("OthersThenGluonAndQuarkFractionPt", &v_OthersThenGluonAndQuarkFractionPt);
  ttree->Branch("PartonFractionPt", &v_PartonFractionPt);
  ttree->Branch("GluonMulti", &v_GluonMulti);
@@ -104,97 +108,6 @@ namespace Rivet {
  ttree->Branch("GluonAndQuarkMulti", &v_GluonAndQuarkMulti);
  ttree->Branch("OthersThenGluonAndQuarkMulti", &v_OthersThenGluonAndQuarkMulti);
  ttree->Branch("PartonMulti", &v_PartonMulti);
-      ttree->Branch("no_cut_FastJets02Pt", &v_no_cut_ArrayOfHist[0][0]);
-      ttree->Branch("no_cut_FastJets02Eta", &v_no_cut_ArrayOfHist[0][1]);
-      ttree->Branch("no_cut_FastJets02Phi", &v_no_cut_ArrayOfHist[0][2]);
-      ttree->Branch("no_cut_FastJets02E", &v_no_cut_ArrayOfHist[0][3]);
-      ttree->Branch("no_cut_FastJets02MultLam", &v_no_cut_ArrayOfHist[0][4]);
-      ttree->Branch("no_cut_FastJets02PtLam", &v_no_cut_ArrayOfHist[0][5]);
-      ttree->Branch("no_cut_FastJets02LhaLam", &v_no_cut_ArrayOfHist[0][6]);
-      ttree->Branch("no_cut_FastJets02WidthLam", &v_no_cut_ArrayOfHist[0][7]);
-      ttree->Branch("no_cut_FastJets02MassLam", &v_no_cut_ArrayOfHist[0][8]);
-      ttree->Branch("no_cut_FastJets04Pt", &v_no_cut_ArrayOfHist[1][0]);
-      ttree->Branch("no_cut_FastJets04Eta", &v_no_cut_ArrayOfHist[1][1]);
-      ttree->Branch("no_cut_FastJets04Phi", &v_no_cut_ArrayOfHist[1][2]);
-      ttree->Branch("no_cut_FastJets04E", &v_no_cut_ArrayOfHist[1][3]);
-      ttree->Branch("no_cut_FastJets04MultLam", &v_no_cut_ArrayOfHist[1][4]);
-      ttree->Branch("no_cut_FastJets04PtLam", &v_no_cut_ArrayOfHist[1][5]);
-      ttree->Branch("no_cut_FastJets04LhaLam", &v_no_cut_ArrayOfHist[1][6]);
-      ttree->Branch("no_cut_FastJets04WidthLam", &v_no_cut_ArrayOfHist[1][7]);
-      ttree->Branch("no_cut_FastJets04MassLam", &v_no_cut_ArrayOfHist[1][8]);
-      ttree->Branch("no_cut_FastJets06Pt", &v_no_cut_ArrayOfHist[2][0]);
-      ttree->Branch("no_cut_FastJets06Eta", &v_no_cut_ArrayOfHist[2][1]);
-      ttree->Branch("no_cut_FastJets06Phi", &v_no_cut_ArrayOfHist[2][2]);
-      ttree->Branch("no_cut_FastJets06E", &v_no_cut_ArrayOfHist[2][3]);
-      ttree->Branch("no_cut_FastJets06MultLam", &v_no_cut_ArrayOfHist[2][4]);
-      ttree->Branch("no_cut_FastJets06PtLam", &v_no_cut_ArrayOfHist[2][5]);
-      ttree->Branch("no_cut_FastJets06LhaLam", &v_no_cut_ArrayOfHist[2][6]);
-      ttree->Branch("no_cut_FastJets06WidthLam", &v_no_cut_ArrayOfHist[2][7]);
-      ttree->Branch("no_cut_FastJets06MassLam", &v_no_cut_ArrayOfHist[2][8]);
-      ttree->Branch("no_cut_FastJets08Pt", &v_no_cut_ArrayOfHist[3][0]);
-      ttree->Branch("no_cut_FastJets08Eta", &v_no_cut_ArrayOfHist[3][1]);
-      ttree->Branch("no_cut_FastJets08Phi", &v_no_cut_ArrayOfHist[3][2]);
-      ttree->Branch("no_cut_FastJets08E", &v_no_cut_ArrayOfHist[3][3]);
-      ttree->Branch("no_cut_FastJets08MultLam", &v_no_cut_ArrayOfHist[3][4]);
-      ttree->Branch("no_cut_FastJets08PtLam", &v_no_cut_ArrayOfHist[3][5]);
-      ttree->Branch("no_cut_FastJets08LhaLam", &v_no_cut_ArrayOfHist[3][6]);
-      ttree->Branch("no_cut_FastJets08WidthLam", &v_no_cut_ArrayOfHist[3][7]);
-      ttree->Branch("no_cut_FastJets08MassLam", &v_no_cut_ArrayOfHist[3][8]);
-      ttree->Branch("no_cut_FastJets10Pt", &v_no_cut_ArrayOfHist[4][0]);
-      ttree->Branch("no_cut_FastJets10Eta", &v_no_cut_ArrayOfHist[4][1]);
-      ttree->Branch("no_cut_FastJets10Phi", &v_no_cut_ArrayOfHist[4][2]);
-      ttree->Branch("no_cut_FastJets10E", &v_no_cut_ArrayOfHist[4][3]);
-      ttree->Branch("no_cut_FastJets10MultLam", &v_no_cut_ArrayOfHist[4][4]);
-      ttree->Branch("no_cut_FastJets10PtLam", &v_no_cut_ArrayOfHist[4][5]);
-      ttree->Branch("no_cut_FastJets10LhaLam", &v_no_cut_ArrayOfHist[4][6]);
-      ttree->Branch("no_cut_FastJets10WidthLam", &v_no_cut_ArrayOfHist[4][7]);
-      ttree->Branch("no_cut_FastJets10MassLam", &v_no_cut_ArrayOfHist[4][8]);
-      ttree->Branch("no_cut_mmdt_FastJets02Pt", &v_no_cut_mmdt_ArrayOfHist[0][0]);
-      ttree->Branch("no_cut_mmdt_FastJets02Eta", &v_no_cut_mmdt_ArrayOfHist[0][1]);
-      ttree->Branch("no_cut_mmdt_FastJets02Phi", &v_no_cut_mmdt_ArrayOfHist[0][2]);
-      ttree->Branch("no_cut_mmdt_FastJets02E", &v_no_cut_mmdt_ArrayOfHist[0][3]);
-      ttree->Branch("no_cut_mmdt_FastJets02MultLam", &v_no_cut_mmdt_ArrayOfHist[0][4]);
-      ttree->Branch("no_cut_mmdt_FastJets02PtLam", &v_no_cut_mmdt_ArrayOfHist[0][5]);
-      ttree->Branch("no_cut_mmdt_FastJets02LhaLam", &v_no_cut_mmdt_ArrayOfHist[0][6]);
-      ttree->Branch("no_cut_mmdt_FastJets02WidthLam", &v_no_cut_mmdt_ArrayOfHist[0][7]);
-      ttree->Branch("no_cut_mmdt_FastJets02MassLam", &v_no_cut_mmdt_ArrayOfHist[0][8]);
-      ttree->Branch("no_cut_mmdt_FastJets04Pt", &v_no_cut_mmdt_ArrayOfHist[1][0]);
-      ttree->Branch("no_cut_mmdt_FastJets04Eta", &v_no_cut_mmdt_ArrayOfHist[1][1]);
-      ttree->Branch("no_cut_mmdt_FastJets04Phi", &v_no_cut_mmdt_ArrayOfHist[1][2]);
-      ttree->Branch("no_cut_mmdt_FastJets04E", &v_no_cut_mmdt_ArrayOfHist[1][3]);
-      ttree->Branch("no_cut_mmdt_FastJets04MultLam", &v_no_cut_mmdt_ArrayOfHist[1][4]);
-      ttree->Branch("no_cut_mmdt_FastJets04PtLam", &v_no_cut_mmdt_ArrayOfHist[1][5]);
-      ttree->Branch("no_cut_mmdt_FastJets04LhaLam", &v_no_cut_mmdt_ArrayOfHist[1][6]);
-      ttree->Branch("no_cut_mmdt_FastJets04WidthLam", &v_no_cut_mmdt_ArrayOfHist[1][7]);
-      ttree->Branch("no_cut_mmdt_FastJets04MassLam", &v_no_cut_mmdt_ArrayOfHist[1][8]);
-      ttree->Branch("no_cut_mmdt_FastJets06Pt", &v_no_cut_mmdt_ArrayOfHist[2][0]);
-      ttree->Branch("no_cut_mmdt_FastJets06Eta", &v_no_cut_mmdt_ArrayOfHist[2][1]);
-      ttree->Branch("no_cut_mmdt_FastJets06Phi", &v_no_cut_mmdt_ArrayOfHist[2][2]);
-      ttree->Branch("no_cut_mmdt_FastJets06E", &v_no_cut_mmdt_ArrayOfHist[2][3]);
-      ttree->Branch("no_cut_mmdt_FastJets06MultLam", &v_no_cut_mmdt_ArrayOfHist[2][4]);
-      ttree->Branch("no_cut_mmdt_FastJets06PtLam", &v_no_cut_mmdt_ArrayOfHist[2][5]);
-      ttree->Branch("no_cut_mmdt_FastJets06LhaLam", &v_no_cut_mmdt_ArrayOfHist[2][6]);
-      ttree->Branch("no_cut_mmdt_FastJets06WidthLam", &v_no_cut_mmdt_ArrayOfHist[2][7]);
-      ttree->Branch("no_cut_mmdt_FastJets06MassLam", &v_no_cut_mmdt_ArrayOfHist[2][8]);
-      ttree->Branch("no_cut_mmdt_FastJets08Pt", &v_no_cut_mmdt_ArrayOfHist[3][0]);
-      ttree->Branch("no_cut_mmdt_FastJets08Eta", &v_no_cut_mmdt_ArrayOfHist[3][1]);
-      ttree->Branch("no_cut_mmdt_FastJets08Phi", &v_no_cut_mmdt_ArrayOfHist[3][2]);
-      ttree->Branch("no_cut_mmdt_FastJets08E", &v_no_cut_mmdt_ArrayOfHist[3][3]);
-      ttree->Branch("no_cut_mmdt_FastJets08MultLam", &v_no_cut_mmdt_ArrayOfHist[3][4]);
-      ttree->Branch("no_cut_mmdt_FastJets08PtLam", &v_no_cut_mmdt_ArrayOfHist[3][5]);
-      ttree->Branch("no_cut_mmdt_FastJets08LhaLam", &v_no_cut_mmdt_ArrayOfHist[3][6]);
-      ttree->Branch("no_cut_mmdt_FastJets08WidthLam", &v_no_cut_mmdt_ArrayOfHist[3][7]);
-      ttree->Branch("no_cut_mmdt_FastJets08MassLam", &v_no_cut_mmdt_ArrayOfHist[3][8]);
-      ttree->Branch("no_cut_mmdt_FastJets10Pt", &v_no_cut_mmdt_ArrayOfHist[4][0]);
-      ttree->Branch("no_cut_mmdt_FastJets10Eta", &v_no_cut_mmdt_ArrayOfHist[4][1]);
-      ttree->Branch("no_cut_mmdt_FastJets10Phi", &v_no_cut_mmdt_ArrayOfHist[4][2]);
-      ttree->Branch("no_cut_mmdt_FastJets10E", &v_no_cut_mmdt_ArrayOfHist[4][3]);
-      ttree->Branch("no_cut_mmdt_FastJets10MultLam", &v_no_cut_mmdt_ArrayOfHist[4][4]);
-      ttree->Branch("no_cut_mmdt_FastJets10PtLam", &v_no_cut_mmdt_ArrayOfHist[4][5]);
-      ttree->Branch("no_cut_mmdt_FastJets10LhaLam", &v_no_cut_mmdt_ArrayOfHist[4][6]);
-      ttree->Branch("no_cut_mmdt_FastJets10WidthLam", &v_no_cut_mmdt_ArrayOfHist[4][7]);
-      ttree->Branch("no_cut_mmdt_FastJets10MassLam", &v_no_cut_mmdt_ArrayOfHist[4][8]);
-
  ttree->Branch("FastJets02PtSubLeading", &v_ArrayOfHist[0][0]);
  ttree->Branch("FastJets02PtLeading", &v_ArrayOfHist[0][1]);
  ttree->Branch("FastJets02PtReclust", &v_ArrayOfHist[0][2]);
@@ -686,6 +599,559 @@ namespace Rivet {
  ttree->Branch("mmdt_FastJets10PtLeadingQ800", &v_mmdt_ArrayOfHist[4][52]);
  ttree->Branch("mmdt_FastJets10PtReclustQ800", &v_mmdt_ArrayOfHist[4][53]);
         
+      h_histGluonFractionPt=new TH1D("h_GluonFractionPt","",200,0,200);
+h_histQuarkFractionPt=new TH1D("h_QuarkFractionPt","",200,0,200);
+h_histGluonAndQuarkFractionPt=new TH1D("h_GluonAndQuarkFractionPt","",200,0,200);
+h_histOthersThenGluonAndQuarkFractionPt=new TH1D("h_OthersThenGluonAndQuarkFractionPt","",200,0,200);
+h_histPartonFractionPt=new TH1D("h_PartonFractionPt","",200,0,200);
+h_histGluonMulti=new TH1D("h_GluonMulti","",10,0,10);
+h_histQuarkMulti=new TH1D("h_QuarkMulti","",10,0,10);
+h_histGluonAndQuarkMulti=new TH1D("h_GluonAndQuarkMulti","",10,0,10);
+h_histOthersThenGluonAndQuarkMulti=new TH1D("h_OthersThenGluonAndQuarkMulti","",10,0,10);
+h_histPartonMulti=new TH1D("h_PartonMulti","",10,0,10);
+h_histPDGID=new TH1D("h_PDGID","",180,-90,90);
+h_histCONTROL_PT_RAP=new TH2D("h_CONTROL_PT_RAP","",NbinsMulti,0,MaxMulti,100,-5,5);
+h_histFastJets02PtSubLeadingQ50=new TH1D("h_FastJets02PtSubLeadingQ50","",50,0,200);
+h_histFastJets02PtSubLeadingQ100=new TH1D("h_FastJets02PtSubLeadingQ100","",50,0,200);
+h_histFastJets02PtSubLeadingQ200=new TH1D("h_FastJets02PtSubLeadingQ200","",50,0,200);
+h_histFastJets02PtSubLeadingQ400=new TH1D("h_FastJets02PtSubLeadingQ400","",50,0,200);
+h_histFastJets02PtSubLeadingQ800=new TH1D("h_FastJets02PtSubLeadingQ800","",50,0,200);
+h_histFastJets02PtSubLeading=new TH1D("h_FastJets02PtSubLeading","",50,0,200);
+h_histFastJets02PtLeadingQ50=new TH1D("h_FastJets02PtLeadingQ50","",50,0,200);
+h_histFastJets02PtLeadingQ100=new TH1D("h_FastJets02PtLeadingQ100","",50,0,200);
+h_histFastJets02PtLeadingQ200=new TH1D("h_FastJets02PtLeadingQ200","",50,0,200);
+h_histFastJets02PtLeadingQ400=new TH1D("h_FastJets02PtLeadingQ400","",50,0,200);
+h_histFastJets02PtLeadingQ800=new TH1D("h_FastJets02PtLeadingQ800","",50,0,200);
+h_histFastJets02PtLeading=new TH1D("h_FastJets02PtLeading","",50,0,200);
+h_histFastJets02PtReclustQ50=new TH1D("h_FastJets02PtReclustQ50","",50,0,200);
+h_histFastJets02PtReclustQ100=new TH1D("h_FastJets02PtReclustQ100","",50,0,200);
+h_histFastJets02PtReclustQ200=new TH1D("h_FastJets02PtReclustQ200","",50,0,200);
+h_histFastJets02PtReclustQ400=new TH1D("h_FastJets02PtReclustQ400","",50,0,200);
+h_histFastJets02PtReclustQ800=new TH1D("h_FastJets02PtReclustQ800","",50,0,200);
+h_histFastJets02PtReclust=new TH1D("h_FastJets02PtReclust","",50,0,200);
+h_histFastJets02Pt=new TH1D("h_FastJets02Pt","",50,0,200);
+h_histFastJets02Mult=new TH1D("h_FastJets02Mult","",25,0,50);
+h_histFastJets02E=new TH1D("h_FastJets02E","",25,0,50);
+h_histFastJets02Eta=new TH1D("h_FastJets02Eta","",50,-5,5);
+h_histFastJets02Rapidity=new TH1D("h_FastJets02Rapidity","",50,-5,5);
+h_histFastJets02Phi=new TH1D("h_FastJets02Phi","",50,0,TWOPI);
+h_histFastJets02MultLam=new TH2D("h_FastJets02MultLam","",NbinsMulti,0.0,MaxMulti,NbinsPt,0.0,MaxPt);
+h_histFastJets02PtLam=new TH2D("h_FastJets02PtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets02LhaLam=new TH2D("h_FastJets02LhaLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets02WidthLam=new TH2D("h_FastJets02WidhtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets02MassLam=new TH2D("h_FastJets02MassLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets02MultLam50=new TH1D("h_FastJets02MultLam50","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets02PtLam50=new TH1D("h_FastJets02PtLam50","",Nbins,0.0,1.0);
+h_histFastJets02LhaLam50=new TH1D("h_FastJets02LhaLam50","",Nbins,0.0,1.0);
+h_histFastJets02WidthLam50=new TH1D("h_FastJets02WidhtLam50","",Nbins,0.0,1.0);
+h_histFastJets02MassLam50=new TH1D("h_FastJets02MassLam50","",Nbins,0.0,1.0);
+h_histFastJets02MultLam100=new TH1D("h_FastJets02MultLam100","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets02PtLam100=new TH1D("h_FastJets02PtLam100","",Nbins,0.0,1.0);
+h_histFastJets02LhaLam100=new TH1D("h_FastJets02LhaLam100","",Nbins,0.0,1.0);
+h_histFastJets02WidthLam100=new TH1D("h_FastJets02WidhtLam100","",Nbins,0.0,1.0);
+h_histFastJets02MassLam100=new TH1D("h_FastJets02MassLam100","",Nbins,0.0,1.0);
+h_histFastJets02MultLam200=new TH1D("h_FastJets02MultLam200","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets02PtLam200=new TH1D("h_FastJets02PtLam200","",Nbins,0.0,1.0);
+h_histFastJets02LhaLam200=new TH1D("h_FastJets02LhaLam200","",Nbins,0.0,1.0);
+h_histFastJets02WidthLam200=new TH1D("h_FastJets02WidhtLam200","",Nbins,0.0,1.0);
+h_histFastJets02MassLam200=new TH1D("h_FastJets02MassLam200","",Nbins,0.0,1.0);
+h_histFastJets02MultLam400=new TH1D("h_FastJets02MultLam400","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets02PtLam400=new TH1D("h_FastJets02PtLam400","",Nbins,0.0,1.0);
+h_histFastJets02LhaLam400=new TH1D("h_FastJets02LhaLam400","",Nbins,0.0,1.0);
+h_histFastJets02WidthLam400=new TH1D("h_FastJets02WidhtLam400","",Nbins,0.0,1.0);
+h_histFastJets02MassLam400=new TH1D("h_FastJets02MassLam400","",Nbins,0.0,1.0);
+h_histFastJets02MultLam800=new TH1D("h_FastJets02MultLam800","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets02PtLam800=new TH1D("h_FastJets02PtLam800","",Nbins,0.0,1.0);
+h_histFastJets02LhaLam800=new TH1D("h_FastJets02LhaLam800","",Nbins,0.0,1.0);
+h_histFastJets02WidthLam800=new TH1D("h_FastJets02WidhtLam800","",Nbins,0.0,1.0);
+h_histFastJets02MassLam800=new TH1D("h_FastJets02MassLam800","",Nbins,0.0,1.0);
+h_histFastJets04PtSubLeadingQ50=new TH1D("h_FastJets04PtSubLeadingQ50","",50,0,200);
+h_histFastJets04PtSubLeadingQ100=new TH1D("h_FastJets04PtSubLeadingQ100","",50,0,200);
+h_histFastJets04PtSubLeadingQ200=new TH1D("h_FastJets04PtSubLeadingQ200","",50,0,200);
+h_histFastJets04PtSubLeadingQ400=new TH1D("h_FastJets04PtSubLeadingQ400","",50,0,200);
+h_histFastJets04PtSubLeadingQ800=new TH1D("h_FastJets04PtSubLeadingQ800","",50,0,200);
+h_histFastJets04PtSubLeading=new TH1D("h_FastJets04PtSubLeading","",50,0,200);
+h_histFastJets04PtLeadingQ50=new TH1D("h_FastJets04PtLeadingQ50","",50,0,200);
+h_histFastJets04PtLeadingQ100=new TH1D("h_FastJets04PtLeadingQ100","",50,0,200);
+h_histFastJets04PtLeadingQ200=new TH1D("h_FastJets04PtLeadingQ200","",50,0,200);
+h_histFastJets04PtLeadingQ400=new TH1D("h_FastJets04PtLeadingQ400","",50,0,200);
+h_histFastJets04PtLeadingQ800=new TH1D("h_FastJets04PtLeadingQ800","",50,0,200);
+h_histFastJets04PtLeading=new TH1D("h_FastJets04PtLeading","",50,0,200);
+h_histFastJets04PtReclustQ50=new TH1D("h_FastJets04PtReclustQ50","",50,0,200);
+h_histFastJets04PtReclustQ100=new TH1D("h_FastJets04PtReclustQ100","",50,0,200);
+h_histFastJets04PtReclustQ200=new TH1D("h_FastJets04PtReclustQ200","",50,0,200);
+h_histFastJets04PtReclustQ400=new TH1D("h_FastJets04PtReclustQ400","",50,0,200);
+h_histFastJets04PtReclustQ800=new TH1D("h_FastJets04PtReclustQ800","",50,0,200);
+h_histFastJets04PtReclust=new TH1D("h_FastJets04PtReclust","",50,0,200);
+h_histFastJets04Pt=new TH1D("h_FastJets04Pt","",50,0,200);
+h_histFastJets04Mult=new TH1D("h_FastJets04Mult","",25,0,50);
+h_histFastJets04E=new TH1D("h_FastJets04E","",25,0,50);
+h_histFastJets04Eta=new TH1D("h_FastJets04Eta","",50,-5,5);
+h_histFastJets04Rapidity=new TH1D("h_FastJets04Rapidity","",50,-5,5);
+h_histFastJets04Phi=new TH1D("h_FastJets04Phi","",50,0,TWOPI);
+h_histFastJets04MultLam=new TH2D("h_FastJets04MultLam","",NbinsMulti,0.0,MaxMulti,NbinsPt,0.0,MaxPt);
+h_histFastJets04PtLam=new TH2D("h_FastJets04PtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets04LhaLam=new TH2D("h_FastJets04LhaLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets04WidthLam=new TH2D("h_FastJets04WidhtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets04MassLam=new TH2D("h_FastJets04MassLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets04MultLam50=new TH1D("h_FastJets04MultLam50","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets04PtLam50=new TH1D("h_FastJets04PtLam50","",Nbins,0.0,1.0);
+h_histFastJets04LhaLam50=new TH1D("h_FastJets04LhaLam50","",Nbins,0.0,1.0);
+h_histFastJets04WidthLam50=new TH1D("h_FastJets04WidhtLam50","",Nbins,0.0,1.0);
+h_histFastJets04MassLam50=new TH1D("h_FastJets04MassLam50","",Nbins,0.0,1.0);
+h_histFastJets04MultLam100=new TH1D("h_FastJets04MultLam100","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets04PtLam100=new TH1D("h_FastJets04PtLam100","",Nbins,0.0,1.0);
+h_histFastJets04LhaLam100=new TH1D("h_FastJets04LhaLam100","",Nbins,0.0,1.0);
+h_histFastJets04WidthLam100=new TH1D("h_FastJets04WidhtLam100","",Nbins,0.0,1.0);
+h_histFastJets04MassLam100=new TH1D("h_FastJets04MassLam100","",Nbins,0.0,1.0);
+h_histFastJets04MultLam200=new TH1D("h_FastJets04MultLam200","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets04PtLam200=new TH1D("h_FastJets04PtLam200","",Nbins,0.0,1.0);
+h_histFastJets04LhaLam200=new TH1D("h_FastJets04LhaLam200","",Nbins,0.0,1.0);
+h_histFastJets04WidthLam200=new TH1D("h_FastJets04WidhtLam200","",Nbins,0.0,1.0);
+h_histFastJets04MassLam200=new TH1D("h_FastJets04MassLam200","",Nbins,0.0,1.0);
+h_histFastJets04MultLam400=new TH1D("h_FastJets04MultLam400","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets04PtLam400=new TH1D("h_FastJets04PtLam400","",Nbins,0.0,1.0);
+h_histFastJets04LhaLam400=new TH1D("h_FastJets04LhaLam400","",Nbins,0.0,1.0);
+h_histFastJets04WidthLam400=new TH1D("h_FastJets04WidhtLam400","",Nbins,0.0,1.0);
+h_histFastJets04MassLam400=new TH1D("h_FastJets04MassLam400","",Nbins,0.0,1.0);
+h_histFastJets04MultLam800=new TH1D("h_FastJets04MultLam800","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets04PtLam800=new TH1D("h_FastJets04PtLam800","",Nbins,0.0,1.0);
+h_histFastJets04LhaLam800=new TH1D("h_FastJets04LhaLam800","",Nbins,0.0,1.0);
+h_histFastJets04WidthLam800=new TH1D("h_FastJets04WidhtLam800","",Nbins,0.0,1.0);
+h_histFastJets04MassLam800=new TH1D("h_FastJets04MassLam800","",Nbins,0.0,1.0);
+h_histFastJets06PtSubLeadingQ50=new TH1D("h_FastJets06PtSubLeadingQ50","",50,0,200);
+h_histFastJets06PtSubLeadingQ100=new TH1D("h_FastJets06PtSubLeadingQ100","",50,0,200);
+h_histFastJets06PtSubLeadingQ200=new TH1D("h_FastJets06PtSubLeadingQ200","",50,0,200);
+h_histFastJets06PtSubLeadingQ400=new TH1D("h_FastJets06PtSubLeadingQ400","",50,0,200);
+h_histFastJets06PtSubLeadingQ800=new TH1D("h_FastJets06PtSubLeadingQ800","",50,0,200);
+h_histFastJets06PtSubLeading=new TH1D("h_FastJets06PtSubLeading","",50,0,200);
+h_histFastJets06PtLeadingQ50=new TH1D("h_FastJets06PtLeadingQ50","",50,0,200);
+h_histFastJets06PtLeadingQ100=new TH1D("h_FastJets06PtLeadingQ100","",50,0,200);
+h_histFastJets06PtLeadingQ200=new TH1D("h_FastJets06PtLeadingQ200","",50,0,200);
+h_histFastJets06PtLeadingQ400=new TH1D("h_FastJets06PtLeadingQ400","",50,0,200);
+h_histFastJets06PtLeadingQ800=new TH1D("h_FastJets06PtLeadingQ800","",50,0,200);
+h_histFastJets06PtLeading=new TH1D("h_FastJets06PtLeading","",50,0,200);
+h_histFastJets06PtReclustQ50=new TH1D("h_FastJets06PtReclustQ50","",50,0,200);
+h_histFastJets06PtReclustQ100=new TH1D("h_FastJets06PtReclustQ100","",50,0,200);
+h_histFastJets06PtReclustQ200=new TH1D("h_FastJets06PtReclustQ200","",50,0,200);
+h_histFastJets06PtReclustQ400=new TH1D("h_FastJets06PtReclustQ400","",50,0,200);
+h_histFastJets06PtReclustQ800=new TH1D("h_FastJets06PtReclustQ800","",50,0,200);
+h_histFastJets06PtReclust=new TH1D("h_FastJets06PtReclust","",50,0,200);
+h_histFastJets06Pt=new TH1D("h_FastJets06Pt","",50,0,200);
+h_histFastJets06Mult=new TH1D("h_FastJets06Mult","",25,0,50);
+h_histFastJets06E=new TH1D("h_FastJets06E","",25,0,50);
+h_histFastJets06Eta=new TH1D("h_FastJets06Eta","",50,-5,5);
+h_histFastJets06Rapidity=new TH1D("h_FastJets06Rapidity","",50,-5,5);
+h_histFastJets06Phi=new TH1D("h_FastJets06Phi","",50,0,TWOPI);
+h_histFastJets06MultLam=new TH2D("h_FastJets06MultLam","",NbinsMulti,0.0,MaxMulti,NbinsPt,0.0,MaxPt);
+h_histFastJets06PtLam=new TH2D("h_FastJets06PtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets06LhaLam=new TH2D("h_FastJets06LhaLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets06WidthLam=new TH2D("h_FastJets06WidhtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets06MassLam=new TH2D("h_FastJets06MassLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets06MultLam50=new TH1D("h_FastJets06MultLam50","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets06PtLam50=new TH1D("h_FastJets06PtLam50","",Nbins,0.0,1.0);
+h_histFastJets06LhaLam50=new TH1D("h_FastJets06LhaLam50","",Nbins,0.0,1.0);
+h_histFastJets06WidthLam50=new TH1D("h_FastJets06WidhtLam50","",Nbins,0.0,1.0);
+h_histFastJets06MassLam50=new TH1D("h_FastJets06MassLam50","",Nbins,0.0,1.0);
+h_histFastJets06MultLam100=new TH1D("h_FastJets06MultLam100","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets06PtLam100=new TH1D("h_FastJets06PtLam100","",Nbins,0.0,1.0);
+h_histFastJets06LhaLam100=new TH1D("h_FastJets06LhaLam100","",Nbins,0.0,1.0);
+h_histFastJets06WidthLam100=new TH1D("h_FastJets06WidhtLam100","",Nbins,0.0,1.0);
+h_histFastJets06MassLam100=new TH1D("h_FastJets06MassLam100","",Nbins,0.0,1.0);
+h_histFastJets06MultLam200=new TH1D("h_FastJets06MultLam200","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets06PtLam200=new TH1D("h_FastJets06PtLam200","",Nbins,0.0,1.0);
+h_histFastJets06LhaLam200=new TH1D("h_FastJets06LhaLam200","",Nbins,0.0,1.0);
+h_histFastJets06WidthLam200=new TH1D("h_FastJets06WidhtLam200","",Nbins,0.0,1.0);
+h_histFastJets06MassLam200=new TH1D("h_FastJets06MassLam200","",Nbins,0.0,1.0);
+h_histFastJets06MultLam400=new TH1D("h_FastJets06MultLam400","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets06PtLam400=new TH1D("h_FastJets06PtLam400","",Nbins,0.0,1.0);
+h_histFastJets06LhaLam400=new TH1D("h_FastJets06LhaLam400","",Nbins,0.0,1.0);
+h_histFastJets06WidthLam400=new TH1D("h_FastJets06WidhtLam400","",Nbins,0.0,1.0);
+h_histFastJets06MassLam400=new TH1D("h_FastJets06MassLam400","",Nbins,0.0,1.0);
+h_histFastJets06MultLam800=new TH1D("h_FastJets06MultLam800","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets06PtLam800=new TH1D("h_FastJets06PtLam800","",Nbins,0.0,1.0);
+h_histFastJets06LhaLam800=new TH1D("h_FastJets06LhaLam800","",Nbins,0.0,1.0);
+h_histFastJets06WidthLam800=new TH1D("h_FastJets06WidhtLam800","",Nbins,0.0,1.0);
+h_histFastJets06MassLam800=new TH1D("h_FastJets06MassLam800","",Nbins,0.0,1.0);
+h_histFastJets08PtSubLeadingQ50=new TH1D("h_FastJets08PtSubLeadingQ50","",50,0,200);
+h_histFastJets08PtSubLeadingQ100=new TH1D("h_FastJets08PtSubLeadingQ100","",50,0,200);
+h_histFastJets08PtSubLeadingQ200=new TH1D("h_FastJets08PtSubLeadingQ200","",50,0,200);
+h_histFastJets08PtSubLeadingQ400=new TH1D("h_FastJets08PtSubLeadingQ400","",50,0,200);
+h_histFastJets08PtSubLeadingQ800=new TH1D("h_FastJets08PtSubLeadingQ800","",50,0,200);
+h_histFastJets08PtSubLeading=new TH1D("h_FastJets08PtSubLeading","",50,0,200);
+h_histFastJets08PtLeadingQ50=new TH1D("h_FastJets08PtLeadingQ50","",50,0,200);
+h_histFastJets08PtLeadingQ100=new TH1D("h_FastJets08PtLeadingQ100","",50,0,200);
+h_histFastJets08PtLeadingQ200=new TH1D("h_FastJets08PtLeadingQ200","",50,0,200);
+h_histFastJets08PtLeadingQ400=new TH1D("h_FastJets08PtLeadingQ400","",50,0,200);
+h_histFastJets08PtLeadingQ800=new TH1D("h_FastJets08PtLeadingQ800","",50,0,200);
+h_histFastJets08PtLeading=new TH1D("h_FastJets08PtLeading","",50,0,200);
+h_histFastJets08PtReclustQ50=new TH1D("h_FastJets08PtReclustQ50","",50,0,200);
+h_histFastJets08PtReclustQ100=new TH1D("h_FastJets08PtReclustQ100","",50,0,200);
+h_histFastJets08PtReclustQ200=new TH1D("h_FastJets08PtReclustQ200","",50,0,200);
+h_histFastJets08PtReclustQ400=new TH1D("h_FastJets08PtReclustQ400","",50,0,200);
+h_histFastJets08PtReclustQ800=new TH1D("h_FastJets08PtReclustQ800","",50,0,200);
+h_histFastJets08PtReclust=new TH1D("h_FastJets08PtReclust","",50,0,200);
+h_histFastJets08Pt=new TH1D("h_FastJets08Pt","",50,0,200);
+h_histFastJets08Mult=new TH1D("h_FastJets08Mult","",25,0,50);
+h_histFastJets08E=new TH1D("h_FastJets08E","",25,0,50);
+h_histFastJets08Eta=new TH1D("h_FastJets08Eta","",50,-5,5);
+h_histFastJets08Rapidity=new TH1D("h_FastJets08Rapidity","",50,-5,5);
+h_histFastJets08Phi=new TH1D("h_FastJets08Phi","",50,0,TWOPI);
+h_histFastJets08MultLam=new TH2D("h_FastJets08MultLam","",NbinsMulti,0.0,MaxMulti,NbinsPt,0.0,MaxPt);
+h_histFastJets08PtLam=new TH2D("h_FastJets08PtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets08LhaLam=new TH2D("h_FastJets08LhaLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets08WidthLam=new TH2D("h_FastJets08WidhtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets08MassLam=new TH2D("h_FastJets08MassLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets08MultLam50=new TH1D("h_FastJets08MultLam50","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets08PtLam50=new TH1D("h_FastJets08PtLam50","",Nbins,0.0,1.0);
+h_histFastJets08LhaLam50=new TH1D("h_FastJets08LhaLam50","",Nbins,0.0,1.0);
+h_histFastJets08WidthLam50=new TH1D("h_FastJets08WidhtLam50","",Nbins,0.0,1.0);
+h_histFastJets08MassLam50=new TH1D("h_FastJets08MassLam50","",Nbins,0.0,1.0);
+h_histFastJets08MultLam100=new TH1D("h_FastJets08MultLam100","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets08PtLam100=new TH1D("h_FastJets08PtLam100","",Nbins,0.0,1.0);
+h_histFastJets08LhaLam100=new TH1D("h_FastJets08LhaLam100","",Nbins,0.0,1.0);
+h_histFastJets08WidthLam100=new TH1D("h_FastJets08WidhtLam100","",Nbins,0.0,1.0);
+h_histFastJets08MassLam100=new TH1D("h_FastJets08MassLam100","",Nbins,0.0,1.0);
+h_histFastJets08MultLam200=new TH1D("h_FastJets08MultLam200","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets08PtLam200=new TH1D("h_FastJets08PtLam200","",Nbins,0.0,1.0);
+h_histFastJets08LhaLam200=new TH1D("h_FastJets08LhaLam200","",Nbins,0.0,1.0);
+h_histFastJets08WidthLam200=new TH1D("h_FastJets08WidhtLam200","",Nbins,0.0,1.0);
+h_histFastJets08MassLam200=new TH1D("h_FastJets08MassLam200","",Nbins,0.0,1.0);
+h_histFastJets08MultLam400=new TH1D("h_FastJets08MultLam400","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets08PtLam400=new TH1D("h_FastJets08PtLam400","",Nbins,0.0,1.0);
+h_histFastJets08LhaLam400=new TH1D("h_FastJets08LhaLam400","",Nbins,0.0,1.0);
+h_histFastJets08WidthLam400=new TH1D("h_FastJets08WidhtLam400","",Nbins,0.0,1.0);
+h_histFastJets08MassLam400=new TH1D("h_FastJets08MassLam400","",Nbins,0.0,1.0);
+h_histFastJets08MultLam800=new TH1D("h_FastJets08MultLam800","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets08PtLam800=new TH1D("h_FastJets08PtLam800","",Nbins,0.0,1.0);
+h_histFastJets08LhaLam800=new TH1D("h_FastJets08LhaLam800","",Nbins,0.0,1.0);
+h_histFastJets08WidthLam800=new TH1D("h_FastJets08WidhtLam800","",Nbins,0.0,1.0);
+h_histFastJets08MassLam800=new TH1D("h_FastJets08MassLam800","",Nbins,0.0,1.0);
+h_histFastJets10PtSubLeadingQ50=new TH1D("h_FastJets10PtSubLeadingQ50","",50,0,200);
+h_histFastJets10PtSubLeadingQ100=new TH1D("h_FastJets10PtSubLeadingQ100","",50,0,200);
+h_histFastJets10PtSubLeadingQ200=new TH1D("h_FastJets10PtSubLeadingQ200","",50,0,200);
+h_histFastJets10PtSubLeadingQ400=new TH1D("h_FastJets10PtSubLeadingQ400","",50,0,200);
+h_histFastJets10PtSubLeadingQ800=new TH1D("h_FastJets10PtSubLeadingQ800","",50,0,200);
+h_histFastJets10PtSubLeading=new TH1D("h_FastJets10PtSubLeading","",50,0,200);
+h_histFastJets10PtLeadingQ50=new TH1D("h_FastJets10PtLeadingQ50","",50,0,200);
+h_histFastJets10PtLeadingQ100=new TH1D("h_FastJets10PtLeadingQ100","",50,0,200);
+h_histFastJets10PtLeadingQ200=new TH1D("h_FastJets10PtLeadingQ200","",50,0,200);
+h_histFastJets10PtLeadingQ400=new TH1D("h_FastJets10PtLeadingQ400","",50,0,200);
+h_histFastJets10PtLeadingQ800=new TH1D("h_FastJets10PtLeadingQ800","",50,0,200);
+h_histFastJets10PtLeading=new TH1D("h_FastJets10PtLeading","",50,0,200);
+h_histFastJets10PtReclustQ50=new TH1D("h_FastJets10PtReclustQ50","",50,0,200);
+h_histFastJets10PtReclustQ100=new TH1D("h_FastJets10PtReclustQ100","",50,0,200);
+h_histFastJets10PtReclustQ200=new TH1D("h_FastJets10PtReclustQ200","",50,0,200);
+h_histFastJets10PtReclustQ400=new TH1D("h_FastJets10PtReclustQ400","",50,0,200);
+h_histFastJets10PtReclustQ800=new TH1D("h_FastJets10PtReclustQ800","",50,0,200);
+h_histFastJets10PtReclust=new TH1D("h_FastJets10PtReclust","",50,0,200);
+h_histFastJets10Pt=new TH1D("h_FastJets10Pt","",50,0,200);
+h_histFastJets10Mult=new TH1D("h_FastJets10Mult","",25,0,50);
+h_histFastJets10E=new TH1D("h_FastJets10E","",25,0,50);
+h_histFastJets10Eta=new TH1D("h_FastJets10Eta","",50,-5,5);
+h_histFastJets10Rapidity=new TH1D("h_FastJets10Rapidity","",50,-5,5);
+h_histFastJets10Phi=new TH1D("h_FastJets10Phi","",50,0,TWOPI);
+h_histFastJets10MultLam=new TH2D("h_FastJets10MultLam","",NbinsMulti,0.0,MaxMulti,NbinsPt,0.0,MaxPt);
+h_histFastJets10PtLam=new TH2D("h_FastJets10PtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets10LhaLam=new TH2D("h_FastJets10LhaLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets10WidthLam=new TH2D("h_FastJets10WidhtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets10MassLam=new TH2D("h_FastJets10MassLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_histFastJets10MultLam50=new TH1D("h_FastJets10MultLam50","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets10PtLam50=new TH1D("h_FastJets10PtLam50","",Nbins,0.0,1.0);
+h_histFastJets10LhaLam50=new TH1D("h_FastJets10LhaLam50","",Nbins,0.0,1.0);
+h_histFastJets10WidthLam50=new TH1D("h_FastJets10WidhtLam50","",Nbins,0.0,1.0);
+h_histFastJets10MassLam50=new TH1D("h_FastJets10MassLam50","",Nbins,0.0,1.0);
+h_histFastJets10MultLam100=new TH1D("h_FastJets10MultLam100","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets10PtLam100=new TH1D("h_FastJets10PtLam100","",Nbins,0.0,1.0);
+h_histFastJets10LhaLam100=new TH1D("h_FastJets10LhaLam100","",Nbins,0.0,1.0);
+h_histFastJets10WidthLam100=new TH1D("h_FastJets10WidhtLam100","",Nbins,0.0,1.0);
+h_histFastJets10MassLam100=new TH1D("h_FastJets10MassLam100","",Nbins,0.0,1.0);
+h_histFastJets10MultLam200=new TH1D("h_FastJets10MultLam200","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets10PtLam200=new TH1D("h_FastJets10PtLam200","",Nbins,0.0,1.0);
+h_histFastJets10LhaLam200=new TH1D("h_FastJets10LhaLam200","",Nbins,0.0,1.0);
+h_histFastJets10WidthLam200=new TH1D("h_FastJets10WidhtLam200","",Nbins,0.0,1.0);
+h_histFastJets10MassLam200=new TH1D("h_FastJets10MassLam200","",Nbins,0.0,1.0);
+h_histFastJets10MultLam400=new TH1D("h_FastJets10MultLam400","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets10PtLam400=new TH1D("h_FastJets10PtLam400","",Nbins,0.0,1.0);
+h_histFastJets10LhaLam400=new TH1D("h_FastJets10LhaLam400","",Nbins,0.0,1.0);
+h_histFastJets10WidthLam400=new TH1D("h_FastJets10WidhtLam400","",Nbins,0.0,1.0);
+h_histFastJets10MassLam400=new TH1D("h_FastJets10MassLam400","",Nbins,0.0,1.0);
+h_histFastJets10MultLam800=new TH1D("h_FastJets10MultLam800","",NbinsMulti,0.0,MaxMulti);
+h_histFastJets10PtLam800=new TH1D("h_FastJets10PtLam800","",Nbins,0.0,1.0);
+h_histFastJets10LhaLam800=new TH1D("h_FastJets10LhaLam800","",Nbins,0.0,1.0);
+h_histFastJets10WidthLam800=new TH1D("h_FastJets10WidhtLam800","",Nbins,0.0,1.0);
+h_histFastJets10MassLam800=new TH1D("h_FastJets10MassLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02PtSubLeadingQ50=new TH1D("h_mmdt_FastJets02PtSubLeadingQ50","",50,0,200);
+h_mmdt_histFastJets02PtSubLeadingQ100=new TH1D("h_mmdt_FastJets02PtSubLeadingQ100","",50,0,200);
+h_mmdt_histFastJets02PtSubLeadingQ200=new TH1D("h_mmdt_FastJets02PtSubLeadingQ200","",50,0,200);
+h_mmdt_histFastJets02PtSubLeadingQ400=new TH1D("h_mmdt_FastJets02PtSubLeadingQ400","",50,0,200);
+h_mmdt_histFastJets02PtSubLeadingQ800=new TH1D("h_mmdt_FastJets02PtSubLeadingQ800","",50,0,200);
+h_mmdt_histFastJets02PtSubLeading=new TH1D("h_mmdt_FastJets02PtSubLeading","",50,0,200);
+h_mmdt_histFastJets02PtLeadingQ50=new TH1D("h_mmdt_FastJets02PtLeadingQ50","",50,0,200);
+h_mmdt_histFastJets02PtLeadingQ100=new TH1D("h_mmdt_FastJets02PtLeadingQ100","",50,0,200);
+h_mmdt_histFastJets02PtLeadingQ200=new TH1D("h_mmdt_FastJets02PtLeadingQ200","",50,0,200);
+h_mmdt_histFastJets02PtLeadingQ400=new TH1D("h_mmdt_FastJets02PtLeadingQ400","",50,0,200);
+h_mmdt_histFastJets02PtLeadingQ800=new TH1D("h_mmdt_FastJets02PtLeadingQ800","",50,0,200);
+h_mmdt_histFastJets02PtLeading=new TH1D("h_mmdt_FastJets02PtLeading","",50,0,200);
+h_mmdt_histFastJets02PtReclustQ50=new TH1D("h_mmdt_FastJets02PtReclustQ50","",50,0,200);
+h_mmdt_histFastJets02PtReclustQ100=new TH1D("h_mmdt_FastJets02PtReclustQ100","",50,0,200);
+h_mmdt_histFastJets02PtReclustQ200=new TH1D("h_mmdt_FastJets02PtReclustQ200","",50,0,200);
+h_mmdt_histFastJets02PtReclustQ400=new TH1D("h_mmdt_FastJets02PtReclustQ400","",50,0,200);
+h_mmdt_histFastJets02PtReclustQ800=new TH1D("h_mmdt_FastJets02PtReclustQ800","",50,0,200);
+h_mmdt_histFastJets02PtReclust=new TH1D("h_mmdt_FastJets02PtReclust","",50,0,200);
+h_mmdt_histFastJets02Pt=new TH1D("h_mmdt_FastJets02Pt","",50,0,200);
+h_mmdt_histFastJets02Mult=new TH1D("h_mmdt_FastJets02Mult","",25,0,50);
+h_mmdt_histFastJets02E=new TH1D("h_mmdt_FastJets02E","",25,0,50);
+h_mmdt_histFastJets02Eta=new TH1D("h_mmdt_FastJets02Eta","",50,-5,5);
+h_mmdt_histFastJets02Rapidity=new TH1D("h_mmdt_FastJets02Rapidity","",50,-5,5);
+h_mmdt_histFastJets02Phi=new TH1D("h_mmdt_FastJets02Phi","",50,0,TWOPI);
+h_mmdt_histFastJets02MultLam=new TH2D("h_mmdt_FastJets02MultLam","",NbinsMulti,0.0,MaxMulti,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets02PtLam=new TH2D("h_mmdt_FastJets02PtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets02LhaLam=new TH2D("h_mmdt_FastJets02LhaLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets02WidthLam=new TH2D("h_mmdt_FastJets02WidhtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets02MassLam=new TH2D("h_mmdt_FastJets02MassLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets02MultLam50=new TH1D("h_mmdt_FastJets02MultLam50","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets02PtLam50=new TH1D("h_mmdt_FastJets02PtLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02LhaLam50=new TH1D("h_mmdt_FastJets02LhaLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02WidthLam50=new TH1D("h_mmdt_FastJets02WidhtLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02MassLam50=new TH1D("h_mmdt_FastJets02MassLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02MultLam100=new TH1D("h_mmdt_FastJets02MultLam100","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets02PtLam100=new TH1D("h_mmdt_FastJets02PtLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02LhaLam100=new TH1D("h_mmdt_FastJets02LhaLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02WidthLam100=new TH1D("h_mmdt_FastJets02WidhtLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02MassLam100=new TH1D("h_mmdt_FastJets02MassLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02MultLam200=new TH1D("h_mmdt_FastJets02MultLam200","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets02PtLam200=new TH1D("h_mmdt_FastJets02PtLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02LhaLam200=new TH1D("h_mmdt_FastJets02LhaLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02WidthLam200=new TH1D("h_mmdt_FastJets02WidhtLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02MassLam200=new TH1D("h_mmdt_FastJets02MassLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02MultLam400=new TH1D("h_mmdt_FastJets02MultLam400","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets02PtLam400=new TH1D("h_mmdt_FastJets02PtLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02LhaLam400=new TH1D("h_mmdt_FastJets02LhaLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02WidthLam400=new TH1D("h_mmdt_FastJets02WidhtLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02MassLam400=new TH1D("h_mmdt_FastJets02MassLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02MultLam800=new TH1D("h_mmdt_FastJets02MultLam800","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets02PtLam800=new TH1D("h_mmdt_FastJets02PtLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02LhaLam800=new TH1D("h_mmdt_FastJets02LhaLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02WidthLam800=new TH1D("h_mmdt_FastJets02WidhtLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets02MassLam800=new TH1D("h_mmdt_FastJets02MassLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04PtSubLeadingQ50=new TH1D("h_mmdt_FastJets04PtSubLeadingQ50","",50,0,200);
+h_mmdt_histFastJets04PtSubLeadingQ100=new TH1D("h_mmdt_FastJets04PtSubLeadingQ100","",50,0,200);
+h_mmdt_histFastJets04PtSubLeadingQ200=new TH1D("h_mmdt_FastJets04PtSubLeadingQ200","",50,0,200);
+h_mmdt_histFastJets04PtSubLeadingQ400=new TH1D("h_mmdt_FastJets04PtSubLeadingQ400","",50,0,200);
+h_mmdt_histFastJets04PtSubLeadingQ800=new TH1D("h_mmdt_FastJets04PtSubLeadingQ800","",50,0,200);
+h_mmdt_histFastJets04PtSubLeading=new TH1D("h_mmdt_FastJets04PtSubLeading","",50,0,200);
+h_mmdt_histFastJets04PtLeadingQ50=new TH1D("h_mmdt_FastJets04PtLeadingQ50","",50,0,200);
+h_mmdt_histFastJets04PtLeadingQ100=new TH1D("h_mmdt_FastJets04PtLeadingQ100","",50,0,200);
+h_mmdt_histFastJets04PtLeadingQ200=new TH1D("h_mmdt_FastJets04PtLeadingQ200","",50,0,200);
+h_mmdt_histFastJets04PtLeadingQ400=new TH1D("h_mmdt_FastJets04PtLeadingQ400","",50,0,200);
+h_mmdt_histFastJets04PtLeadingQ800=new TH1D("h_mmdt_FastJets04PtLeadingQ800","",50,0,200);
+h_mmdt_histFastJets04PtLeading=new TH1D("h_mmdt_FastJets04PtLeading","",50,0,200);
+h_mmdt_histFastJets04PtReclustQ50=new TH1D("h_mmdt_FastJets04PtReclustQ50","",50,0,200);
+h_mmdt_histFastJets04PtReclustQ100=new TH1D("h_mmdt_FastJets04PtReclustQ100","",50,0,200);
+h_mmdt_histFastJets04PtReclustQ200=new TH1D("h_mmdt_FastJets04PtReclustQ200","",50,0,200);
+h_mmdt_histFastJets04PtReclustQ400=new TH1D("h_mmdt_FastJets04PtReclustQ400","",50,0,200);
+h_mmdt_histFastJets04PtReclustQ800=new TH1D("h_mmdt_FastJets04PtReclustQ800","",50,0,200);
+h_mmdt_histFastJets04PtReclust=new TH1D("h_mmdt_FastJets04PtReclust","",50,0,200);
+h_mmdt_histFastJets04Pt=new TH1D("h_mmdt_FastJets04Pt","",50,0,200);
+h_mmdt_histFastJets04Mult=new TH1D("h_mmdt_FastJets04Mult","",25,0,50);
+h_mmdt_histFastJets04E=new TH1D("h_mmdt_FastJets04E","",25,0,50);
+h_mmdt_histFastJets04Eta=new TH1D("h_mmdt_FastJets04Eta","",50,-5,5);
+h_mmdt_histFastJets04Rapidity=new TH1D("h_mmdt_FastJets04Rapidity","",50,-5,5);
+h_mmdt_histFastJets04Phi=new TH1D("h_mmdt_FastJets04Phi","",50,0,TWOPI);
+h_mmdt_histFastJets04MultLam=new TH2D("h_mmdt_FastJets04MultLam","",NbinsMulti,0.0,MaxMulti,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets04PtLam=new TH2D("h_mmdt_FastJets04PtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets04LhaLam=new TH2D("h_mmdt_FastJets04LhaLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets04WidthLam=new TH2D("h_mmdt_FastJets04WidhtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets04MassLam=new TH2D("h_mmdt_FastJets04MassLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets04MultLam50=new TH1D("h_mmdt_FastJets04MultLam50","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets04PtLam50=new TH1D("h_mmdt_FastJets04PtLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04LhaLam50=new TH1D("h_mmdt_FastJets04LhaLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04WidthLam50=new TH1D("h_mmdt_FastJets04WidhtLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04MassLam50=new TH1D("h_mmdt_FastJets04MassLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04MultLam100=new TH1D("h_mmdt_FastJets04MultLam100","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets04PtLam100=new TH1D("h_mmdt_FastJets04PtLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04LhaLam100=new TH1D("h_mmdt_FastJets04LhaLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04WidthLam100=new TH1D("h_mmdt_FastJets04WidhtLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04MassLam100=new TH1D("h_mmdt_FastJets04MassLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04MultLam200=new TH1D("h_mmdt_FastJets04MultLam200","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets04PtLam200=new TH1D("h_mmdt_FastJets04PtLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04LhaLam200=new TH1D("h_mmdt_FastJets04LhaLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04WidthLam200=new TH1D("h_mmdt_FastJets04WidhtLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04MassLam200=new TH1D("h_mmdt_FastJets04MassLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04MultLam400=new TH1D("h_mmdt_FastJets04MultLam400","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets04PtLam400=new TH1D("h_mmdt_FastJets04PtLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04LhaLam400=new TH1D("h_mmdt_FastJets04LhaLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04WidthLam400=new TH1D("h_mmdt_FastJets04WidhtLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04MassLam400=new TH1D("h_mmdt_FastJets04MassLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04MultLam800=new TH1D("h_mmdt_FastJets04MultLam800","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets04PtLam800=new TH1D("h_mmdt_FastJets04PtLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04LhaLam800=new TH1D("h_mmdt_FastJets04LhaLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04WidthLam800=new TH1D("h_mmdt_FastJets04WidhtLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets04MassLam800=new TH1D("h_mmdt_FastJets04MassLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06PtSubLeadingQ50=new TH1D("h_mmdt_FastJets06PtSubLeadingQ50","",50,0,200);
+h_mmdt_histFastJets06PtSubLeadingQ100=new TH1D("h_mmdt_FastJets06PtSubLeadingQ100","",50,0,200);
+h_mmdt_histFastJets06PtSubLeadingQ200=new TH1D("h_mmdt_FastJets06PtSubLeadingQ200","",50,0,200);
+h_mmdt_histFastJets06PtSubLeadingQ400=new TH1D("h_mmdt_FastJets06PtSubLeadingQ400","",50,0,200);
+h_mmdt_histFastJets06PtSubLeadingQ800=new TH1D("h_mmdt_FastJets06PtSubLeadingQ800","",50,0,200);
+h_mmdt_histFastJets06PtSubLeading=new TH1D("h_mmdt_FastJets06PtSubLeading","",50,0,200);
+h_mmdt_histFastJets06PtLeadingQ50=new TH1D("h_mmdt_FastJets06PtLeadingQ50","",50,0,200);
+h_mmdt_histFastJets06PtLeadingQ100=new TH1D("h_mmdt_FastJets06PtLeadingQ100","",50,0,200);
+h_mmdt_histFastJets06PtLeadingQ200=new TH1D("h_mmdt_FastJets06PtLeadingQ200","",50,0,200);
+h_mmdt_histFastJets06PtLeadingQ400=new TH1D("h_mmdt_FastJets06PtLeadingQ400","",50,0,200);
+h_mmdt_histFastJets06PtLeadingQ800=new TH1D("h_mmdt_FastJets06PtLeadingQ800","",50,0,200);
+h_mmdt_histFastJets06PtLeading=new TH1D("h_mmdt_FastJets06PtLeading","",50,0,200);
+h_mmdt_histFastJets06PtReclustQ50=new TH1D("h_mmdt_FastJets06PtReclustQ50","",50,0,200);
+h_mmdt_histFastJets06PtReclustQ100=new TH1D("h_mmdt_FastJets06PtReclustQ100","",50,0,200);
+h_mmdt_histFastJets06PtReclustQ200=new TH1D("h_mmdt_FastJets06PtReclustQ200","",50,0,200);
+h_mmdt_histFastJets06PtReclustQ400=new TH1D("h_mmdt_FastJets06PtReclustQ400","",50,0,200);
+h_mmdt_histFastJets06PtReclustQ800=new TH1D("h_mmdt_FastJets06PtReclustQ800","",50,0,200);
+h_mmdt_histFastJets06PtReclust=new TH1D("h_mmdt_FastJets06PtReclust","",50,0,200);
+h_mmdt_histFastJets06Pt=new TH1D("h_mmdt_FastJets06Pt","",50,0,200);
+h_mmdt_histFastJets06Mult=new TH1D("h_mmdt_FastJets06Mult","",25,0,50);
+h_mmdt_histFastJets06E=new TH1D("h_mmdt_FastJets06E","",25,0,50);
+h_mmdt_histFastJets06Eta=new TH1D("h_mmdt_FastJets06Eta","",50,-5,5);
+h_mmdt_histFastJets06Rapidity=new TH1D("h_mmdt_FastJets06Rapidity","",50,-5,5);
+h_mmdt_histFastJets06Phi=new TH1D("h_mmdt_FastJets06Phi","",50,0,TWOPI);
+h_mmdt_histFastJets06MultLam=new TH2D("h_mmdt_FastJets06MultLam","",NbinsMulti,0.0,MaxMulti,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets06PtLam=new TH2D("h_mmdt_FastJets06PtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets06LhaLam=new TH2D("h_mmdt_FastJets06LhaLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets06WidthLam=new TH2D("h_mmdt_FastJets06WidhtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets06MassLam=new TH2D("h_mmdt_FastJets06MassLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets06MultLam50=new TH1D("h_mmdt_FastJets06MultLam50","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets06PtLam50=new TH1D("h_mmdt_FastJets06PtLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06LhaLam50=new TH1D("h_mmdt_FastJets06LhaLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06WidthLam50=new TH1D("h_mmdt_FastJets06WidhtLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06MassLam50=new TH1D("h_mmdt_FastJets06MassLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06MultLam100=new TH1D("h_mmdt_FastJets06MultLam100","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets06PtLam100=new TH1D("h_mmdt_FastJets06PtLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06LhaLam100=new TH1D("h_mmdt_FastJets06LhaLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06WidthLam100=new TH1D("h_mmdt_FastJets06WidhtLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06MassLam100=new TH1D("h_mmdt_FastJets06MassLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06MultLam200=new TH1D("h_mmdt_FastJets06MultLam200","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets06PtLam200=new TH1D("h_mmdt_FastJets06PtLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06LhaLam200=new TH1D("h_mmdt_FastJets06LhaLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06WidthLam200=new TH1D("h_mmdt_FastJets06WidhtLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06MassLam200=new TH1D("h_mmdt_FastJets06MassLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06MultLam400=new TH1D("h_mmdt_FastJets06MultLam400","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets06PtLam400=new TH1D("h_mmdt_FastJets06PtLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06LhaLam400=new TH1D("h_mmdt_FastJets06LhaLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06WidthLam400=new TH1D("h_mmdt_FastJets06WidhtLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06MassLam400=new TH1D("h_mmdt_FastJets06MassLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06MultLam800=new TH1D("h_mmdt_FastJets06MultLam800","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets06PtLam800=new TH1D("h_mmdt_FastJets06PtLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06LhaLam800=new TH1D("h_mmdt_FastJets06LhaLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06WidthLam800=new TH1D("h_mmdt_FastJets06WidhtLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets06MassLam800=new TH1D("h_mmdt_FastJets06MassLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08PtSubLeadingQ50=new TH1D("h_mmdt_FastJets08PtSubLeadingQ50","",50,0,200);
+h_mmdt_histFastJets08PtSubLeadingQ100=new TH1D("h_mmdt_FastJets08PtSubLeadingQ100","",50,0,200);
+h_mmdt_histFastJets08PtSubLeadingQ200=new TH1D("h_mmdt_FastJets08PtSubLeadingQ200","",50,0,200);
+h_mmdt_histFastJets08PtSubLeadingQ400=new TH1D("h_mmdt_FastJets08PtSubLeadingQ400","",50,0,200);
+h_mmdt_histFastJets08PtSubLeadingQ800=new TH1D("h_mmdt_FastJets08PtSubLeadingQ800","",50,0,200);
+h_mmdt_histFastJets08PtSubLeading=new TH1D("h_mmdt_FastJets08PtSubLeading","",50,0,200);
+h_mmdt_histFastJets08PtLeadingQ50=new TH1D("h_mmdt_FastJets08PtLeadingQ50","",50,0,200);
+h_mmdt_histFastJets08PtLeadingQ100=new TH1D("h_mmdt_FastJets08PtLeadingQ100","",50,0,200);
+h_mmdt_histFastJets08PtLeadingQ200=new TH1D("h_mmdt_FastJets08PtLeadingQ200","",50,0,200);
+h_mmdt_histFastJets08PtLeadingQ400=new TH1D("h_mmdt_FastJets08PtLeadingQ400","",50,0,200);
+h_mmdt_histFastJets08PtLeadingQ800=new TH1D("h_mmdt_FastJets08PtLeadingQ800","",50,0,200);
+h_mmdt_histFastJets08PtLeading=new TH1D("h_mmdt_FastJets08PtLeading","",50,0,200);
+h_mmdt_histFastJets08PtReclustQ50=new TH1D("h_mmdt_FastJets08PtReclustQ50","",50,0,200);
+h_mmdt_histFastJets08PtReclustQ100=new TH1D("h_mmdt_FastJets08PtReclustQ100","",50,0,200);
+h_mmdt_histFastJets08PtReclustQ200=new TH1D("h_mmdt_FastJets08PtReclustQ200","",50,0,200);
+h_mmdt_histFastJets08PtReclustQ400=new TH1D("h_mmdt_FastJets08PtReclustQ400","",50,0,200);
+h_mmdt_histFastJets08PtReclustQ800=new TH1D("h_mmdt_FastJets08PtReclustQ800","",50,0,200);
+h_mmdt_histFastJets08PtReclust=new TH1D("h_mmdt_FastJets08PtReclust","",50,0,200);
+h_mmdt_histFastJets08Pt=new TH1D("h_mmdt_FastJets08Pt","",50,0,200);
+h_mmdt_histFastJets08Mult=new TH1D("h_mmdt_FastJets08Mult","",25,0,50);
+h_mmdt_histFastJets08E=new TH1D("h_mmdt_FastJets08E","",25,0,50);
+h_mmdt_histFastJets08Eta=new TH1D("h_mmdt_FastJets08Eta","",50,-5,5);
+h_mmdt_histFastJets08Rapidity=new TH1D("h_mmdt_FastJets08Rapidity","",50,-5,5);
+h_mmdt_histFastJets08Phi=new TH1D("h_mmdt_FastJets08Phi","",50,0,TWOPI);
+h_mmdt_histFastJets08MultLam=new TH2D("h_mmdt_FastJets08MultLam","",NbinsMulti,0.0,MaxMulti,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets08PtLam=new TH2D("h_mmdt_FastJets08PtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets08LhaLam=new TH2D("h_mmdt_FastJets08LhaLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets08WidthLam=new TH2D("h_mmdt_FastJets08WidhtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets08MassLam=new TH2D("h_mmdt_FastJets08MassLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets08MultLam50=new TH1D("h_mmdt_FastJets08MultLam50","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets08PtLam50=new TH1D("h_mmdt_FastJets08PtLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08LhaLam50=new TH1D("h_mmdt_FastJets08LhaLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08WidthLam50=new TH1D("h_mmdt_FastJets08WidhtLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08MassLam50=new TH1D("h_mmdt_FastJets08MassLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08MultLam100=new TH1D("h_mmdt_FastJets08MultLam100","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets08PtLam100=new TH1D("h_mmdt_FastJets08PtLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08LhaLam100=new TH1D("h_mmdt_FastJets08LhaLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08WidthLam100=new TH1D("h_mmdt_FastJets08WidhtLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08MassLam100=new TH1D("h_mmdt_FastJets08MassLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08MultLam200=new TH1D("h_mmdt_FastJets08MultLam200","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets08PtLam200=new TH1D("h_mmdt_FastJets08PtLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08LhaLam200=new TH1D("h_mmdt_FastJets08LhaLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08WidthLam200=new TH1D("h_mmdt_FastJets08WidhtLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08MassLam200=new TH1D("h_mmdt_FastJets08MassLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08MultLam400=new TH1D("h_mmdt_FastJets08MultLam400","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets08PtLam400=new TH1D("h_mmdt_FastJets08PtLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08LhaLam400=new TH1D("h_mmdt_FastJets08LhaLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08WidthLam400=new TH1D("h_mmdt_FastJets08WidhtLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08MassLam400=new TH1D("h_mmdt_FastJets08MassLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08MultLam800=new TH1D("h_mmdt_FastJets08MultLam800","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets08PtLam800=new TH1D("h_mmdt_FastJets08PtLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08LhaLam800=new TH1D("h_mmdt_FastJets08LhaLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08WidthLam800=new TH1D("h_mmdt_FastJets08WidhtLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets08MassLam800=new TH1D("h_mmdt_FastJets08MassLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10PtSubLeadingQ50=new TH1D("h_mmdt_FastJets10PtSubLeadingQ50","",50,0,200);
+h_mmdt_histFastJets10PtSubLeadingQ100=new TH1D("h_mmdt_FastJets10PtSubLeadingQ100","",50,0,200);
+h_mmdt_histFastJets10PtSubLeadingQ200=new TH1D("h_mmdt_FastJets10PtSubLeadingQ200","",50,0,200);
+h_mmdt_histFastJets10PtSubLeadingQ400=new TH1D("h_mmdt_FastJets10PtSubLeadingQ400","",50,0,200);
+h_mmdt_histFastJets10PtSubLeadingQ800=new TH1D("h_mmdt_FastJets10PtSubLeadingQ800","",50,0,200);
+h_mmdt_histFastJets10PtSubLeading=new TH1D("h_mmdt_FastJets10PtSubLeading","",50,0,200);
+h_mmdt_histFastJets10PtLeadingQ50=new TH1D("h_mmdt_FastJets10PtLeadingQ50","",50,0,200);
+h_mmdt_histFastJets10PtLeadingQ100=new TH1D("h_mmdt_FastJets10PtLeadingQ100","",50,0,200);
+h_mmdt_histFastJets10PtLeadingQ200=new TH1D("h_mmdt_FastJets10PtLeadingQ200","",50,0,200);
+h_mmdt_histFastJets10PtLeadingQ400=new TH1D("h_mmdt_FastJets10PtLeadingQ400","",50,0,200);
+h_mmdt_histFastJets10PtLeadingQ800=new TH1D("h_mmdt_FastJets10PtLeadingQ800","",50,0,200);
+h_mmdt_histFastJets10PtLeading=new TH1D("h_mmdt_FastJets10PtLeading","",50,0,200);
+h_mmdt_histFastJets10PtReclustQ50=new TH1D("h_mmdt_FastJets10PtReclustQ50","",50,0,200);
+h_mmdt_histFastJets10PtReclustQ100=new TH1D("h_mmdt_FastJets10PtReclustQ100","",50,0,200);
+h_mmdt_histFastJets10PtReclustQ200=new TH1D("h_mmdt_FastJets10PtReclustQ200","",50,0,200);
+h_mmdt_histFastJets10PtReclustQ400=new TH1D("h_mmdt_FastJets10PtReclustQ400","",50,0,200);
+h_mmdt_histFastJets10PtReclustQ800=new TH1D("h_mmdt_FastJets10PtReclustQ800","",50,0,200);
+h_mmdt_histFastJets10PtReclust=new TH1D("h_mmdt_FastJets10PtReclust","",50,0,200);
+h_mmdt_histFastJets10Pt=new TH1D("h_mmdt_FastJets10Pt","",50,0,200);
+h_mmdt_histFastJets10Mult=new TH1D("h_mmdt_FastJets10Mult","",25,0,50);
+h_mmdt_histFastJets10E=new TH1D("h_mmdt_FastJets10E","",25,0,50);
+h_mmdt_histFastJets10Eta=new TH1D("h_mmdt_FastJets10Eta","",50,-5,5);
+h_mmdt_histFastJets10Rapidity=new TH1D("h_mmdt_FastJets10Rapidity","",50,-5,5);
+h_mmdt_histFastJets10Phi=new TH1D("h_mmdt_FastJets10Phi","",50,0,TWOPI);
+h_mmdt_histFastJets10MultLam=new TH2D("h_mmdt_FastJets10MultLam","",NbinsMulti,0.0,MaxMulti,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets10PtLam=new TH2D("h_mmdt_FastJets10PtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets10LhaLam=new TH2D("h_mmdt_FastJets10LhaLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets10WidthLam=new TH2D("h_mmdt_FastJets10WidhtLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets10MassLam=new TH2D("h_mmdt_FastJets10MassLam","",Nbins,0.0,1.0,NbinsPt,0.0,MaxPt);
+h_mmdt_histFastJets10MultLam50=new TH1D("h_mmdt_FastJets10MultLam50","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets10PtLam50=new TH1D("h_mmdt_FastJets10PtLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10LhaLam50=new TH1D("h_mmdt_FastJets10LhaLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10WidthLam50=new TH1D("h_mmdt_FastJets10WidhtLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10MassLam50=new TH1D("h_mmdt_FastJets10MassLam50","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10MultLam100=new TH1D("h_mmdt_FastJets10MultLam100","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets10PtLam100=new TH1D("h_mmdt_FastJets10PtLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10LhaLam100=new TH1D("h_mmdt_FastJets10LhaLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10WidthLam100=new TH1D("h_mmdt_FastJets10WidhtLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10MassLam100=new TH1D("h_mmdt_FastJets10MassLam100","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10MultLam200=new TH1D("h_mmdt_FastJets10MultLam200","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets10PtLam200=new TH1D("h_mmdt_FastJets10PtLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10LhaLam200=new TH1D("h_mmdt_FastJets10LhaLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10WidthLam200=new TH1D("h_mmdt_FastJets10WidhtLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10MassLam200=new TH1D("h_mmdt_FastJets10MassLam200","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10MultLam400=new TH1D("h_mmdt_FastJets10MultLam400","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets10PtLam400=new TH1D("h_mmdt_FastJets10PtLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10LhaLam400=new TH1D("h_mmdt_FastJets10LhaLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10WidthLam400=new TH1D("h_mmdt_FastJets10WidhtLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10MassLam400=new TH1D("h_mmdt_FastJets10MassLam400","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10MultLam800=new TH1D("h_mmdt_FastJets10MultLam800","",NbinsMulti,0.0,MaxMulti);
+h_mmdt_histFastJets10PtLam800=new TH1D("h_mmdt_FastJets10PtLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10LhaLam800=new TH1D("h_mmdt_FastJets10LhaLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10WidthLam800=new TH1D("h_mmdt_FastJets10WidhtLam800","",Nbins,0.0,1.0);
+h_mmdt_histFastJets10MassLam800=new TH1D("h_mmdt_FastJets10MassLam800","",Nbins,0.0,1.0);
+
       //
       FinalState fs(-PARTICLE_RAPMAX, PARTICLE_RAPMAX, 0.0*GeV);
       
@@ -704,12 +1170,7 @@ namespace Rivet {
       mmdt->set_grooming_mode();
       mmdt->set_reclustering(false);
       
-      double Nbins = 100;
-      double NbinsMulti = 100;
-      //double NbinsMulti = 250;
-      double MaxMulti = 100;
-      double NbinsPt = 20;
-      double MaxPt = 200; 
+
       _histGluonFractionPt = bookHisto1D("GluonFractionPt", 200, 0, 200);
       _histQuarkFractionPt = bookHisto1D("QuarkFractionPt", 200, 0, 200);
       _histGluonAndQuarkFractionPt = bookHisto1D("GluonAndQuarkFractionPt", 200, 0, 200);
@@ -1910,7 +2371,577 @@ mmdt_histFastJets10PtReclustQ800 = bookHisto1D("mmdt_FastJets10PtReclustQ800", 5
       mmdt_ArrayOfHist[4][51] = mmdt_histFastJets10PtSubLeadingQ800;
       mmdt_ArrayOfHist[4][52] = mmdt_histFastJets10PtLeadingQ800;
       mmdt_ArrayOfHist[4][53] = mmdt_histFastJets10PtReclustQ800;
-  
+      
+      h_ArrayOfHist[0][0] = h_histFastJets02PtSubLeading;
+      h_ArrayOfHist[0][1] = h_histFastJets02PtLeading;
+      h_ArrayOfHist[0][2] = h_histFastJets02PtReclust;
+      h_ArrayOfHist[0][3] = h_histFastJets02Pt;
+      h_ArrayOfHist[0][4] = h_histFastJets02Mult;
+      h_ArrayOfHist[0][5] = h_histFastJets02E;
+      h_ArrayOfHist[0][6] = h_histFastJets02Eta;
+      h_ArrayOfHist[0][7] = h_histFastJets02Rapidity;
+      h_ArrayOfHist[0][8] = h_histFastJets02Phi;
+      h_ArrayOfHist2[0][9] = h_histFastJets02MultLam;
+      h_ArrayOfHist2[0][10] = h_histFastJets02PtLam;
+      h_ArrayOfHist2[0][11] = h_histFastJets02LhaLam;
+      h_ArrayOfHist2[0][12] = h_histFastJets02WidthLam;
+      h_ArrayOfHist2[0][13] = h_histFastJets02MassLam;
+
+      h_ArrayOfHist[0][14] = h_histFastJets02MultLam50;
+      h_ArrayOfHist[0][15] = h_histFastJets02PtLam50;
+      h_ArrayOfHist[0][16] = h_histFastJets02LhaLam50;
+      h_ArrayOfHist[0][17] = h_histFastJets02WidthLam50;
+      h_ArrayOfHist[0][18] = h_histFastJets02MassLam50;     
+      h_ArrayOfHist[0][19] = h_histFastJets02MultLam100;
+      h_ArrayOfHist[0][20] = h_histFastJets02PtLam100;
+      h_ArrayOfHist[0][21] = h_histFastJets02LhaLam100;
+      h_ArrayOfHist[0][22] = h_histFastJets02WidthLam100;
+      h_ArrayOfHist[0][23] = h_histFastJets02MassLam100;
+      h_ArrayOfHist[0][24] = h_histFastJets02MultLam200;
+      h_ArrayOfHist[0][25] = h_histFastJets02PtLam200;
+      h_ArrayOfHist[0][26] = h_histFastJets02LhaLam200;
+      h_ArrayOfHist[0][27] = h_histFastJets02WidthLam200;
+      h_ArrayOfHist[0][28] = h_histFastJets02MassLam200;
+      h_ArrayOfHist[0][29] = h_histFastJets02MultLam400;
+      h_ArrayOfHist[0][30] = h_histFastJets02PtLam400;
+      h_ArrayOfHist[0][31] = h_histFastJets02LhaLam400;
+      h_ArrayOfHist[0][32] = h_histFastJets02WidthLam400;
+      h_ArrayOfHist[0][33] = h_histFastJets02MassLam400;
+      h_ArrayOfHist[0][34] = h_histFastJets02MultLam800;
+      h_ArrayOfHist[0][35] = h_histFastJets02PtLam800;
+      h_ArrayOfHist[0][36] = h_histFastJets02LhaLam800;
+      h_ArrayOfHist[0][37] = h_histFastJets02WidthLam800;
+      h_ArrayOfHist[0][38] = h_histFastJets02MassLam800;
+      
+      h_ArrayOfHist[0][39] = h_histFastJets02PtSubLeadingQ50;
+      h_ArrayOfHist[0][40] = h_histFastJets02PtLeadingQ50;
+      h_ArrayOfHist[0][41] = h_histFastJets02PtReclustQ50;
+      h_ArrayOfHist[0][42] = h_histFastJets02PtSubLeadingQ100;
+      h_ArrayOfHist[0][43] = h_histFastJets02PtLeadingQ100;
+      h_ArrayOfHist[0][44] = h_histFastJets02PtReclustQ100;
+      h_ArrayOfHist[0][45] = h_histFastJets02PtSubLeadingQ200;
+      h_ArrayOfHist[0][46] = h_histFastJets02PtLeadingQ200;
+      h_ArrayOfHist[0][47] = h_histFastJets02PtReclustQ200;
+      h_ArrayOfHist[0][48] = h_histFastJets02PtSubLeadingQ400;
+      h_ArrayOfHist[0][49] = h_histFastJets02PtLeadingQ400;
+      h_ArrayOfHist[0][50] = h_histFastJets02PtReclustQ400;
+      h_ArrayOfHist[0][51] = h_histFastJets02PtSubLeadingQ800;
+      h_ArrayOfHist[0][52] = h_histFastJets02PtLeadingQ800;
+      h_ArrayOfHist[0][53] = h_histFastJets02PtReclustQ800;
+
+      h_ArrayOfHist[1][0] = h_histFastJets04PtSubLeading;
+      h_ArrayOfHist[1][1] = h_histFastJets04PtLeading;
+      h_ArrayOfHist[1][2] = h_histFastJets04PtReclust;
+      h_ArrayOfHist[1][3] = h_histFastJets04Pt;
+      h_ArrayOfHist[1][4] = h_histFastJets04Mult;
+      h_ArrayOfHist[1][5] = h_histFastJets04E;
+      h_ArrayOfHist[1][6] = h_histFastJets04Eta;
+      h_ArrayOfHist[1][7] = h_histFastJets04Rapidity;
+      h_ArrayOfHist[1][8] = h_histFastJets04Phi;
+      h_ArrayOfHist2[1][9] = h_histFastJets04MultLam;
+      h_ArrayOfHist2[1][10] = h_histFastJets04PtLam;
+      h_ArrayOfHist2[1][11] = h_histFastJets04LhaLam;
+      h_ArrayOfHist2[1][12] = h_histFastJets04WidthLam;
+      h_ArrayOfHist2[1][13] = h_histFastJets04MassLam;
+
+      h_ArrayOfHist[1][14] = h_histFastJets04MultLam50;
+      h_ArrayOfHist[1][15] = h_histFastJets04PtLam50;
+      h_ArrayOfHist[1][16] = h_histFastJets04LhaLam50;
+      h_ArrayOfHist[1][17] = h_histFastJets04WidthLam50;
+      h_ArrayOfHist[1][18] = h_histFastJets04MassLam50;     
+      h_ArrayOfHist[1][19] = h_histFastJets04MultLam100;
+      h_ArrayOfHist[1][20] = h_histFastJets04PtLam100;
+      h_ArrayOfHist[1][21] = h_histFastJets04LhaLam100;
+      h_ArrayOfHist[1][22] = h_histFastJets04WidthLam100;
+      h_ArrayOfHist[1][23] = h_histFastJets04MassLam100;
+      h_ArrayOfHist[1][24] = h_histFastJets04MultLam200;
+      h_ArrayOfHist[1][25] = h_histFastJets04PtLam200;
+      h_ArrayOfHist[1][26] = h_histFastJets04LhaLam200;
+      h_ArrayOfHist[1][27] = h_histFastJets04WidthLam200;
+      h_ArrayOfHist[1][28] = h_histFastJets04MassLam200;
+      h_ArrayOfHist[1][29] = h_histFastJets04MultLam400;
+      h_ArrayOfHist[1][30] = h_histFastJets04PtLam400;
+      h_ArrayOfHist[1][31] = h_histFastJets04LhaLam400;
+      h_ArrayOfHist[1][32] = h_histFastJets04WidthLam400;
+      h_ArrayOfHist[1][33] = h_histFastJets04MassLam400;
+      h_ArrayOfHist[1][34] = h_histFastJets04MultLam800;
+      h_ArrayOfHist[1][35] = h_histFastJets04PtLam800;
+      h_ArrayOfHist[1][36] = h_histFastJets04LhaLam800;
+      h_ArrayOfHist[1][37] = h_histFastJets04WidthLam800;
+      h_ArrayOfHist[1][38] = h_histFastJets04MassLam800;
+
+      h_ArrayOfHist[1][39] = h_histFastJets04PtSubLeadingQ50;
+      h_ArrayOfHist[1][40] = h_histFastJets04PtLeadingQ50;
+      h_ArrayOfHist[1][41] = h_histFastJets04PtReclustQ50;
+      h_ArrayOfHist[1][42] = h_histFastJets04PtSubLeadingQ100;
+      h_ArrayOfHist[1][43] = h_histFastJets04PtLeadingQ100;
+      h_ArrayOfHist[1][44] = h_histFastJets04PtReclustQ100;
+      h_ArrayOfHist[1][45] = h_histFastJets04PtSubLeadingQ200;
+      h_ArrayOfHist[1][46] = h_histFastJets04PtLeadingQ200;
+      h_ArrayOfHist[1][47] = h_histFastJets04PtReclustQ200;
+      h_ArrayOfHist[1][48] = h_histFastJets04PtSubLeadingQ400;
+      h_ArrayOfHist[1][49] = h_histFastJets04PtLeadingQ400;
+      h_ArrayOfHist[1][50] = h_histFastJets04PtReclustQ400;
+      h_ArrayOfHist[1][51] = h_histFastJets04PtSubLeadingQ800;
+      h_ArrayOfHist[1][52] = h_histFastJets04PtLeadingQ800;
+      h_ArrayOfHist[1][53] = h_histFastJets04PtReclustQ800;
+      
+      h_ArrayOfHist[2][0] = h_histFastJets06PtSubLeading;
+      h_ArrayOfHist[2][1] = h_histFastJets06PtLeading;
+      h_ArrayOfHist[2][2] = h_histFastJets06PtReclust;
+      h_ArrayOfHist[2][3] = h_histFastJets06Pt;
+      h_ArrayOfHist[2][4] = h_histFastJets06Mult;
+      h_ArrayOfHist[2][5] = h_histFastJets06E;
+      h_ArrayOfHist[2][6] = h_histFastJets06Eta;
+      h_ArrayOfHist[2][7] = h_histFastJets06Rapidity;
+      h_ArrayOfHist[2][8] = h_histFastJets06Phi;
+      h_ArrayOfHist2[2][9] = h_histFastJets06MultLam;
+      h_ArrayOfHist2[2][10] = h_histFastJets06PtLam;
+      h_ArrayOfHist2[2][11] = h_histFastJets06LhaLam;
+      h_ArrayOfHist2[2][12] = h_histFastJets06WidthLam;
+      h_ArrayOfHist2[2][13] = h_histFastJets06MassLam;
+
+      h_ArrayOfHist[2][14] = h_histFastJets06MultLam50;
+      h_ArrayOfHist[2][15] = h_histFastJets06PtLam50;
+      h_ArrayOfHist[2][16] = h_histFastJets06LhaLam50;
+      h_ArrayOfHist[2][17] = h_histFastJets06WidthLam50;
+      h_ArrayOfHist[2][18] = h_histFastJets06MassLam50;     
+      h_ArrayOfHist[2][19] = h_histFastJets06MultLam100;
+      h_ArrayOfHist[2][20] = h_histFastJets06PtLam100;
+      h_ArrayOfHist[2][21] = h_histFastJets06LhaLam100;
+      h_ArrayOfHist[2][22] = h_histFastJets06WidthLam100;
+      h_ArrayOfHist[2][23] = h_histFastJets06MassLam100;
+      h_ArrayOfHist[2][24] = h_histFastJets06MultLam200;
+      h_ArrayOfHist[2][25] = h_histFastJets06PtLam200;
+      h_ArrayOfHist[2][26] = h_histFastJets06LhaLam200;
+      h_ArrayOfHist[2][27] = h_histFastJets06WidthLam200;
+      h_ArrayOfHist[2][28] = h_histFastJets06MassLam200;
+      h_ArrayOfHist[2][29] = h_histFastJets06MultLam400;
+      h_ArrayOfHist[2][30] = h_histFastJets06PtLam400;
+      h_ArrayOfHist[2][31] = h_histFastJets06LhaLam400;
+      h_ArrayOfHist[2][32] = h_histFastJets06WidthLam400;
+      h_ArrayOfHist[2][33] = h_histFastJets06MassLam400;
+      h_ArrayOfHist[2][34] = h_histFastJets06MultLam800;
+      h_ArrayOfHist[2][35] = h_histFastJets06PtLam800;
+      h_ArrayOfHist[2][36] = h_histFastJets06LhaLam800;
+      h_ArrayOfHist[2][37] = h_histFastJets06WidthLam800;
+      h_ArrayOfHist[2][38] = h_histFastJets06MassLam800;
+
+      h_ArrayOfHist[2][39] = h_histFastJets06PtSubLeadingQ50;
+      h_ArrayOfHist[2][40] = h_histFastJets06PtLeadingQ50;
+      h_ArrayOfHist[2][41] = h_histFastJets06PtReclustQ50;
+      h_ArrayOfHist[2][42] = h_histFastJets06PtSubLeadingQ100;
+      h_ArrayOfHist[2][43] = h_histFastJets06PtLeadingQ100;
+      h_ArrayOfHist[2][44] = h_histFastJets06PtReclustQ100;
+      h_ArrayOfHist[2][45] = h_histFastJets06PtSubLeadingQ200;
+      h_ArrayOfHist[2][46] = h_histFastJets06PtLeadingQ200;
+      h_ArrayOfHist[2][47] = h_histFastJets06PtReclustQ200;
+      h_ArrayOfHist[2][48] = h_histFastJets06PtSubLeadingQ400;
+      h_ArrayOfHist[2][49] = h_histFastJets06PtLeadingQ400;
+      h_ArrayOfHist[2][50] = h_histFastJets06PtReclustQ400;
+      h_ArrayOfHist[2][51] = h_histFastJets06PtSubLeadingQ800;
+      h_ArrayOfHist[2][52] = h_histFastJets06PtLeadingQ800;
+      h_ArrayOfHist[2][53] = h_histFastJets06PtReclustQ800;
+      
+      h_ArrayOfHist[3][0] = h_histFastJets08PtSubLeading;
+      h_ArrayOfHist[3][1] = h_histFastJets08PtLeading;
+      h_ArrayOfHist[3][2] = h_histFastJets08PtReclust;
+      h_ArrayOfHist[3][3] = h_histFastJets08Pt;
+      h_ArrayOfHist[3][4] = h_histFastJets08Mult;
+      h_ArrayOfHist[3][5] = h_histFastJets08E;
+      h_ArrayOfHist[3][6] = h_histFastJets08Eta;
+      h_ArrayOfHist[3][7] = h_histFastJets08Rapidity;
+      h_ArrayOfHist[3][8] = h_histFastJets08Phi;
+      h_ArrayOfHist2[3][9] = h_histFastJets08MultLam;
+      h_ArrayOfHist2[3][10] = h_histFastJets08PtLam;
+      h_ArrayOfHist2[3][11] = h_histFastJets08LhaLam;
+      h_ArrayOfHist2[3][12] = h_histFastJets08WidthLam;
+      h_ArrayOfHist2[3][13] = h_histFastJets08MassLam;
+
+      h_ArrayOfHist[3][14] = h_histFastJets08MultLam50;
+      h_ArrayOfHist[3][15] = h_histFastJets08PtLam50;
+      h_ArrayOfHist[3][16] = h_histFastJets08LhaLam50;
+      h_ArrayOfHist[3][17] = h_histFastJets08WidthLam50;
+      h_ArrayOfHist[3][18] = h_histFastJets08MassLam50;     
+      h_ArrayOfHist[3][19] = h_histFastJets08MultLam100;
+      h_ArrayOfHist[3][20] = h_histFastJets08PtLam100;
+      h_ArrayOfHist[3][21] = h_histFastJets08LhaLam100;
+      h_ArrayOfHist[3][22] = h_histFastJets08WidthLam100;
+      h_ArrayOfHist[3][23] = h_histFastJets08MassLam100;
+      h_ArrayOfHist[3][24] = h_histFastJets08MultLam200;
+      h_ArrayOfHist[3][25] = h_histFastJets08PtLam200;
+      h_ArrayOfHist[3][26] = h_histFastJets08LhaLam200;
+      h_ArrayOfHist[3][27] = h_histFastJets08WidthLam200;
+      h_ArrayOfHist[3][28] = h_histFastJets08MassLam200;
+      h_ArrayOfHist[3][29] = h_histFastJets08MultLam400;
+      h_ArrayOfHist[3][30] = h_histFastJets08PtLam400;
+      h_ArrayOfHist[3][31] = h_histFastJets08LhaLam400;
+      h_ArrayOfHist[3][32] = h_histFastJets08WidthLam400;
+      h_ArrayOfHist[3][33] = h_histFastJets08MassLam400;
+      h_ArrayOfHist[3][34] = h_histFastJets08MultLam800;
+      h_ArrayOfHist[3][35] = h_histFastJets08PtLam800;
+      h_ArrayOfHist[3][36] = h_histFastJets08LhaLam800;
+      h_ArrayOfHist[3][37] = h_histFastJets08WidthLam800;
+      h_ArrayOfHist[3][38] = h_histFastJets08MassLam800;
+
+      h_ArrayOfHist[3][39] = h_histFastJets08PtSubLeadingQ50;
+      h_ArrayOfHist[3][40] = h_histFastJets08PtLeadingQ50;
+      h_ArrayOfHist[3][41] = h_histFastJets08PtReclustQ50;
+      h_ArrayOfHist[3][42] = h_histFastJets08PtSubLeadingQ100;
+      h_ArrayOfHist[3][43] = h_histFastJets08PtLeadingQ100;
+      h_ArrayOfHist[3][44] = h_histFastJets08PtReclustQ100;
+      h_ArrayOfHist[3][45] = h_histFastJets08PtSubLeadingQ200;
+      h_ArrayOfHist[3][46] = h_histFastJets08PtLeadingQ200;
+      h_ArrayOfHist[3][47] = h_histFastJets08PtReclustQ200;
+      h_ArrayOfHist[3][48] = h_histFastJets08PtSubLeadingQ400;
+      h_ArrayOfHist[3][49] = h_histFastJets08PtLeadingQ400;
+      h_ArrayOfHist[3][50] = h_histFastJets08PtReclustQ400;
+      h_ArrayOfHist[3][51] = h_histFastJets08PtSubLeadingQ800;
+      h_ArrayOfHist[3][52] = h_histFastJets08PtLeadingQ800;
+      h_ArrayOfHist[3][53] = h_histFastJets08PtReclustQ800;
+      
+      h_ArrayOfHist[4][0] = h_histFastJets10PtSubLeading;
+      h_ArrayOfHist[4][1] = h_histFastJets10PtLeading;
+      h_ArrayOfHist[4][2] = h_histFastJets10PtReclust;
+      h_ArrayOfHist[4][3] = h_histFastJets10Pt;
+      h_ArrayOfHist[4][4] = h_histFastJets10Mult;
+      h_ArrayOfHist[4][5] = h_histFastJets10E;
+      h_ArrayOfHist[4][6] = h_histFastJets10Eta;
+      h_ArrayOfHist[4][7] = h_histFastJets10Rapidity;
+      h_ArrayOfHist[4][8] = h_histFastJets10Phi;
+      h_ArrayOfHist2[4][9] = h_histFastJets10MultLam;
+      h_ArrayOfHist2[4][10] = h_histFastJets10PtLam;
+      h_ArrayOfHist2[4][11] = h_histFastJets10LhaLam;
+      h_ArrayOfHist2[4][12] = h_histFastJets10WidthLam;
+      h_ArrayOfHist2[4][13] = h_histFastJets10MassLam;
+
+      h_ArrayOfHist[4][14] = h_histFastJets10MultLam50;
+      h_ArrayOfHist[4][15] = h_histFastJets10PtLam50;
+      h_ArrayOfHist[4][16] = h_histFastJets10LhaLam50;
+      h_ArrayOfHist[4][17] = h_histFastJets10WidthLam50;
+      h_ArrayOfHist[4][18] = h_histFastJets10MassLam50;     
+      h_ArrayOfHist[4][19] = h_histFastJets10MultLam100;
+      h_ArrayOfHist[4][20] = h_histFastJets10PtLam100;
+      h_ArrayOfHist[4][21] = h_histFastJets10LhaLam100;
+      h_ArrayOfHist[4][22] = h_histFastJets10WidthLam100;
+      h_ArrayOfHist[4][23] = h_histFastJets10MassLam100;
+      h_ArrayOfHist[4][24] = h_histFastJets10MultLam200;
+      h_ArrayOfHist[4][25] = h_histFastJets10PtLam200;
+      h_ArrayOfHist[4][26] = h_histFastJets10LhaLam200;
+      h_ArrayOfHist[4][27] = h_histFastJets10WidthLam200;
+      h_ArrayOfHist[4][28] = h_histFastJets10MassLam200;
+      h_ArrayOfHist[4][29] = h_histFastJets10MultLam400;
+      h_ArrayOfHist[4][30] = h_histFastJets10PtLam400;
+      h_ArrayOfHist[4][31] = h_histFastJets10LhaLam400;
+      h_ArrayOfHist[4][32] = h_histFastJets10WidthLam400;
+      h_ArrayOfHist[4][33] = h_histFastJets10MassLam400;
+      h_ArrayOfHist[4][34] = h_histFastJets10MultLam800;
+      h_ArrayOfHist[4][35] = h_histFastJets10PtLam800;
+      h_ArrayOfHist[4][36] = h_histFastJets10LhaLam800;
+      h_ArrayOfHist[4][37] = h_histFastJets10WidthLam800;
+      h_ArrayOfHist[4][38] = h_histFastJets10MassLam800;
+
+      h_ArrayOfHist[4][39] = h_histFastJets10PtSubLeadingQ50;
+      h_ArrayOfHist[4][40] = h_histFastJets10PtLeadingQ50;
+      h_ArrayOfHist[4][41] = h_histFastJets10PtReclustQ50;
+      h_ArrayOfHist[4][42] = h_histFastJets10PtSubLeadingQ100;
+      h_ArrayOfHist[4][43] = h_histFastJets10PtLeadingQ100;
+      h_ArrayOfHist[4][44] = h_histFastJets10PtReclustQ100;
+      h_ArrayOfHist[4][45] = h_histFastJets10PtSubLeadingQ200;
+      h_ArrayOfHist[4][46] = h_histFastJets10PtLeadingQ200;
+      h_ArrayOfHist[4][47] = h_histFastJets10PtReclustQ200;
+      h_ArrayOfHist[4][48] = h_histFastJets10PtSubLeadingQ400;
+      h_ArrayOfHist[4][49] = h_histFastJets10PtLeadingQ400;
+      h_ArrayOfHist[4][50] = h_histFastJets10PtReclustQ400;
+      h_ArrayOfHist[4][51] = h_histFastJets10PtSubLeadingQ800;
+      h_ArrayOfHist[4][52] = h_histFastJets10PtLeadingQ800;
+      h_ArrayOfHist[4][53] = h_histFastJets10PtReclustQ800;
+
+      //mmdt root histos
+            h_mmdt_ArrayOfHist[0][0]   = h_mmdt_histFastJets02PtSubLeading;
+      h_mmdt_ArrayOfHist[0][1]   = h_mmdt_histFastJets02PtLeading;
+      h_mmdt_ArrayOfHist[0][2]   = h_mmdt_histFastJets02PtReclust;
+      h_mmdt_ArrayOfHist[0][3]   = h_mmdt_histFastJets02Pt;
+      h_mmdt_ArrayOfHist[0][4]   = h_mmdt_histFastJets02Mult;
+      h_mmdt_ArrayOfHist[0][5]   = h_mmdt_histFastJets02E;
+      h_mmdt_ArrayOfHist[0][6]   = h_mmdt_histFastJets02Eta;
+      h_mmdt_ArrayOfHist[0][7]   = h_mmdt_histFastJets02Rapidity;
+      h_mmdt_ArrayOfHist[0][8]   = h_mmdt_histFastJets02Phi;
+      h_mmdt_ArrayOfHist2[0][9]  = h_mmdt_histFastJets02MultLam;
+      h_mmdt_ArrayOfHist2[0][10] = h_mmdt_histFastJets02PtLam;
+      h_mmdt_ArrayOfHist2[0][11] = h_mmdt_histFastJets02LhaLam;
+      h_mmdt_ArrayOfHist2[0][12] = h_mmdt_histFastJets02WidthLam;
+      h_mmdt_ArrayOfHist2[0][13] = h_mmdt_histFastJets02MassLam;
+
+      h_mmdt_ArrayOfHist[0][14] = h_mmdt_histFastJets02MultLam50;
+      h_mmdt_ArrayOfHist[0][15] = h_mmdt_histFastJets02PtLam50;
+      h_mmdt_ArrayOfHist[0][16] = h_mmdt_histFastJets02LhaLam50;
+      h_mmdt_ArrayOfHist[0][17] = h_mmdt_histFastJets02WidthLam50;
+      h_mmdt_ArrayOfHist[0][18] = h_mmdt_histFastJets02MassLam50;     
+      h_mmdt_ArrayOfHist[0][19] = h_mmdt_histFastJets02MultLam100;
+      h_mmdt_ArrayOfHist[0][20] = h_mmdt_histFastJets02PtLam100;
+      h_mmdt_ArrayOfHist[0][21] = h_mmdt_histFastJets02LhaLam100;
+      h_mmdt_ArrayOfHist[0][22] = h_mmdt_histFastJets02WidthLam100;
+      h_mmdt_ArrayOfHist[0][23] = h_mmdt_histFastJets02MassLam100;
+      h_mmdt_ArrayOfHist[0][24] = h_mmdt_histFastJets02MultLam200;
+      h_mmdt_ArrayOfHist[0][25] = h_mmdt_histFastJets02PtLam200;
+      h_mmdt_ArrayOfHist[0][26] = h_mmdt_histFastJets02LhaLam200;
+      h_mmdt_ArrayOfHist[0][27] = h_mmdt_histFastJets02WidthLam200;
+      h_mmdt_ArrayOfHist[0][28] = h_mmdt_histFastJets02MassLam200;
+      h_mmdt_ArrayOfHist[0][29] = h_mmdt_histFastJets02MultLam400;
+      h_mmdt_ArrayOfHist[0][30] = h_mmdt_histFastJets02PtLam400;
+      h_mmdt_ArrayOfHist[0][31] = h_mmdt_histFastJets02LhaLam400;
+      h_mmdt_ArrayOfHist[0][32] = h_mmdt_histFastJets02WidthLam400;
+      h_mmdt_ArrayOfHist[0][33] = h_mmdt_histFastJets02MassLam400;
+      h_mmdt_ArrayOfHist[0][34] = h_mmdt_histFastJets02MultLam800;
+      h_mmdt_ArrayOfHist[0][35] = h_mmdt_histFastJets02PtLam800;
+      h_mmdt_ArrayOfHist[0][36] = h_mmdt_histFastJets02LhaLam800;
+      h_mmdt_ArrayOfHist[0][37] = h_mmdt_histFastJets02WidthLam800;
+      h_mmdt_ArrayOfHist[0][38] = h_mmdt_histFastJets02MassLam800;
+
+      h_mmdt_ArrayOfHist[0][39] = h_mmdt_histFastJets02PtSubLeadingQ50;
+      h_mmdt_ArrayOfHist[0][40] = h_mmdt_histFastJets02PtLeadingQ50;
+      h_mmdt_ArrayOfHist[0][41] = h_mmdt_histFastJets02PtReclustQ50;
+      h_mmdt_ArrayOfHist[0][42] = h_mmdt_histFastJets02PtSubLeadingQ100;
+      h_mmdt_ArrayOfHist[0][43] = h_mmdt_histFastJets02PtLeadingQ100;
+      h_mmdt_ArrayOfHist[0][44] = h_mmdt_histFastJets02PtReclustQ100;
+      h_mmdt_ArrayOfHist[0][45] = h_mmdt_histFastJets02PtSubLeadingQ200;
+      h_mmdt_ArrayOfHist[0][46] = h_mmdt_histFastJets02PtLeadingQ200;
+      h_mmdt_ArrayOfHist[0][47] = h_mmdt_histFastJets02PtReclustQ200;
+      h_mmdt_ArrayOfHist[0][48] = h_mmdt_histFastJets02PtSubLeadingQ400;
+      h_mmdt_ArrayOfHist[0][49] = h_mmdt_histFastJets02PtLeadingQ400;
+      h_mmdt_ArrayOfHist[0][50] = h_mmdt_histFastJets02PtReclustQ400;
+      h_mmdt_ArrayOfHist[0][51] = h_mmdt_histFastJets02PtSubLeadingQ800;
+      h_mmdt_ArrayOfHist[0][52] = h_mmdt_histFastJets02PtLeadingQ800;
+      h_mmdt_ArrayOfHist[0][53] = h_mmdt_histFastJets02PtReclustQ800;
+
+      h_mmdt_ArrayOfHist[1][0]   = h_mmdt_histFastJets04PtSubLeading;
+      h_mmdt_ArrayOfHist[1][1]   = h_mmdt_histFastJets04PtLeading;
+      h_mmdt_ArrayOfHist[1][2]   = h_mmdt_histFastJets04PtReclust;
+      h_mmdt_ArrayOfHist[1][3]   = h_mmdt_histFastJets04Pt;
+      h_mmdt_ArrayOfHist[1][4]   = h_mmdt_histFastJets04Mult;
+      h_mmdt_ArrayOfHist[1][5]   = h_mmdt_histFastJets04E;
+      h_mmdt_ArrayOfHist[1][6]   = h_mmdt_histFastJets04Eta;
+      h_mmdt_ArrayOfHist[1][7]   = h_mmdt_histFastJets04Rapidity;
+      h_mmdt_ArrayOfHist[1][8]   = h_mmdt_histFastJets04Phi;
+      h_mmdt_ArrayOfHist2[1][9]  = h_mmdt_histFastJets04MultLam;
+      h_mmdt_ArrayOfHist2[1][10] = h_mmdt_histFastJets04PtLam;
+      h_mmdt_ArrayOfHist2[1][11] = h_mmdt_histFastJets04LhaLam;
+      h_mmdt_ArrayOfHist2[1][12] = h_mmdt_histFastJets04WidthLam;
+      h_mmdt_ArrayOfHist2[1][13] = h_mmdt_histFastJets04MassLam;
+
+      h_mmdt_ArrayOfHist[1][14] = h_mmdt_histFastJets04MultLam50;
+      h_mmdt_ArrayOfHist[1][15] = h_mmdt_histFastJets04PtLam50;
+      h_mmdt_ArrayOfHist[1][16] = h_mmdt_histFastJets04LhaLam50;
+      h_mmdt_ArrayOfHist[1][17] = h_mmdt_histFastJets04WidthLam50;
+      h_mmdt_ArrayOfHist[1][18] = h_mmdt_histFastJets04MassLam50;     
+      h_mmdt_ArrayOfHist[1][19] = h_mmdt_histFastJets04MultLam100;
+      h_mmdt_ArrayOfHist[1][20] = h_mmdt_histFastJets04PtLam100;
+      h_mmdt_ArrayOfHist[1][21] = h_mmdt_histFastJets04LhaLam100;
+      h_mmdt_ArrayOfHist[1][22] = h_mmdt_histFastJets04WidthLam100;
+      h_mmdt_ArrayOfHist[1][23] = h_mmdt_histFastJets04MassLam100;
+      h_mmdt_ArrayOfHist[1][24] = h_mmdt_histFastJets04MultLam200;
+      h_mmdt_ArrayOfHist[1][25] = h_mmdt_histFastJets04PtLam200;
+      h_mmdt_ArrayOfHist[1][26] = h_mmdt_histFastJets04LhaLam200;
+      h_mmdt_ArrayOfHist[1][27] = h_mmdt_histFastJets04WidthLam200;
+      h_mmdt_ArrayOfHist[1][28] = h_mmdt_histFastJets04MassLam200;
+      h_mmdt_ArrayOfHist[1][29] = h_mmdt_histFastJets04MultLam400;
+      h_mmdt_ArrayOfHist[1][30] = h_mmdt_histFastJets04PtLam400;
+      h_mmdt_ArrayOfHist[1][31] = h_mmdt_histFastJets04LhaLam400;
+      h_mmdt_ArrayOfHist[1][32] = h_mmdt_histFastJets04WidthLam400;
+      h_mmdt_ArrayOfHist[1][33] = h_mmdt_histFastJets04MassLam400;
+      h_mmdt_ArrayOfHist[1][34] = h_mmdt_histFastJets04MultLam800;
+      h_mmdt_ArrayOfHist[1][35] = h_mmdt_histFastJets04PtLam800;
+      h_mmdt_ArrayOfHist[1][36] = h_mmdt_histFastJets04LhaLam800;
+      h_mmdt_ArrayOfHist[1][37] = h_mmdt_histFastJets04WidthLam800;
+      h_mmdt_ArrayOfHist[1][38] = h_mmdt_histFastJets04MassLam800;
+
+      h_mmdt_ArrayOfHist[1][39] = h_mmdt_histFastJets04PtSubLeadingQ50;
+      h_mmdt_ArrayOfHist[1][40] = h_mmdt_histFastJets04PtLeadingQ50;
+      h_mmdt_ArrayOfHist[1][41] = h_mmdt_histFastJets04PtReclustQ50;
+      h_mmdt_ArrayOfHist[1][42] = h_mmdt_histFastJets04PtSubLeadingQ100;
+      h_mmdt_ArrayOfHist[1][43] = h_mmdt_histFastJets04PtLeadingQ100;
+      h_mmdt_ArrayOfHist[1][44] = h_mmdt_histFastJets04PtReclustQ100;
+      h_mmdt_ArrayOfHist[1][45] = h_mmdt_histFastJets04PtSubLeadingQ200;
+      h_mmdt_ArrayOfHist[1][46] = h_mmdt_histFastJets04PtLeadingQ200;
+      h_mmdt_ArrayOfHist[1][47] = h_mmdt_histFastJets04PtReclustQ200;
+      h_mmdt_ArrayOfHist[1][48] = h_mmdt_histFastJets04PtSubLeadingQ400;
+      h_mmdt_ArrayOfHist[1][49] = h_mmdt_histFastJets04PtLeadingQ400;
+      h_mmdt_ArrayOfHist[1][50] = h_mmdt_histFastJets04PtReclustQ400;
+      h_mmdt_ArrayOfHist[1][51] = h_mmdt_histFastJets04PtSubLeadingQ800;
+      h_mmdt_ArrayOfHist[1][52] = h_mmdt_histFastJets04PtLeadingQ800;
+      h_mmdt_ArrayOfHist[1][53] = h_mmdt_histFastJets04PtReclustQ800;
+      
+      h_mmdt_ArrayOfHist[2][0]   = h_mmdt_histFastJets06PtSubLeading;
+      h_mmdt_ArrayOfHist[2][1]   = h_mmdt_histFastJets06PtLeading;
+      h_mmdt_ArrayOfHist[2][2]   = h_mmdt_histFastJets06PtReclust;
+      h_mmdt_ArrayOfHist[2][3]   = h_mmdt_histFastJets06Pt;
+      h_mmdt_ArrayOfHist[2][4]   = h_mmdt_histFastJets06Mult;
+      h_mmdt_ArrayOfHist[2][5]   = h_mmdt_histFastJets06E;
+      h_mmdt_ArrayOfHist[2][6]   = h_mmdt_histFastJets06Eta;
+      h_mmdt_ArrayOfHist[2][7]   = h_mmdt_histFastJets06Rapidity;
+      h_mmdt_ArrayOfHist[2][8]   = h_mmdt_histFastJets06Phi;
+      h_mmdt_ArrayOfHist2[2][9]  = h_mmdt_histFastJets06MultLam;
+      h_mmdt_ArrayOfHist2[2][10] = h_mmdt_histFastJets06PtLam;
+      h_mmdt_ArrayOfHist2[2][11] = h_mmdt_histFastJets06LhaLam;
+      h_mmdt_ArrayOfHist2[2][12] = h_mmdt_histFastJets06WidthLam;
+      h_mmdt_ArrayOfHist2[2][13] = h_mmdt_histFastJets06MassLam;
+
+      h_mmdt_ArrayOfHist[2][14] = h_mmdt_histFastJets06MultLam50;
+      h_mmdt_ArrayOfHist[2][15] = h_mmdt_histFastJets06PtLam50;
+      h_mmdt_ArrayOfHist[2][16] = h_mmdt_histFastJets06LhaLam50;
+      h_mmdt_ArrayOfHist[2][17] = h_mmdt_histFastJets06WidthLam50;
+      h_mmdt_ArrayOfHist[2][18] = h_mmdt_histFastJets06MassLam50;     
+      h_mmdt_ArrayOfHist[2][19] = h_mmdt_histFastJets06MultLam100;
+      h_mmdt_ArrayOfHist[2][20] = h_mmdt_histFastJets06PtLam100;
+      h_mmdt_ArrayOfHist[2][21] = h_mmdt_histFastJets06LhaLam100;
+      h_mmdt_ArrayOfHist[2][22] = h_mmdt_histFastJets06WidthLam100;
+      h_mmdt_ArrayOfHist[2][23] = h_mmdt_histFastJets06MassLam100;
+      h_mmdt_ArrayOfHist[2][24] = h_mmdt_histFastJets06MultLam200;
+      h_mmdt_ArrayOfHist[2][25] = h_mmdt_histFastJets06PtLam200;
+      h_mmdt_ArrayOfHist[2][26] = h_mmdt_histFastJets06LhaLam200;
+      h_mmdt_ArrayOfHist[2][27] = h_mmdt_histFastJets06WidthLam200;
+      h_mmdt_ArrayOfHist[2][28] = h_mmdt_histFastJets06MassLam200;
+      h_mmdt_ArrayOfHist[2][29] = h_mmdt_histFastJets06MultLam400;
+      h_mmdt_ArrayOfHist[2][30] = h_mmdt_histFastJets06PtLam400;
+      h_mmdt_ArrayOfHist[2][31] = h_mmdt_histFastJets06LhaLam400;
+      h_mmdt_ArrayOfHist[2][32] = h_mmdt_histFastJets06WidthLam400;
+      h_mmdt_ArrayOfHist[2][33] = h_mmdt_histFastJets06MassLam400;
+      h_mmdt_ArrayOfHist[2][34] = h_mmdt_histFastJets06MultLam800;
+      h_mmdt_ArrayOfHist[2][35] = h_mmdt_histFastJets06PtLam800;
+      h_mmdt_ArrayOfHist[2][36] = h_mmdt_histFastJets06LhaLam800;
+      h_mmdt_ArrayOfHist[2][37] = h_mmdt_histFastJets06WidthLam800;
+      h_mmdt_ArrayOfHist[2][38] = h_mmdt_histFastJets06MassLam800;
+      
+      h_mmdt_ArrayOfHist[2][39] = h_mmdt_histFastJets06PtSubLeadingQ50;
+      h_mmdt_ArrayOfHist[2][40] = h_mmdt_histFastJets06PtLeadingQ50;
+      h_mmdt_ArrayOfHist[2][41] = h_mmdt_histFastJets06PtReclustQ50;
+      h_mmdt_ArrayOfHist[2][42] = h_mmdt_histFastJets06PtSubLeadingQ100;
+      h_mmdt_ArrayOfHist[2][43] = h_mmdt_histFastJets06PtLeadingQ100;
+      h_mmdt_ArrayOfHist[2][44] = h_mmdt_histFastJets06PtReclustQ100;
+      h_mmdt_ArrayOfHist[2][45] = h_mmdt_histFastJets06PtSubLeadingQ200;
+      h_mmdt_ArrayOfHist[2][46] = h_mmdt_histFastJets06PtLeadingQ200;
+      h_mmdt_ArrayOfHist[2][47] = h_mmdt_histFastJets06PtReclustQ200;
+      h_mmdt_ArrayOfHist[2][48] = h_mmdt_histFastJets06PtSubLeadingQ400;
+      h_mmdt_ArrayOfHist[2][49] = h_mmdt_histFastJets06PtLeadingQ400;
+      h_mmdt_ArrayOfHist[2][50] = h_mmdt_histFastJets06PtReclustQ400;
+      h_mmdt_ArrayOfHist[2][51] = h_mmdt_histFastJets06PtSubLeadingQ800;
+      h_mmdt_ArrayOfHist[2][52] = h_mmdt_histFastJets06PtLeadingQ800;
+      h_mmdt_ArrayOfHist[2][53] = h_mmdt_histFastJets06PtReclustQ800;
+
+      h_mmdt_ArrayOfHist[3][0]   = h_mmdt_histFastJets08PtSubLeading;
+      h_mmdt_ArrayOfHist[3][1]   = h_mmdt_histFastJets08PtLeading;
+      h_mmdt_ArrayOfHist[3][2]   = h_mmdt_histFastJets08PtReclust;
+      h_mmdt_ArrayOfHist[3][3]   = h_mmdt_histFastJets08Pt;
+      h_mmdt_ArrayOfHist[3][4]   = h_mmdt_histFastJets08Mult;
+      h_mmdt_ArrayOfHist[3][5]   = h_mmdt_histFastJets08E;
+      h_mmdt_ArrayOfHist[3][6]   = h_mmdt_histFastJets08Eta;
+      h_mmdt_ArrayOfHist[3][7]   = h_mmdt_histFastJets08Rapidity;
+      h_mmdt_ArrayOfHist[3][8]   = h_mmdt_histFastJets08Phi;
+      h_mmdt_ArrayOfHist2[3][9]  = h_mmdt_histFastJets08MultLam;
+      h_mmdt_ArrayOfHist2[3][10] = h_mmdt_histFastJets08PtLam;
+      h_mmdt_ArrayOfHist2[3][11] = h_mmdt_histFastJets08LhaLam;
+      h_mmdt_ArrayOfHist2[3][12] = h_mmdt_histFastJets08WidthLam;
+      h_mmdt_ArrayOfHist2[3][13] = h_mmdt_histFastJets08MassLam;
+
+      h_mmdt_ArrayOfHist[3][14] = h_mmdt_histFastJets08MultLam50;
+      h_mmdt_ArrayOfHist[3][15] = h_mmdt_histFastJets08PtLam50;
+      h_mmdt_ArrayOfHist[3][16] = h_mmdt_histFastJets08LhaLam50;
+      h_mmdt_ArrayOfHist[3][17] = h_mmdt_histFastJets08WidthLam50;
+      h_mmdt_ArrayOfHist[3][18] = h_mmdt_histFastJets08MassLam50;     
+      h_mmdt_ArrayOfHist[3][19] = h_mmdt_histFastJets08MultLam100;
+      h_mmdt_ArrayOfHist[3][20] = h_mmdt_histFastJets08PtLam100;
+      h_mmdt_ArrayOfHist[3][21] = h_mmdt_histFastJets08LhaLam100;
+      h_mmdt_ArrayOfHist[3][22] = h_mmdt_histFastJets08WidthLam100;
+      h_mmdt_ArrayOfHist[3][23] = h_mmdt_histFastJets08MassLam100;
+      h_mmdt_ArrayOfHist[3][24] = h_mmdt_histFastJets08MultLam200;
+      h_mmdt_ArrayOfHist[3][25] = h_mmdt_histFastJets08PtLam200;
+      h_mmdt_ArrayOfHist[3][26] = h_mmdt_histFastJets08LhaLam200;
+      h_mmdt_ArrayOfHist[3][27] = h_mmdt_histFastJets08WidthLam200;
+      h_mmdt_ArrayOfHist[3][28] = h_mmdt_histFastJets08MassLam200;
+      h_mmdt_ArrayOfHist[3][29] = h_mmdt_histFastJets08MultLam400;
+      h_mmdt_ArrayOfHist[3][30] = h_mmdt_histFastJets08PtLam400;
+      h_mmdt_ArrayOfHist[3][31] = h_mmdt_histFastJets08LhaLam400;
+      h_mmdt_ArrayOfHist[3][32] = h_mmdt_histFastJets08WidthLam400;
+      h_mmdt_ArrayOfHist[3][33] = h_mmdt_histFastJets08MassLam400;
+      h_mmdt_ArrayOfHist[3][34] = h_mmdt_histFastJets08MultLam800;
+      h_mmdt_ArrayOfHist[3][35] = h_mmdt_histFastJets08PtLam800;
+      h_mmdt_ArrayOfHist[3][36] = h_mmdt_histFastJets08LhaLam800;
+      h_mmdt_ArrayOfHist[3][37] = h_mmdt_histFastJets08WidthLam800;
+      h_mmdt_ArrayOfHist[3][38] = h_mmdt_histFastJets08MassLam800;
+
+      h_mmdt_ArrayOfHist[3][39] = h_mmdt_histFastJets08PtSubLeadingQ50;
+      h_mmdt_ArrayOfHist[3][40] = h_mmdt_histFastJets08PtLeadingQ50;
+      h_mmdt_ArrayOfHist[3][41] = h_mmdt_histFastJets08PtReclustQ50;
+      h_mmdt_ArrayOfHist[3][42] = h_mmdt_histFastJets08PtSubLeadingQ100;
+      h_mmdt_ArrayOfHist[3][43] = h_mmdt_histFastJets08PtLeadingQ100;
+      h_mmdt_ArrayOfHist[3][44] = h_mmdt_histFastJets08PtReclustQ100;
+      h_mmdt_ArrayOfHist[3][45] = h_mmdt_histFastJets08PtSubLeadingQ200;
+      h_mmdt_ArrayOfHist[3][46] = h_mmdt_histFastJets08PtLeadingQ200;
+      h_mmdt_ArrayOfHist[3][47] = h_mmdt_histFastJets08PtReclustQ200;
+      h_mmdt_ArrayOfHist[3][48] = h_mmdt_histFastJets08PtSubLeadingQ400;
+      h_mmdt_ArrayOfHist[3][49] = h_mmdt_histFastJets08PtLeadingQ400;
+      h_mmdt_ArrayOfHist[3][50] = h_mmdt_histFastJets08PtReclustQ400;
+      h_mmdt_ArrayOfHist[3][51] = h_mmdt_histFastJets08PtSubLeadingQ800;
+      h_mmdt_ArrayOfHist[3][52] = h_mmdt_histFastJets08PtLeadingQ800;
+      h_mmdt_ArrayOfHist[3][53] = h_mmdt_histFastJets08PtReclustQ800;
+      
+      h_mmdt_ArrayOfHist[4][0]   = h_mmdt_histFastJets10PtSubLeading;
+      h_mmdt_ArrayOfHist[4][1]   = h_mmdt_histFastJets10PtLeading;
+      h_mmdt_ArrayOfHist[4][2]   = h_mmdt_histFastJets10PtReclust;
+      h_mmdt_ArrayOfHist[4][3]   = h_mmdt_histFastJets10Pt;
+      h_mmdt_ArrayOfHist[4][4]   = h_mmdt_histFastJets10Mult;
+      h_mmdt_ArrayOfHist[4][5]   = h_mmdt_histFastJets10E;
+      h_mmdt_ArrayOfHist[4][6]   = h_mmdt_histFastJets10Eta;
+      h_mmdt_ArrayOfHist[4][7]   = h_mmdt_histFastJets10Rapidity;
+      h_mmdt_ArrayOfHist[4][8]   = h_mmdt_histFastJets10Phi;
+      h_mmdt_ArrayOfHist2[4][9]  = h_mmdt_histFastJets10MultLam;
+      h_mmdt_ArrayOfHist2[4][10] = h_mmdt_histFastJets10PtLam;
+      h_mmdt_ArrayOfHist2[4][11] = h_mmdt_histFastJets10LhaLam;
+      h_mmdt_ArrayOfHist2[4][12] = h_mmdt_histFastJets10WidthLam;
+      h_mmdt_ArrayOfHist2[4][13] = h_mmdt_histFastJets10MassLam;
+
+      h_mmdt_ArrayOfHist[4][14] = h_mmdt_histFastJets10MultLam50;
+      h_mmdt_ArrayOfHist[4][15] = h_mmdt_histFastJets10PtLam50;
+      h_mmdt_ArrayOfHist[4][16] = h_mmdt_histFastJets10LhaLam50;
+      h_mmdt_ArrayOfHist[4][17] = h_mmdt_histFastJets10WidthLam50;
+      h_mmdt_ArrayOfHist[4][18] = h_mmdt_histFastJets10MassLam50;     
+      h_mmdt_ArrayOfHist[4][19] = h_mmdt_histFastJets10MultLam100;
+      h_mmdt_ArrayOfHist[4][20] = h_mmdt_histFastJets10PtLam100;
+      h_mmdt_ArrayOfHist[4][21] = h_mmdt_histFastJets10LhaLam100;
+      h_mmdt_ArrayOfHist[4][22] = h_mmdt_histFastJets10WidthLam100;
+      h_mmdt_ArrayOfHist[4][23] = h_mmdt_histFastJets10MassLam100;
+      h_mmdt_ArrayOfHist[4][24] = h_mmdt_histFastJets10MultLam200;
+      h_mmdt_ArrayOfHist[4][25] = h_mmdt_histFastJets10PtLam200;
+      h_mmdt_ArrayOfHist[4][26] = h_mmdt_histFastJets10LhaLam200;
+      h_mmdt_ArrayOfHist[4][27] = h_mmdt_histFastJets10WidthLam200;
+      h_mmdt_ArrayOfHist[4][28] = h_mmdt_histFastJets10MassLam200;
+      h_mmdt_ArrayOfHist[4][29] = h_mmdt_histFastJets10MultLam400;
+      h_mmdt_ArrayOfHist[4][30] = h_mmdt_histFastJets10PtLam400;
+      h_mmdt_ArrayOfHist[4][31] = h_mmdt_histFastJets10LhaLam400;
+      h_mmdt_ArrayOfHist[4][32] = h_mmdt_histFastJets10WidthLam400;
+      h_mmdt_ArrayOfHist[4][33] = h_mmdt_histFastJets10MassLam400;
+      h_mmdt_ArrayOfHist[4][34] = h_mmdt_histFastJets10MultLam800;
+      h_mmdt_ArrayOfHist[4][35] = h_mmdt_histFastJets10PtLam800;
+      h_mmdt_ArrayOfHist[4][36] = h_mmdt_histFastJets10LhaLam800;
+      h_mmdt_ArrayOfHist[4][37] = h_mmdt_histFastJets10WidthLam800;
+      h_mmdt_ArrayOfHist[4][38] = h_mmdt_histFastJets10MassLam800;
+
+      h_mmdt_ArrayOfHist[4][39] = h_mmdt_histFastJets10PtSubLeadingQ50;
+      h_mmdt_ArrayOfHist[4][40] = h_mmdt_histFastJets10PtLeadingQ50;
+      h_mmdt_ArrayOfHist[4][41] = h_mmdt_histFastJets10PtReclustQ50;
+      h_mmdt_ArrayOfHist[4][42] = h_mmdt_histFastJets10PtSubLeadingQ100;
+      h_mmdt_ArrayOfHist[4][43] = h_mmdt_histFastJets10PtLeadingQ100;
+      h_mmdt_ArrayOfHist[4][44] = h_mmdt_histFastJets10PtReclustQ100;
+      h_mmdt_ArrayOfHist[4][45] = h_mmdt_histFastJets10PtSubLeadingQ200;
+      h_mmdt_ArrayOfHist[4][46] = h_mmdt_histFastJets10PtLeadingQ200;
+      h_mmdt_ArrayOfHist[4][47] = h_mmdt_histFastJets10PtReclustQ200;
+      h_mmdt_ArrayOfHist[4][48] = h_mmdt_histFastJets10PtSubLeadingQ400;
+      h_mmdt_ArrayOfHist[4][49] = h_mmdt_histFastJets10PtLeadingQ400;
+      h_mmdt_ArrayOfHist[4][50] = h_mmdt_histFastJets10PtReclustQ400;
+      h_mmdt_ArrayOfHist[4][51] = h_mmdt_histFastJets10PtSubLeadingQ800;
+      h_mmdt_ArrayOfHist[4][52] = h_mmdt_histFastJets10PtLeadingQ800;
+      h_mmdt_ArrayOfHist[4][53] = h_mmdt_histFastJets10PtReclustQ800;
 
     }
 
@@ -1929,7 +2960,7 @@ void analyze(const Event& event) {
       //       cout << "Filename data is = " << FileName.Data() << endl;
       //       rfile = new TFile("test.root","recreate");
       //       rfile->cd();
-      //       TH1D * h = new TH1D("h", "h", 10, 0,10);
+      //       TH1D * h = new TH1D("h_h", "h", 10, 0,10);
       //       h->Fill(1);
       //       h->Write();
       //       rfile->Write();
@@ -1968,35 +2999,39 @@ void analyze(const Event& event) {
         if (p.pdgId() == 21) {
           NumberOfGluons++;
           _histGluonFractionPt->fill(p.pT(),event.weight());
+          h_histGluonFractionPt->Fill(p.pT(),event.weight());
           v_GluonFractionPt.push_back(p.pT());
-          v_GluonFractionEta.push_back(p.eta());
         } else if (abs(p.pdgId()) < 7) {              
           NumberOfQuarks++;
           _histQuarkFractionPt->fill(p.pT(),event.weight());
+          h_histQuarkFractionPt->Fill(p.pT(),event.weight());
           v_QuarkFractionPt.push_back(p.pT());
-          v_QuarkFractionEta.push_back(p.eta());
         } else{
           NumberOfOthersThanGluonsAndQuars++;
           //if (p.pdgId() != 82){
           //  myfile << p.pdgId() <<"\n";
           //  }
           _histOthersThenGluonAndQuarkFractionPt->fill(p.pT(),event.weight());                      
+          h_histOthersThenGluonAndQuarkFractionPt->Fill(p.pT(),event.weight());                      
           v_OthersThenGluonAndQuarkFractionPt.push_back(p.pT());                      
         }
         if ((p.pdgId() == 21) || (abs(p.pdgId()) < 7)){
                 NumberOfGluonAndQuark++;
                 _histGluonAndQuarkFractionPt->fill(p.pT(), event.weight());          
+                h_histGluonAndQuarkFractionPt->Fill(p.pT(), event.weight());          
                 v_GluonAndQuarkFractionPt.push_back(p.pT());
-                v_GluonAndQuarkFractionEta.push_back(p.eta());
         }
         NumberOfPartons++;
         _histPartonFractionPt->fill(p.pT(), event.weight());
+        h_histPartonFractionPt->Fill(p.pT(), event.weight());
         v_PartonFractionPt.push_back(p.pT());
         if (p.pdgId() == 9922212){
             _histPDGID->fill(30);
+            h_histPDGID->Fill(30);
             v_PDGID.push_back(30);
         } else{
             _histPDGID->fill(p.pdgId(), event.weight());
+            h_histPDGID->Fill(p.pdgId(), event.weight());
             v_PDGID.push_back(p.pdgId());
         }
       }
@@ -2009,6 +3044,12 @@ void analyze(const Event& event) {
       _histGluonAndQuarkMulti->fill(NumberOfGluonAndQuark,event.weight());
       _histOthersThenGluonAndQuarkMulti->fill(NumberOfOthersThanGluonsAndQuars,event.weight());
       _histPartonMulti->fill(NumberOfPartons,event.weight());
+
+      h_histGluonMulti->Fill(NumberOfGluons,event.weight());
+      h_histQuarkMulti->Fill(NumberOfQuarks,event.weight());
+      h_histGluonAndQuarkMulti->Fill(NumberOfGluonAndQuark,event.weight());
+      h_histOthersThenGluonAndQuarkMulti->Fill(NumberOfOthersThanGluonsAndQuars,event.weight());
+      h_histPartonMulti->Fill(NumberOfPartons,event.weight());
 
       v_GluonMulti.push_back(NumberOfGluons);
       v_QuarkMulti.push_back(NumberOfQuarks);
@@ -2030,166 +3071,36 @@ void analyze(const Event& event) {
       JetDefinition jet_def(antikt_algorithm, radius[i]);
       vector<PseudoJet> jets = (SelectorNHardest(2) * SelectorAbsRapMax(JET_RAPMAX) * SelectorPtMin(ptmin_jet))(jet_def(particles));
       vector<PseudoJet> jets_no_pt_cut = (SelectorNHardest(2) * SelectorAbsRapMax(JET_RAPMAX) * SelectorPtMin(0.0))(jet_def(particles));
-
       if(jets_no_pt_cut.size()>=2){
-        // impose the cuts
-        PseudoJet no_cut_orig_jet1 = jets_no_pt_cut[0];
-        PseudoJet no_cut_orig_jet2 = jets_no_pt_cut[1];
-        PseudoJet no_cut_jet1 = ca_wta_recluster(no_cut_orig_jet1);
-        PseudoJet no_cut_jet2 = ca_wta_recluster(no_cut_orig_jet2);
-        vector<PseudoJet> no_cut_JetPair(2);
-        if (no_cut_jet1.pt() >= no_cut_jet2.pt() ){
-            no_cut_JetPair[0]=no_cut_jet1;
-            no_cut_JetPair[1]=no_cut_jet2;
-        } else{
-            no_cut_JetPair[0]=no_cut_jet2;
-            no_cut_JetPair[1]=no_cut_jet1;
-        }
+        ArrayOfHist[i][0]->fill(jets_no_pt_cut[0].pt(), event.weight() );
+        ArrayOfHist[i][1]->fill(jets_no_pt_cut[1].pt(), event.weight() );
+        h_ArrayOfHist[i][0]->Fill(jets_no_pt_cut[0].pt(), event.weight() );
+        h_ArrayOfHist[i][1]->Fill(jets_no_pt_cut[1].pt(), event.weight() );
+        v_ArrayOfHist[i][0].push_back(jets_no_pt_cut[0].pt());
+        v_ArrayOfHist[i][1].push_back(jets_no_pt_cut[1].pt());
 
-        PseudoJet no_cut_mmdt_jet1 = (*mmdt)(no_cut_jet1);
-        PseudoJet no_cut_mmdt_jet2 = (*mmdt)(no_cut_jet2);
-        vector<PseudoJet> no_cut_mmdt_JetPair(2);
-        no_cut_mmdt_JetPair[0]=no_cut_mmdt_jet1;
-        no_cut_mmdt_JetPair[1]=no_cut_mmdt_jet2;
-
-        if (no_cut_mmdt_jet1.pt() >= no_cut_mmdt_jet2.pt() ){
-            no_cut_mmdt_JetPair[0]=no_cut_mmdt_jet1;
-            no_cut_mmdt_JetPair[1]=no_cut_mmdt_jet2;
-        } else{
-            no_cut_mmdt_JetPair[0]=no_cut_mmdt_jet2;
-            no_cut_mmdt_JetPair[1]=no_cut_mmdt_jet1;
-        }
-            //fill no cut variables
-        for (long unsigned int l = 0; l<no_cut_JetPair.size(); l++){
-              v_no_cut_ArrayOfHist[i][0].push_back(no_cut_JetPair[l].pt()/GeV);
-              v_no_cut_ArrayOfHist[i][1].push_back(no_cut_JetPair[l].eta());
-              v_no_cut_ArrayOfHist[i][2].push_back(no_cut_JetPair[l].phi());
-              v_no_cut_ArrayOfHist[i][3].push_back(no_cut_JetPair[l].E()/GeV);
-              lambdaMult = 0.0;
-              lambdaPt = 0.0;
-              lambdaLha = 0.0;
-              lambdaWidth = 0.0;
-              lambdaMass = 0.0;
-              for (const PseudoJet& p : no_cut_JetPair[l].constituents()) {
-                        lambdaLha=lambdaLha+(p.pt()/no_cut_JetPair[l].pt())*pow(sqrt(p.squared_distance(no_cut_JetPair[l]))/radius[i] ,0.5);
-                        lambdaMult=lambdaMult+1.0; //ok 
-                        lambdaPt=lambdaPt+(p.pt()/no_cut_JetPair[l].pt())*(p.pt()/no_cut_JetPair[l].pt()); // ok
-                        lambdaWidth=lambdaWidth+(p.pt()/no_cut_JetPair[l].pt())*(sqrt(p.squared_distance(no_cut_JetPair[l]))/radius[i]);
-                        lambdaMass=lambdaMass+(p.pt()/no_cut_JetPair[l].pt())*pow(sqrt(p.squared_distance(no_cut_JetPair[l]))/radius[i],2.0);
-		  }
-              v_no_cut_ArrayOfHist[i][4].push_back(lambdaMult);
-              v_no_cut_ArrayOfHist[i][5].push_back(lambdaPt);
-              v_no_cut_ArrayOfHist[i][6].push_back(lambdaLha);
-              v_no_cut_ArrayOfHist[i][7].push_back(lambdaMass);
-              v_no_cut_ArrayOfHist[i][8].push_back(lambdaWidth);
-        }
-
-        //fill no cut mmdt variables
-
-        for (long unsigned int l = 0; l<no_cut_mmdt_JetPair.size(); l++){
-              v_no_cut_mmdt_ArrayOfHist[i][0].push_back(no_cut_mmdt_JetPair[l].pt()/GeV);
-              v_no_cut_mmdt_ArrayOfHist[i][1].push_back(no_cut_mmdt_JetPair[l].eta());
-              v_no_cut_mmdt_ArrayOfHist[i][2].push_back(no_cut_mmdt_JetPair[l].phi());
-              v_no_cut_mmdt_ArrayOfHist[i][3].push_back(no_cut_mmdt_JetPair[l].E()/GeV);
-              lambdaMult = 0.0;
-              lambdaPt = 0.0;
-              lambdaLha = 0.0;
-              lambdaWidth = 0.0;
-              lambdaMass = 0.0;
-              for (const PseudoJet& p : no_cut_mmdt_JetPair[l].constituents()) {
-                        lambdaLha=lambdaLha+(p.pt()/no_cut_mmdt_JetPair[l].pt())*pow(sqrt(p.squared_distance(no_cut_mmdt_JetPair[l]))/radius[i] ,0.5);
-                        lambdaMult=lambdaMult+1.0; //ok 
-                        lambdaPt=lambdaPt+(p.pt()/no_cut_mmdt_JetPair[l].pt())*(p.pt()/no_cut_mmdt_JetPair[l].pt()); // ok
-                        lambdaWidth=lambdaWidth+(p.pt()/no_cut_mmdt_JetPair[l].pt())*(sqrt(p.squared_distance(no_cut_mmdt_JetPair[l]))/radius[i]);
-                        lambdaMass=lambdaMass+(p.pt()/no_cut_mmdt_JetPair[l].pt())*pow(sqrt(p.squared_distance(no_cut_mmdt_JetPair[l]))/radius[i],2.0);
-		  }
-              v_no_cut_mmdt_ArrayOfHist[i][4].push_back(lambdaMult);
-              v_no_cut_mmdt_ArrayOfHist[i][5].push_back(lambdaPt);
-              v_no_cut_mmdt_ArrayOfHist[i][6].push_back(lambdaLha);
-              v_no_cut_mmdt_ArrayOfHist[i][7].push_back(lambdaMass);
-              v_no_cut_mmdt_ArrayOfHist[i][8].push_back(lambdaWidth);
-        }
-        
-        //from old code
-
-        if (jets_no_pt_cut[1].pt()>=jets_no_pt_cut[0].pt()){
-              ArrayOfHist[i][0]->fill(jets_no_pt_cut[0].pt()/GeV);
-              ArrayOfHist[i][1]->fill(jets_no_pt_cut[1].pt()/GeV);
-              v_ArrayOfHist[i][0].push_back(jets_no_pt_cut[0].pt()/GeV);
-              v_ArrayOfHist[i][1].push_back(jets_no_pt_cut[1].pt()/GeV);
-        } else{
-              ArrayOfHist[i][0]->fill(jets_no_pt_cut[1].pt()/GeV);
-              ArrayOfHist[i][1]->fill(jets_no_pt_cut[0].pt()/GeV);
-              v_ArrayOfHist[i][0].push_back(jets_no_pt_cut[1].pt()/GeV);
-              v_ArrayOfHist[i][1].push_back(jets_no_pt_cut[0].pt()/GeV);
-        }
-
-      } else{
-      ttree->Fill();
-
-      // clearing vercots
-      v_weight.clear();
-      v_PDGID.clear();
-      v_GluonFractionPt.clear();
-      v_QuarkFractionPt.clear();
-      v_GluonAndQuarkFractionPt.clear();
-      v_GluonFractionEta.clear();
-      v_QuarkFractionEta.clear();
-      v_GluonAndQuarkFractionEta.clear();
-      v_OthersThenGluonAndQuarkFractionPt.clear();
-      v_PartonFractionPt.clear();
-      v_GluonMulti.clear();
-      v_QuarkMulti.clear();
-      v_GluonAndQuarkMulti.clear();
-      v_OthersThenGluonAndQuarkMulti.clear();
-      v_PartonMulti.clear();
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=53;k++){
-            v_ArrayOfHist[l][k].clear();
-            v_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=9;k++){
-            v_no_cut_ArrayOfHist[l][k].clear();
-            v_no_cut_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      continue;
       }
 
         if(jets.size()<2) {
-              ttree->Fill();
-
-      // clearing vercots
-      v_weight.clear();
-      v_PDGID.clear();
-      v_GluonFractionPt.clear();
-      v_QuarkFractionPt.clear();
-      v_GluonAndQuarkFractionPt.clear();
-      v_GluonFractionEta.clear();
-      v_QuarkFractionEta.clear();
-      v_GluonAndQuarkFractionEta.clear();
-      v_OthersThenGluonAndQuarkFractionPt.clear();
-      v_PartonFractionPt.clear();
-      v_GluonMulti.clear();
-      v_QuarkMulti.clear();
-      v_GluonAndQuarkMulti.clear();
-      v_OthersThenGluonAndQuarkMulti.clear();
-      v_PartonMulti.clear();
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=53;k++){
-            v_ArrayOfHist[l][k].clear();
-            v_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=9;k++){
-            v_no_cut_ArrayOfHist[l][k].clear();
-            v_no_cut_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      continue;
+              v_weight.clear();
+              v_PDGID.clear();
+              v_GluonFractionPt.clear();
+              v_QuarkFractionPt.clear();
+              v_GluonAndQuarkFractionPt.clear();
+              v_OthersThenGluonAndQuarkFractionPt.clear();
+              v_PartonFractionPt.clear();
+              v_GluonMulti.clear();
+              v_QuarkMulti.clear();
+              v_GluonAndQuarkMulti.clear();
+              v_OthersThenGluonAndQuarkMulti.clear();
+              v_PartonMulti.clear();
+              for (int l=0; l<=5;l++){
+                    for (int k=0; k<=53;k++){
+                    v_ArrayOfHist[l][k].clear();
+                    v_mmdt_ArrayOfHist[l][k].clear();
+                    }
+              }
+              continue;
         }
 
         // impose the cuts
@@ -2197,50 +3108,37 @@ void analyze(const Event& event) {
         PseudoJet orig_jet2 = jets[1];
 
         // make sure we have something enough symmetric and close in rapidity
-        //if (orig_jet2.pt() / orig_jet1.pt() < JET_MIN_PT_FRACTION) continue; // comment for low pt
-        //if (std::abs(orig_jet1.rap()-orig_jet2.rap())>DELTA_RAP_MAX_DIJET) continue;
+        // moved few lines down if (orig_jet2.pt() / orig_jet1.pt() < JET_MIN_PT_FRACTION) continue; // comment for low pt
+        // moved few lines down if (std::abs(orig_jet1.rap()-orig_jet2.rap())>DELTA_RAP_MAX_DIJET) continue;
 
         // we need to pass the avgpt cut
         double avgpt = 0.5*(orig_jet1.pt() + orig_jet2.pt());
         unsigned int nQ=0;
         while ((nQ<nQs) && (avgpt>=JET_AVG_PTMINS[nQ])) nQ++;
-        if ( (nQ == 0) ||
-            (orig_jet2.pt() / orig_jet1.pt() < JET_MIN_PT_FRACTION) ||
-            (std::abs(orig_jet1.rap()-orig_jet2.rap())>DELTA_RAP_MAX_DIJET) )
-             {
-              
-            ttree->Fill();
-
-      // clearing vercots
-      v_weight.clear();
-      v_PDGID.clear();
-      v_GluonFractionPt.clear();
-      v_QuarkFractionPt.clear();
-      v_GluonAndQuarkFractionPt.clear();
-      v_GluonFractionEta.clear();
-      v_QuarkFractionEta.clear();
-      v_GluonAndQuarkFractionEta.clear();
-      v_OthersThenGluonAndQuarkFractionPt.clear();
-      v_PartonFractionPt.clear();
-      v_GluonMulti.clear();
-      v_QuarkMulti.clear();
-      v_GluonAndQuarkMulti.clear();
-      v_OthersThenGluonAndQuarkMulti.clear();
-      v_PartonMulti.clear();
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=53;k++){
-            v_ArrayOfHist[l][k].clear();
-            v_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=9;k++){
-            v_no_cut_ArrayOfHist[l][k].clear();
-            v_no_cut_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      continue;
-      }
+        if ((nQ == 0)||
+        (orig_jet2.pt() / orig_jet1.pt() < JET_MIN_PT_FRACTION)||
+        (std::abs(orig_jet1.rap()-orig_jet2.rap())>DELTA_RAP_MAX_DIJET))
+            {
+              v_weight.clear();
+              v_PDGID.clear();
+              v_GluonFractionPt.clear();
+              v_QuarkFractionPt.clear();
+              v_GluonAndQuarkFractionPt.clear();
+              v_OthersThenGluonAndQuarkFractionPt.clear();
+              v_PartonFractionPt.clear();
+              v_GluonMulti.clear();
+              v_QuarkMulti.clear();
+              v_GluonAndQuarkMulti.clear();
+              v_OthersThenGluonAndQuarkMulti.clear();
+              v_PartonMulti.clear();
+              for (int l=0; l<=5;l++){
+                    for (int k=0; k<=53;k++){
+                    v_ArrayOfHist[l][k].clear();
+                    v_mmdt_ArrayOfHist[l][k].clear();
+                    }
+              }
+              continue;
+        } 
         
         // grooming
         PseudoJet jet1 = ca_wta_recluster(orig_jet1);
@@ -2255,6 +3153,8 @@ void analyze(const Event& event) {
         mmdt_JetPair[0]=mmdt_jet1;
         mmdt_JetPair[1]=mmdt_jet2;
 
+        
+
         //
         for (int k=0; k<=1; k++) {
         ArrayOfHist[i][3]->fill(JetPair[k].pt()/GeV, event.weight());
@@ -2263,11 +3163,17 @@ void analyze(const Event& event) {
         ArrayOfHist[i][5]->fill(JetPair[k].E()/GeV , event.weight());
         ArrayOfHist[i][7]->fill(JetPair[k].rap() , event.weight());
 
-        v_ArrayOfHist[i][3].push_back( JetPair[k].pt()/GeV);
-        v_ArrayOfHist[i][8].push_back( JetPair[k].phi());
-        v_ArrayOfHist[i][6].push_back( JetPair[k].eta() );
-        v_ArrayOfHist[i][5].push_back( JetPair[k].E()/GeV );
-        v_ArrayOfHist[i][7].push_back( JetPair[k].rap() );
+        h_ArrayOfHist[i][3]->Fill(JetPair[k].pt()/GeV, event.weight());
+        h_ArrayOfHist[i][8]->Fill(JetPair[k].phi(), event.weight());
+        h_ArrayOfHist[i][6]->Fill(JetPair[k].eta() , event.weight());
+        h_ArrayOfHist[i][5]->Fill(JetPair[k].E()/GeV , event.weight());
+        h_ArrayOfHist[i][7]->Fill(JetPair[k].rap() , event.weight());
+
+        v_ArrayOfHist[i][3].push_back( (event.weight()) * JetPair[k].pt()/GeV);
+        v_ArrayOfHist[i][8].push_back( (event.weight()) * JetPair[k].phi());
+        v_ArrayOfHist[i][6].push_back( (event.weight()) * JetPair[k].eta() );
+        v_ArrayOfHist[i][5].push_back( (event.weight()) * JetPair[k].E()/GeV );
+        v_ArrayOfHist[i][7].push_back( (event.weight()) * JetPair[k].rap() );
         lambdaMult = 0.0;
         lambdaPt = 0.0;
         lambdaLha = 0.0;
@@ -2286,6 +3192,8 @@ void analyze(const Event& event) {
                   lambdaPt=lambdaPt+(p.pt()/JetPair[k].pt())*(p.pt()/JetPair[k].pt()); // ok
                   lambdaWidth=lambdaWidth+(p.pt()/JetPair[k].pt())*(sqrt(p.squared_distance(JetPair[k]))/radius[i]);
                   lambdaMass=lambdaMass+(p.pt()/JetPair[k].pt())*pow(sqrt(p.squared_distance(JetPair[k]))/radius[i],2.0);
+              
+
 					}
 
           
@@ -2294,6 +3202,12 @@ void analyze(const Event& event) {
             ArrayOfHist2[i][11]->fill(lambdaLha  , avgpt, event.weight());
             ArrayOfHist2[i][12]->fill(lambdaWidth, avgpt, event.weight());
             ArrayOfHist2[i][13]->fill(lambdaMass , avgpt, event.weight()); // average is good for now, maybee highest
+
+            h_ArrayOfHist2[i][9]-> Fill(lambdaMult  , avgpt, event.weight());
+            h_ArrayOfHist2[i][10]->Fill(lambdaPt   , avgpt, event.weight());
+            h_ArrayOfHist2[i][11]->Fill(lambdaLha  , avgpt, event.weight());
+            h_ArrayOfHist2[i][12]->Fill(lambdaWidth, avgpt, event.weight());
+            h_ArrayOfHist2[i][13]->Fill(lambdaMass , avgpt, event.weight()); // average is good for now, maybee highest
 
             if (nQ == 1){
               //ArrayOfHist2[i][9]->fill(lambdaMult  , avgpt, event.weight());
@@ -2312,6 +3226,12 @@ void analyze(const Event& event) {
               ArrayOfHist[i][17]->fill(lambdaWidth,event.weight());
               ArrayOfHist[i][18]->fill(lambdaMass,event.weight());
 
+              h_ArrayOfHist[i][14]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][15]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][16]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][17]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][18]->Fill(lambdaMass,event.weight());
+
               v_ArrayOfHist[i][14].push_back( lambdaMult );
               v_ArrayOfHist[i][15].push_back( lambdaPt );
               v_ArrayOfHist[i][16].push_back( lambdaLha );
@@ -2321,6 +3241,10 @@ void analyze(const Event& event) {
               if (k == 1 ) ArrayOfHist[i][39]->fill(JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) ArrayOfHist[i][40]->fill(JetPair[k].pt()/GeV, event.weight());
               ArrayOfHist[i][41]->fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][39]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][40]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][41]->Fill(JetPair[k].pt()/GeV, event.weight());
 
               if (k == 1 ) v_ArrayOfHist[i][39].push_back( JetPair[k].pt()/GeV );
               if (k == 0 ) v_ArrayOfHist[i][40].push_back( JetPair[k].pt()/GeV );
@@ -2351,6 +3275,18 @@ void analyze(const Event& event) {
               ArrayOfHist[i][22]->fill(lambdaWidth,event.weight());
               ArrayOfHist[i][23]->fill(lambdaMass,event.weight());
 
+              h_ArrayOfHist[i][14]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][15]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][16]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][17]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][18]->Fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][19]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][20]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][21]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][22]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][23]->Fill(lambdaMass,event.weight());
+
               if (k == 1 ) ArrayOfHist[i][39]->fill(JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) ArrayOfHist[i][40]->fill(JetPair[k].pt()/GeV, event.weight());
               ArrayOfHist[i][41]->fill(JetPair[k].pt()/GeV, event.weight());
@@ -2358,6 +3294,14 @@ void analyze(const Event& event) {
               if (k == 1 ) ArrayOfHist[i][42]->fill(JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) ArrayOfHist[i][43]->fill(JetPair[k].pt()/GeV, event.weight());
               ArrayOfHist[i][44]->fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][39]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][40]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][41]->Fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][42]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][43]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][44]->Fill(JetPair[k].pt()/GeV, event.weight());
 
               v_ArrayOfHist[i][14].push_back( lambdaMult );
               v_ArrayOfHist[i][15].push_back( lambdaPt );
@@ -2414,6 +3358,25 @@ void analyze(const Event& event) {
               ArrayOfHist[i][27]->fill(lambdaWidth,event.weight());
               ArrayOfHist[i][28]->fill(lambdaMass,event.weight());
 
+              h_ArrayOfHist[i][14]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][15]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][16]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][17]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][18]->Fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][19]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][20]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][21]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][22]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][23]->Fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][24]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][25]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][26]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][27]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][28]->Fill(lambdaMass,event.weight());
+
+
               if (k == 1 ) ArrayOfHist[i][39]->fill(JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) ArrayOfHist[i][40]->fill(JetPair[k].pt()/GeV, event.weight());
               ArrayOfHist[i][41]->fill(JetPair[k].pt()/GeV, event.weight());
@@ -2425,6 +3388,19 @@ void analyze(const Event& event) {
               if (k == 1 ) ArrayOfHist[i][45]->fill(JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) ArrayOfHist[i][46]->fill(JetPair[k].pt()/GeV, event.weight());
               ArrayOfHist[i][47]->fill(JetPair[k].pt()/GeV, event.weight());
+
+              //
+              if (k == 1 ) h_ArrayOfHist[i][39]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][40]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][41]->Fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][42]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][43]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][44]->Fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][45]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][46]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][47]->Fill(JetPair[k].pt()/GeV, event.weight());
 
               //
               v_ArrayOfHist[i][14].push_back( lambdaMult );
@@ -2457,27 +3433,6 @@ void analyze(const Event& event) {
 
             } else if (nQ == 4){
 
-              //CheckEvent << "lambdaMult: " << lambdaMult << "\n" ;
-              //CheckEvent << "lambdaMult: " << lambdaMult << "\n" ;
-              //CheckEvent << "lambdaMult: " << lambdaMult << "\n" ;
-              //CheckEvent << "lambdaMult: " << lambdaMult << "\n" ;
-              //CheckEvent << "lambdaLha: " << lambdaLha << "\n" ;
-              //CheckEvent << "lambdaLha: " << lambdaLha << "\n" ;
-              //CheckEvent << "lambdaLha: " << lambdaLha << "\n" ;
-              //CheckEvent << "lambdaLha: " << lambdaLha << "\n" ;
-              //CheckEvent << "lambdaWidth: " << lambdaWidth << "\n" ;
-              //CheckEvent << "lambdaWidth: " << lambdaWidth << "\n" ;
-              //CheckEvent << "lambdaWidth: " << lambdaWidth << "\n" ;
-              //CheckEvent << "lambdaWidth: " << lambdaWidth << "\n" ;
-              //CheckEvent << "lambdaMass: " << lambdaMass << "\n" ;
-              //CheckEvent << "lambdaMass: " << lambdaMass << "\n" ;
-              //CheckEvent << "lambdaMass: " << lambdaMass << "\n" ;
-              //CheckEvent << "lambdaMass: " << lambdaMass << "\n" ;
-              //CheckEvent << "lambdaPt: " << lambdaPt << "\n" ;
-              //CheckEvent << "lambdaPt: " << lambdaPt << "\n" ;
-              //CheckEvent << "lambdaPt: " << lambdaPt << "\n" ;
-              //CheckEvent << "lambdaPt: " << lambdaPt << "\n" ;
-
               ArrayOfHist[i][14]->fill(lambdaMult,event.weight());
               ArrayOfHist[i][15]->fill(lambdaPt,event.weight());
               ArrayOfHist[i][16]->fill(lambdaLha,event.weight());
@@ -2501,6 +3456,49 @@ void analyze(const Event& event) {
               ArrayOfHist[i][31]->fill(lambdaLha,event.weight());
               ArrayOfHist[i][32]->fill(lambdaWidth,event.weight());
               ArrayOfHist[i][33]->fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][14]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][15]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][16]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][17]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][18]->Fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][19]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][20]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][21]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][22]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][23]->Fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][24]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][25]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][26]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][27]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][28]->Fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][29]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][30]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][31]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][32]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][33]->Fill(lambdaMass,event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][39]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][40]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][41]->Fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][42]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][43]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][44]->Fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][45]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][46]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][47]->Fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][48]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][49]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][50]->Fill(JetPair[k].pt()/GeV, event.weight());
+
+              //
+
 
               if (k == 1 ) ArrayOfHist[i][39]->fill(JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) ArrayOfHist[i][40]->fill(JetPair[k].pt()/GeV, event.weight());
@@ -2557,31 +3555,6 @@ void analyze(const Event& event) {
 
             } else if (nQ == 5){
 
-              //CheckEvent << "lambdaMult: " << lambdaMult << "\n" ;
-              //CheckEvent << "lambdaMult: " << lambdaMult << "\n" ;
-              //CheckEvent << "lambdaMult: " << lambdaMult << "\n" ;
-              //CheckEvent << "lambdaMult: " << lambdaMult << "\n" ;
-              //CheckEvent << "lambdaMult: " << lambdaMult << "\n" ;
-              //CheckEvent << "lambdaLha: " << lambdaLha << "\n" ;
-              //CheckEvent << "lambdaLha: " << lambdaLha << "\n" ;
-              //CheckEvent << "lambdaLha: " << lambdaLha << "\n" ;
-              //CheckEvent << "lambdaLha: " << lambdaLha << "\n" ;
-              //CheckEvent << "lambdaLha: " << lambdaLha << "\n" ;
-              //CheckEvent << "lambdaWidth: " << lambdaWidth << "\n" ;
-              //CheckEvent << "lambdaWidth: " << lambdaWidth << "\n" ;
-              //CheckEvent << "lambdaWidth: " << lambdaWidth << "\n" ;
-              //CheckEvent << "lambdaWidth: " << lambdaWidth << "\n" ;
-              //CheckEvent << "lambdaWidth: " << lambdaWidth << "\n" ;
-              //CheckEvent << "lambdaMass: " << lambdaMass << "\n" ;
-              //CheckEvent << "lambdaMass: " << lambdaMass << "\n" ;
-              //CheckEvent << "lambdaMass: " << lambdaMass << "\n" ;
-              //CheckEvent << "lambdaMass: " << lambdaMass << "\n" ;
-              //CheckEvent << "lambdaMass: " << lambdaMass << "\n" ;
-              //CheckEvent << "lambdaPt: " << lambdaPt << "\n" ;
-              //CheckEvent << "lambdaPt: " << lambdaPt << "\n" ;
-              //CheckEvent << "lambdaPt: " << lambdaPt << "\n" ;
-              //CheckEvent << "lambdaPt: " << lambdaPt << "\n" ;
-              //CheckEvent << "lambdaPt: " << lambdaPt << "\n" ;
 
               ArrayOfHist[i][14]->fill(lambdaMult,event.weight());
               ArrayOfHist[i][15]->fill(lambdaPt,event.weight());
@@ -2612,6 +3585,57 @@ void analyze(const Event& event) {
               ArrayOfHist[i][36]->fill(lambdaLha,event.weight());
               ArrayOfHist[i][37]->fill(lambdaWidth,event.weight());
               ArrayOfHist[i][38]->fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][14]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][15]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][16]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][17]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][18]->Fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][19]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][20]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][21]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][22]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][23]->Fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][24]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][25]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][26]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][27]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][28]->Fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][29]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][30]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][31]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][32]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][33]->Fill(lambdaMass,event.weight());
+
+              h_ArrayOfHist[i][34]->Fill(lambdaMult,event.weight());
+              h_ArrayOfHist[i][35]->Fill(lambdaPt,event.weight());
+              h_ArrayOfHist[i][36]->Fill(lambdaLha,event.weight());
+              h_ArrayOfHist[i][37]->Fill(lambdaWidth,event.weight());
+              h_ArrayOfHist[i][38]->Fill(lambdaMass,event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][39]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][40]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][41]->Fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][42]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][43]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][44]->Fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][45]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][46]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][47]->Fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][48]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][49]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][50]->Fill(JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_ArrayOfHist[i][51]->Fill(JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_ArrayOfHist[i][52]->Fill(JetPair[k].pt()/GeV, event.weight());
+              h_ArrayOfHist[i][53]->Fill(JetPair[k].pt()/GeV, event.weight());
+
 
               if (k == 1 ) ArrayOfHist[i][39]->fill(JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) ArrayOfHist[i][40]->fill(JetPair[k].pt()/GeV, event.weight());
@@ -2693,6 +3717,13 @@ void analyze(const Event& event) {
         mmdt_ArrayOfHist[i][5]->fill(mmdt_JetPair[k].E()/GeV , event.weight());
         mmdt_ArrayOfHist[i][7]->fill(mmdt_JetPair[k].rap() , event.weight());
 
+        h_mmdt_ArrayOfHist[i][3]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+        h_mmdt_ArrayOfHist[i][8]->Fill(mmdt_JetPair[k].phi(), event.weight());
+        h_mmdt_ArrayOfHist[i][6]->Fill(mmdt_JetPair[k].eta() , event.weight());
+        h_mmdt_ArrayOfHist[i][5]->Fill(mmdt_JetPair[k].E()/GeV , event.weight());
+        h_mmdt_ArrayOfHist[i][7]->Fill(mmdt_JetPair[k].rap() , event.weight());
+
+
         v_mmdt_ArrayOfHist[i][3].push_back( mmdt_JetPair[k].pt()/GeV);
         v_mmdt_ArrayOfHist[i][8].push_back( mmdt_JetPair[k].phi());
         v_mmdt_ArrayOfHist[i][6].push_back( mmdt_JetPair[k].eta() );
@@ -2721,12 +3752,28 @@ void analyze(const Event& event) {
             mmdt_ArrayOfHist2[i][12]->fill(lambdaWidth, 0.5*(mmdt_JetPair[0].pt() + mmdt_JetPair[1].pt()), event.weight());
             mmdt_ArrayOfHist2[i][13]->fill(lambdaMass , 0.5*(mmdt_JetPair[0].pt() + mmdt_JetPair[1].pt()), event.weight()); // average is good for now, maybee highest
 
+            h_mmdt_ArrayOfHist2[i][9]-> Fill(lambdaMult  , 0.5*(mmdt_JetPair[0].pt() + mmdt_JetPair[1].pt()), event.weight());
+            h_mmdt_ArrayOfHist2[i][10]->Fill(lambdaPt   , 0.5*(mmdt_JetPair[0].pt() + mmdt_JetPair[1].pt()), event.weight());
+            h_mmdt_ArrayOfHist2[i][11]->Fill(lambdaLha  , 0.5*(mmdt_JetPair[0].pt() + mmdt_JetPair[1].pt()), event.weight());
+            h_mmdt_ArrayOfHist2[i][12]->Fill(lambdaWidth, 0.5*(mmdt_JetPair[0].pt() + mmdt_JetPair[1].pt()), event.weight());
+            h_mmdt_ArrayOfHist2[i][13]->Fill(lambdaMass , 0.5*(mmdt_JetPair[0].pt() + mmdt_JetPair[1].pt()), event.weight()); // average is good for now, maybee highest
+
             if (nQ == 1){
               mmdt_ArrayOfHist[i][14]->fill(lambdaMult,event.weight());
               mmdt_ArrayOfHist[i][15]->fill(lambdaPt,event.weight());
               mmdt_ArrayOfHist[i][16]->fill(lambdaLha,event.weight());
               mmdt_ArrayOfHist[i][17]->fill(lambdaWidth,event.weight());
               mmdt_ArrayOfHist[i][18]->fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][14]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][15]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][16]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][17]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][18]->Fill(lambdaMass,event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][39]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][40]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][41]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
 
               if (k == 1 ) mmdt_ArrayOfHist[i][39]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) mmdt_ArrayOfHist[i][40]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
@@ -2755,6 +3802,26 @@ void analyze(const Event& event) {
               mmdt_ArrayOfHist[i][21]->fill(lambdaLha,event.weight());
               mmdt_ArrayOfHist[i][22]->fill(lambdaWidth,event.weight());
               mmdt_ArrayOfHist[i][23]->fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][14]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][15]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][16]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][17]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][18]->Fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][19]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][20]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][21]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][22]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][23]->Fill(lambdaMass,event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][39]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][40]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][41]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][42]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][43]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][44]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
 
               if (k == 1 ) mmdt_ArrayOfHist[i][39]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) mmdt_ArrayOfHist[i][40]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
@@ -2803,6 +3870,36 @@ void analyze(const Event& event) {
               mmdt_ArrayOfHist[i][26]->fill(lambdaLha,event.weight());
               mmdt_ArrayOfHist[i][27]->fill(lambdaWidth,event.weight());
               mmdt_ArrayOfHist[i][28]->fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][14]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][15]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][16]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][17]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][18]->Fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][19]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][20]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][21]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][22]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][23]->Fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][24]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][25]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][26]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][27]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][28]->Fill(lambdaMass,event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][39]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][40]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][41]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][42]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][43]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][44]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][45]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][46]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][47]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
 
               if (k == 1 ) mmdt_ArrayOfHist[i][39]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) mmdt_ArrayOfHist[i][40]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
@@ -2872,6 +3969,47 @@ void analyze(const Event& event) {
               mmdt_ArrayOfHist[i][31]->fill(lambdaLha,event.weight());
               mmdt_ArrayOfHist[i][32]->fill(lambdaWidth,event.weight());
               mmdt_ArrayOfHist[i][33]->fill(lambdaMass,event.weight());
+
+                            h_mmdt_ArrayOfHist[i][14]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][15]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][16]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][17]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][18]->Fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][19]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][20]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][21]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][22]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][23]->Fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][24]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][25]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][26]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][27]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][28]->Fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][29]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][30]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][31]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][32]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][33]->Fill(lambdaMass,event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][39]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][40]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][41]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][42]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][43]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][44]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][45]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][46]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][47]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][48]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][49]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][50]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
 
               if (k == 1 ) mmdt_ArrayOfHist[i][39]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) mmdt_ArrayOfHist[i][40]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
@@ -2959,6 +4097,57 @@ void analyze(const Event& event) {
               mmdt_ArrayOfHist[i][36]->fill(lambdaLha,event.weight());
               mmdt_ArrayOfHist[i][37]->fill(lambdaWidth,event.weight());
               mmdt_ArrayOfHist[i][38]->fill(lambdaMass,event.weight());
+
+                            h_mmdt_ArrayOfHist[i][14]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][15]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][16]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][17]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][18]->Fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][19]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][20]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][21]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][22]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][23]->Fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][24]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][25]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][26]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][27]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][28]->Fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][29]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][30]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][31]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][32]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][33]->Fill(lambdaMass,event.weight());
+
+              h_mmdt_ArrayOfHist[i][34]->Fill(lambdaMult,event.weight());
+              h_mmdt_ArrayOfHist[i][35]->Fill(lambdaPt,event.weight());
+              h_mmdt_ArrayOfHist[i][36]->Fill(lambdaLha,event.weight());
+              h_mmdt_ArrayOfHist[i][37]->Fill(lambdaWidth,event.weight());
+              h_mmdt_ArrayOfHist[i][38]->Fill(lambdaMass,event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][39]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][40]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][41]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][42]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][43]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][44]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][45]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][46]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][47]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][48]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][49]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][50]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
+              if (k == 1 ) h_mmdt_ArrayOfHist[i][51]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              if (k == 0 ) h_mmdt_ArrayOfHist[i][52]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+              h_mmdt_ArrayOfHist[i][53]->Fill(mmdt_JetPair[k].pt()/GeV, event.weight());
+
 
               if (k == 1 ) mmdt_ArrayOfHist[i][39]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
               if (k == 0 ) mmdt_ArrayOfHist[i][40]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
@@ -3118,9 +4307,6 @@ void analyze(const Event& event) {
       v_GluonFractionPt.clear();
       v_QuarkFractionPt.clear();
       v_GluonAndQuarkFractionPt.clear();
-      v_GluonFractionEta.clear();
-      v_QuarkFractionEta.clear();
-      v_GluonAndQuarkFractionEta.clear();
       v_OthersThenGluonAndQuarkFractionPt.clear();
       v_PartonFractionPt.clear();
       v_GluonMulti.clear();
@@ -3132,12 +4318,6 @@ void analyze(const Event& event) {
             for (int k=0; k<=53;k++){
             v_ArrayOfHist[l][k].clear();
             v_mmdt_ArrayOfHist[l][k].clear();
-            }
-      }
-      for (int l=0; l<=5;l++){
-            for (int k=0; k<=9;k++){
-            v_no_cut_ArrayOfHist[l][k].clear();
-            v_no_cut_mmdt_ArrayOfHist[l][k].clear();
             }
       }
 
@@ -3364,23 +4544,177 @@ void analyze(const Event& event) {
     Histo1DPtr mmdt_ArrayOfHist[5][53];
     Histo2DPtr mmdt_ArrayOfHist2[5][39];
 
+// root hists
+
+TH1D * h_histPDGID;
+    TH2D * h_histCONTROL_PT_RAP;
+    TH1D * h_histGluonFractionPt,* h_histQuarkFractionPt,* h_histGluonAndQuarkFractionPt,* h_histOthersThenGluonAndQuarkFractionPt,* h_histPartonFractionPt;
+    TH1D * h_histGluonMulti,* h_histQuarkMulti,* h_histGluonAndQuarkMulti,* h_histOthersThenGluonAndQuarkMulti,* h_histPartonMulti;
+    TH1D * h_histFastJets02PtReclust,*h_histFastJets02PtSubLeading,*h_histFastJets02PtLeading,*h_histFastJets02Pt,* h_histFastJets02Mult,* h_histFastJets02E,* h_histFastJets02Eta,* h_histFastJets02Rapidity,* h_histFastJets02Phi;
+    TH1D * h_histFastJets04PtReclust,*h_histFastJets04PtSubLeading,*h_histFastJets04PtLeading,*h_histFastJets04Pt,* h_histFastJets04Mult,* h_histFastJets04E,* h_histFastJets04Eta,* h_histFastJets04Rapidity,* h_histFastJets04Phi;
+    TH1D * h_histFastJets06PtReclust,*h_histFastJets06PtSubLeading,*h_histFastJets06PtLeading,*h_histFastJets06Pt,* h_histFastJets06Mult,* h_histFastJets06E,* h_histFastJets06Eta,* h_histFastJets06Rapidity,* h_histFastJets06Phi;
+    TH1D * h_histFastJets08PtReclust,*h_histFastJets08PtSubLeading,*h_histFastJets08PtLeading,*h_histFastJets08Pt,* h_histFastJets08Mult,* h_histFastJets08E,* h_histFastJets08Eta,* h_histFastJets08Rapidity,* h_histFastJets08Phi;
+    TH1D * h_histFastJets10PtReclust,*h_histFastJets10PtSubLeading,*h_histFastJets10PtLeading,*h_histFastJets10Pt,* h_histFastJets10Mult,* h_histFastJets10E,* h_histFastJets10Eta,* h_histFastJets10Rapidity,* h_histFastJets10Phi;
+
+    TH1D * h_histFastJets02PtReclustQ50,*h_histFastJets02PtSubLeadingQ50,*h_histFastJets02PtLeadingQ50;
+    TH1D * h_histFastJets04PtReclustQ50,*h_histFastJets04PtSubLeadingQ50,*h_histFastJets04PtLeadingQ50;
+    TH1D * h_histFastJets06PtReclustQ50,*h_histFastJets06PtSubLeadingQ50,*h_histFastJets06PtLeadingQ50;
+    TH1D * h_histFastJets08PtReclustQ50,*h_histFastJets08PtSubLeadingQ50,*h_histFastJets08PtLeadingQ50;
+    TH1D * h_histFastJets10PtReclustQ50,*h_histFastJets10PtSubLeadingQ50,*h_histFastJets10PtLeadingQ50;
+
+    TH1D * h_histFastJets02PtReclustQ100,*h_histFastJets02PtSubLeadingQ100,*h_histFastJets02PtLeadingQ100;
+    TH1D * h_histFastJets04PtReclustQ100,*h_histFastJets04PtSubLeadingQ100,*h_histFastJets04PtLeadingQ100;
+    TH1D * h_histFastJets06PtReclustQ100,*h_histFastJets06PtSubLeadingQ100,*h_histFastJets06PtLeadingQ100;
+    TH1D * h_histFastJets08PtReclustQ100,*h_histFastJets08PtSubLeadingQ100,*h_histFastJets08PtLeadingQ100;
+    TH1D * h_histFastJets10PtReclustQ100,*h_histFastJets10PtSubLeadingQ100,*h_histFastJets10PtLeadingQ100;
+
+    TH1D * h_histFastJets02PtReclustQ200,*h_histFastJets02PtSubLeadingQ200,*h_histFastJets02PtLeadingQ200;
+    TH1D * h_histFastJets04PtReclustQ200,*h_histFastJets04PtSubLeadingQ200,*h_histFastJets04PtLeadingQ200;
+    TH1D * h_histFastJets06PtReclustQ200,*h_histFastJets06PtSubLeadingQ200,*h_histFastJets06PtLeadingQ200;
+    TH1D * h_histFastJets08PtReclustQ200,*h_histFastJets08PtSubLeadingQ200,*h_histFastJets08PtLeadingQ200;
+    TH1D * h_histFastJets10PtReclustQ200,*h_histFastJets10PtSubLeadingQ200,*h_histFastJets10PtLeadingQ200;
+
+    TH1D * h_histFastJets02PtReclustQ400,*h_histFastJets02PtSubLeadingQ400,*h_histFastJets02PtLeadingQ400;
+    TH1D * h_histFastJets04PtReclustQ400,*h_histFastJets04PtSubLeadingQ400,*h_histFastJets04PtLeadingQ400;
+    TH1D * h_histFastJets06PtReclustQ400,*h_histFastJets06PtSubLeadingQ400,*h_histFastJets06PtLeadingQ400;
+    TH1D * h_histFastJets08PtReclustQ400,*h_histFastJets08PtSubLeadingQ400,*h_histFastJets08PtLeadingQ400;
+    TH1D * h_histFastJets10PtReclustQ400,*h_histFastJets10PtSubLeadingQ400,*h_histFastJets10PtLeadingQ400;
+
+    TH1D * h_histFastJets02PtReclustQ800,*h_histFastJets02PtSubLeadingQ800,*h_histFastJets02PtLeadingQ800;
+    TH1D * h_histFastJets04PtReclustQ800,*h_histFastJets04PtSubLeadingQ800,*h_histFastJets04PtLeadingQ800;
+    TH1D * h_histFastJets06PtReclustQ800,*h_histFastJets06PtSubLeadingQ800,*h_histFastJets06PtLeadingQ800;
+    TH1D * h_histFastJets08PtReclustQ800,*h_histFastJets08PtSubLeadingQ800,*h_histFastJets08PtLeadingQ800;
+    TH1D * h_histFastJets10PtReclustQ800,*h_histFastJets10PtSubLeadingQ800,*h_histFastJets10PtLeadingQ800;
+
+    TH2D * h_histFastJets02MultLam,* h_histFastJets02PtLam,*h_histFastJets02LhaLam,*h_histFastJets02WidthLam,*h_histFastJets02MassLam;
+    TH2D * h_histFastJets04MultLam,* h_histFastJets04PtLam,*h_histFastJets04LhaLam,*h_histFastJets04WidthLam,*h_histFastJets04MassLam;
+    TH2D * h_histFastJets06MultLam,* h_histFastJets06PtLam,*h_histFastJets06LhaLam,*h_histFastJets06WidthLam,*h_histFastJets06MassLam;
+    TH2D * h_histFastJets08MultLam,* h_histFastJets08PtLam,*h_histFastJets08LhaLam,*h_histFastJets08WidthLam,*h_histFastJets08MassLam;
+    TH2D * h_histFastJets10MultLam,* h_histFastJets10PtLam,*h_histFastJets10LhaLam,*h_histFastJets10WidthLam,*h_histFastJets10MassLam;
+
+
+
+
+
+    //addition Q cuts
+    TH1D * h_histFastJets02MultLam50,* h_histFastJets02PtLam50,*h_histFastJets02LhaLam50,*h_histFastJets02WidthLam50,*h_histFastJets02MassLam50;
+    TH1D * h_histFastJets04MultLam50,* h_histFastJets04PtLam50,*h_histFastJets04LhaLam50,*h_histFastJets04WidthLam50,*h_histFastJets04MassLam50;
+    TH1D * h_histFastJets06MultLam50,* h_histFastJets06PtLam50,*h_histFastJets06LhaLam50,*h_histFastJets06WidthLam50,*h_histFastJets06MassLam50;
+    TH1D * h_histFastJets08MultLam50,* h_histFastJets08PtLam50,*h_histFastJets08LhaLam50,*h_histFastJets08WidthLam50,*h_histFastJets08MassLam50;
+    TH1D * h_histFastJets10MultLam50,* h_histFastJets10PtLam50,*h_histFastJets10LhaLam50,*h_histFastJets10WidthLam50,*h_histFastJets10MassLam50;
+    TH1D * h_histFastJets02MultLam100,* h_histFastJets02PtLam100,*h_histFastJets02LhaLam100,*h_histFastJets02WidthLam100,*h_histFastJets02MassLam100;
+    TH1D * h_histFastJets04MultLam100,* h_histFastJets04PtLam100,*h_histFastJets04LhaLam100,*h_histFastJets04WidthLam100,*h_histFastJets04MassLam100;
+    TH1D * h_histFastJets06MultLam100,* h_histFastJets06PtLam100,*h_histFastJets06LhaLam100,*h_histFastJets06WidthLam100,*h_histFastJets06MassLam100;
+    TH1D * h_histFastJets08MultLam100,* h_histFastJets08PtLam100,*h_histFastJets08LhaLam100,*h_histFastJets08WidthLam100,*h_histFastJets08MassLam100;
+    TH1D * h_histFastJets10MultLam100,* h_histFastJets10PtLam100,*h_histFastJets10LhaLam100,*h_histFastJets10WidthLam100,*h_histFastJets10MassLam100;
+    TH1D * h_histFastJets02MultLam200,* h_histFastJets02PtLam200,*h_histFastJets02LhaLam200,*h_histFastJets02WidthLam200,*h_histFastJets02MassLam200;
+    TH1D * h_histFastJets04MultLam200,* h_histFastJets04PtLam200,*h_histFastJets04LhaLam200,*h_histFastJets04WidthLam200,*h_histFastJets04MassLam200;
+    TH1D * h_histFastJets06MultLam200,* h_histFastJets06PtLam200,*h_histFastJets06LhaLam200,*h_histFastJets06WidthLam200,*h_histFastJets06MassLam200;
+    TH1D * h_histFastJets08MultLam200,* h_histFastJets08PtLam200,*h_histFastJets08LhaLam200,*h_histFastJets08WidthLam200,*h_histFastJets08MassLam200;
+    TH1D * h_histFastJets10MultLam200,* h_histFastJets10PtLam200,*h_histFastJets10LhaLam200,*h_histFastJets10WidthLam200,*h_histFastJets10MassLam200;
+    TH1D * h_histFastJets02MultLam400,* h_histFastJets02PtLam400,*h_histFastJets02LhaLam400,*h_histFastJets02WidthLam400,*h_histFastJets02MassLam400;
+    TH1D * h_histFastJets04MultLam400,* h_histFastJets04PtLam400,*h_histFastJets04LhaLam400,*h_histFastJets04WidthLam400,*h_histFastJets04MassLam400;
+    TH1D * h_histFastJets06MultLam400,* h_histFastJets06PtLam400,*h_histFastJets06LhaLam400,*h_histFastJets06WidthLam400,*h_histFastJets06MassLam400;
+    TH1D * h_histFastJets08MultLam400,* h_histFastJets08PtLam400,*h_histFastJets08LhaLam400,*h_histFastJets08WidthLam400,*h_histFastJets08MassLam400;
+    TH1D * h_histFastJets10MultLam400,* h_histFastJets10PtLam400,*h_histFastJets10LhaLam400,*h_histFastJets10WidthLam400,*h_histFastJets10MassLam400;
+    TH1D * h_histFastJets02MultLam800,* h_histFastJets02PtLam800,*h_histFastJets02LhaLam800,*h_histFastJets02WidthLam800,*h_histFastJets02MassLam800;
+    TH1D * h_histFastJets04MultLam800,* h_histFastJets04PtLam800,*h_histFastJets04LhaLam800,*h_histFastJets04WidthLam800,*h_histFastJets04MassLam800;
+    TH1D * h_histFastJets06MultLam800,* h_histFastJets06PtLam800,*h_histFastJets06LhaLam800,*h_histFastJets06WidthLam800,*h_histFastJets06MassLam800;
+    TH1D * h_histFastJets08MultLam800,* h_histFastJets08PtLam800,*h_histFastJets08LhaLam800,*h_histFastJets08WidthLam800,*h_histFastJets08MassLam800;
+    TH1D * h_histFastJets10MultLam800,* h_histFastJets10PtLam800,*h_histFastJets10LhaLam800,*h_histFastJets10WidthLam800,*h_histFastJets10MassLam800;
+
+    //mmdt
+  TH1D * h_mmdt_histFastJets02PtReclust,*h_mmdt_histFastJets02PtSubLeading,*h_mmdt_histFastJets02PtLeading,*h_mmdt_histFastJets02Pt,* h_mmdt_histFastJets02Mult,* h_mmdt_histFastJets02E,* h_mmdt_histFastJets02Eta,* h_mmdt_histFastJets02Rapidity,* h_mmdt_histFastJets02Phi;
+    TH1D * h_mmdt_histFastJets04PtReclust,*h_mmdt_histFastJets04PtSubLeading,*h_mmdt_histFastJets04PtLeading,*h_mmdt_histFastJets04Pt,* h_mmdt_histFastJets04Mult,* h_mmdt_histFastJets04E,* h_mmdt_histFastJets04Eta,* h_mmdt_histFastJets04Rapidity,* h_mmdt_histFastJets04Phi;
+    TH1D * h_mmdt_histFastJets06PtReclust,*h_mmdt_histFastJets06PtSubLeading,*h_mmdt_histFastJets06PtLeading,*h_mmdt_histFastJets06Pt,* h_mmdt_histFastJets06Mult,* h_mmdt_histFastJets06E,* h_mmdt_histFastJets06Eta,* h_mmdt_histFastJets06Rapidity,* h_mmdt_histFastJets06Phi;
+    TH1D * h_mmdt_histFastJets08PtReclust,*h_mmdt_histFastJets08PtSubLeading,*h_mmdt_histFastJets08PtLeading,*h_mmdt_histFastJets08Pt,* h_mmdt_histFastJets08Mult,* h_mmdt_histFastJets08E,* h_mmdt_histFastJets08Eta,* h_mmdt_histFastJets08Rapidity,* h_mmdt_histFastJets08Phi;
+    TH1D * h_mmdt_histFastJets10PtReclust,*h_mmdt_histFastJets10PtSubLeading,*h_mmdt_histFastJets10PtLeading,*h_mmdt_histFastJets10Pt,* h_mmdt_histFastJets10Mult,* h_mmdt_histFastJets10E,* h_mmdt_histFastJets10Eta,* h_mmdt_histFastJets10Rapidity,* h_mmdt_histFastJets10Phi;
+
+    TH1D * h_mmdt_histFastJets02PtReclustQ50,*h_mmdt_histFastJets02PtSubLeadingQ50,*h_mmdt_histFastJets02PtLeadingQ50;
+    TH1D * h_mmdt_histFastJets04PtReclustQ50,*h_mmdt_histFastJets04PtSubLeadingQ50,*h_mmdt_histFastJets04PtLeadingQ50;
+    TH1D * h_mmdt_histFastJets06PtReclustQ50,*h_mmdt_histFastJets06PtSubLeadingQ50,*h_mmdt_histFastJets06PtLeadingQ50;
+    TH1D * h_mmdt_histFastJets08PtReclustQ50,*h_mmdt_histFastJets08PtSubLeadingQ50,*h_mmdt_histFastJets08PtLeadingQ50;
+    TH1D * h_mmdt_histFastJets10PtReclustQ50,*h_mmdt_histFastJets10PtSubLeadingQ50,*h_mmdt_histFastJets10PtLeadingQ50;
+
+    TH1D * h_mmdt_histFastJets02PtReclustQ100,*h_mmdt_histFastJets02PtSubLeadingQ100,*h_mmdt_histFastJets02PtLeadingQ100;
+    TH1D * h_mmdt_histFastJets04PtReclustQ100,*h_mmdt_histFastJets04PtSubLeadingQ100,*h_mmdt_histFastJets04PtLeadingQ100;
+    TH1D * h_mmdt_histFastJets06PtReclustQ100,*h_mmdt_histFastJets06PtSubLeadingQ100,*h_mmdt_histFastJets06PtLeadingQ100;
+    TH1D * h_mmdt_histFastJets08PtReclustQ100,*h_mmdt_histFastJets08PtSubLeadingQ100,*h_mmdt_histFastJets08PtLeadingQ100;
+    TH1D * h_mmdt_histFastJets10PtReclustQ100,*h_mmdt_histFastJets10PtSubLeadingQ100,*h_mmdt_histFastJets10PtLeadingQ100;
+
+    TH1D * h_mmdt_histFastJets02PtReclustQ200,*h_mmdt_histFastJets02PtSubLeadingQ200,*h_mmdt_histFastJets02PtLeadingQ200;
+    TH1D * h_mmdt_histFastJets04PtReclustQ200,*h_mmdt_histFastJets04PtSubLeadingQ200,*h_mmdt_histFastJets04PtLeadingQ200;
+    TH1D * h_mmdt_histFastJets06PtReclustQ200,*h_mmdt_histFastJets06PtSubLeadingQ200,*h_mmdt_histFastJets06PtLeadingQ200;
+    TH1D * h_mmdt_histFastJets08PtReclustQ200,*h_mmdt_histFastJets08PtSubLeadingQ200,*h_mmdt_histFastJets08PtLeadingQ200;
+    TH1D * h_mmdt_histFastJets10PtReclustQ200,*h_mmdt_histFastJets10PtSubLeadingQ200,*h_mmdt_histFastJets10PtLeadingQ200;
+
+    TH1D * h_mmdt_histFastJets02PtReclustQ400,*h_mmdt_histFastJets02PtSubLeadingQ400,*h_mmdt_histFastJets02PtLeadingQ400;
+    TH1D * h_mmdt_histFastJets04PtReclustQ400,*h_mmdt_histFastJets04PtSubLeadingQ400,*h_mmdt_histFastJets04PtLeadingQ400;
+    TH1D * h_mmdt_histFastJets06PtReclustQ400,*h_mmdt_histFastJets06PtSubLeadingQ400,*h_mmdt_histFastJets06PtLeadingQ400;
+    TH1D * h_mmdt_histFastJets08PtReclustQ400,*h_mmdt_histFastJets08PtSubLeadingQ400,*h_mmdt_histFastJets08PtLeadingQ400;
+    TH1D * h_mmdt_histFastJets10PtReclustQ400,*h_mmdt_histFastJets10PtSubLeadingQ400,*h_mmdt_histFastJets10PtLeadingQ400;
+
+    TH1D * h_mmdt_histFastJets02PtReclustQ800,*h_mmdt_histFastJets02PtSubLeadingQ800,*h_mmdt_histFastJets02PtLeadingQ800;
+    TH1D * h_mmdt_histFastJets04PtReclustQ800,*h_mmdt_histFastJets04PtSubLeadingQ800,*h_mmdt_histFastJets04PtLeadingQ800;
+    TH1D * h_mmdt_histFastJets06PtReclustQ800,*h_mmdt_histFastJets06PtSubLeadingQ800,*h_mmdt_histFastJets06PtLeadingQ800;
+    TH1D * h_mmdt_histFastJets08PtReclustQ800,*h_mmdt_histFastJets08PtSubLeadingQ800,*h_mmdt_histFastJets08PtLeadingQ800;
+    TH1D * h_mmdt_histFastJets10PtReclustQ800,*h_mmdt_histFastJets10PtSubLeadingQ800,*h_mmdt_histFastJets10PtLeadingQ800;
+
+    TH2D * h_mmdt_histFastJets02MultLam,* h_mmdt_histFastJets02PtLam,*h_mmdt_histFastJets02LhaLam,*h_mmdt_histFastJets02WidthLam,*h_mmdt_histFastJets02MassLam;
+    TH2D * h_mmdt_histFastJets04MultLam,* h_mmdt_histFastJets04PtLam,*h_mmdt_histFastJets04LhaLam,*h_mmdt_histFastJets04WidthLam,*h_mmdt_histFastJets04MassLam;
+    TH2D * h_mmdt_histFastJets06MultLam,* h_mmdt_histFastJets06PtLam,*h_mmdt_histFastJets06LhaLam,*h_mmdt_histFastJets06WidthLam,*h_mmdt_histFastJets06MassLam;
+    TH2D * h_mmdt_histFastJets08MultLam,* h_mmdt_histFastJets08PtLam,*h_mmdt_histFastJets08LhaLam,*h_mmdt_histFastJets08WidthLam,*h_mmdt_histFastJets08MassLam;
+    TH2D * h_mmdt_histFastJets10MultLam,* h_mmdt_histFastJets10PtLam,*h_mmdt_histFastJets10LhaLam,*h_mmdt_histFastJets10WidthLam,*h_mmdt_histFastJets10MassLam;
+
+
+
+
+
+    //addition Q cuts
+    TH1D * h_mmdt_histFastJets02MultLam50,* h_mmdt_histFastJets02PtLam50,*h_mmdt_histFastJets02LhaLam50,*h_mmdt_histFastJets02WidthLam50,*h_mmdt_histFastJets02MassLam50;
+    TH1D * h_mmdt_histFastJets04MultLam50,* h_mmdt_histFastJets04PtLam50,*h_mmdt_histFastJets04LhaLam50,*h_mmdt_histFastJets04WidthLam50,*h_mmdt_histFastJets04MassLam50;
+    TH1D * h_mmdt_histFastJets06MultLam50,* h_mmdt_histFastJets06PtLam50,*h_mmdt_histFastJets06LhaLam50,*h_mmdt_histFastJets06WidthLam50,*h_mmdt_histFastJets06MassLam50;
+    TH1D * h_mmdt_histFastJets08MultLam50,* h_mmdt_histFastJets08PtLam50,*h_mmdt_histFastJets08LhaLam50,*h_mmdt_histFastJets08WidthLam50,*h_mmdt_histFastJets08MassLam50;
+    TH1D * h_mmdt_histFastJets10MultLam50,* h_mmdt_histFastJets10PtLam50,*h_mmdt_histFastJets10LhaLam50,*h_mmdt_histFastJets10WidthLam50,*h_mmdt_histFastJets10MassLam50;
+    TH1D * h_mmdt_histFastJets02MultLam100,* h_mmdt_histFastJets02PtLam100,*h_mmdt_histFastJets02LhaLam100,*h_mmdt_histFastJets02WidthLam100,*h_mmdt_histFastJets02MassLam100;
+    TH1D * h_mmdt_histFastJets04MultLam100,* h_mmdt_histFastJets04PtLam100,*h_mmdt_histFastJets04LhaLam100,*h_mmdt_histFastJets04WidthLam100,*h_mmdt_histFastJets04MassLam100;
+    TH1D * h_mmdt_histFastJets06MultLam100,* h_mmdt_histFastJets06PtLam100,*h_mmdt_histFastJets06LhaLam100,*h_mmdt_histFastJets06WidthLam100,*h_mmdt_histFastJets06MassLam100;
+    TH1D * h_mmdt_histFastJets08MultLam100,* h_mmdt_histFastJets08PtLam100,*h_mmdt_histFastJets08LhaLam100,*h_mmdt_histFastJets08WidthLam100,*h_mmdt_histFastJets08MassLam100;
+    TH1D * h_mmdt_histFastJets10MultLam100,* h_mmdt_histFastJets10PtLam100,*h_mmdt_histFastJets10LhaLam100,*h_mmdt_histFastJets10WidthLam100,*h_mmdt_histFastJets10MassLam100;
+    TH1D * h_mmdt_histFastJets02MultLam200,* h_mmdt_histFastJets02PtLam200,*h_mmdt_histFastJets02LhaLam200,*h_mmdt_histFastJets02WidthLam200,*h_mmdt_histFastJets02MassLam200;
+    TH1D * h_mmdt_histFastJets04MultLam200,* h_mmdt_histFastJets04PtLam200,*h_mmdt_histFastJets04LhaLam200,*h_mmdt_histFastJets04WidthLam200,*h_mmdt_histFastJets04MassLam200;
+    TH1D * h_mmdt_histFastJets06MultLam200,* h_mmdt_histFastJets06PtLam200,*h_mmdt_histFastJets06LhaLam200,*h_mmdt_histFastJets06WidthLam200,*h_mmdt_histFastJets06MassLam200;
+    TH1D * h_mmdt_histFastJets08MultLam200,* h_mmdt_histFastJets08PtLam200,*h_mmdt_histFastJets08LhaLam200,*h_mmdt_histFastJets08WidthLam200,*h_mmdt_histFastJets08MassLam200;
+    TH1D * h_mmdt_histFastJets10MultLam200,* h_mmdt_histFastJets10PtLam200,*h_mmdt_histFastJets10LhaLam200,*h_mmdt_histFastJets10WidthLam200,*h_mmdt_histFastJets10MassLam200;
+    TH1D * h_mmdt_histFastJets02MultLam400,* h_mmdt_histFastJets02PtLam400,*h_mmdt_histFastJets02LhaLam400,*h_mmdt_histFastJets02WidthLam400,*h_mmdt_histFastJets02MassLam400;
+    TH1D * h_mmdt_histFastJets04MultLam400,* h_mmdt_histFastJets04PtLam400,*h_mmdt_histFastJets04LhaLam400,*h_mmdt_histFastJets04WidthLam400,*h_mmdt_histFastJets04MassLam400;
+    TH1D * h_mmdt_histFastJets06MultLam400,* h_mmdt_histFastJets06PtLam400,*h_mmdt_histFastJets06LhaLam400,*h_mmdt_histFastJets06WidthLam400,*h_mmdt_histFastJets06MassLam400;
+    TH1D * h_mmdt_histFastJets08MultLam400,* h_mmdt_histFastJets08PtLam400,*h_mmdt_histFastJets08LhaLam400,*h_mmdt_histFastJets08WidthLam400,*h_mmdt_histFastJets08MassLam400;
+    TH1D * h_mmdt_histFastJets10MultLam400,* h_mmdt_histFastJets10PtLam400,*h_mmdt_histFastJets10LhaLam400,*h_mmdt_histFastJets10WidthLam400,*h_mmdt_histFastJets10MassLam400;
+    TH1D * h_mmdt_histFastJets02MultLam800,* h_mmdt_histFastJets02PtLam800,*h_mmdt_histFastJets02LhaLam800,*h_mmdt_histFastJets02WidthLam800,*h_mmdt_histFastJets02MassLam800;
+    TH1D * h_mmdt_histFastJets04MultLam800,* h_mmdt_histFastJets04PtLam800,*h_mmdt_histFastJets04LhaLam800,*h_mmdt_histFastJets04WidthLam800,*h_mmdt_histFastJets04MassLam800;
+    TH1D * h_mmdt_histFastJets06MultLam800,* h_mmdt_histFastJets06PtLam800,*h_mmdt_histFastJets06LhaLam800,*h_mmdt_histFastJets06WidthLam800,*h_mmdt_histFastJets06MassLam800;
+    TH1D * h_mmdt_histFastJets08MultLam800,* h_mmdt_histFastJets08PtLam800,*h_mmdt_histFastJets08LhaLam800,*h_mmdt_histFastJets08WidthLam800,*h_mmdt_histFastJets08MassLam800;
+    TH1D * h_mmdt_histFastJets10MultLam800,* h_mmdt_histFastJets10PtLam800,*h_mmdt_histFastJets10LhaLam800,*h_mmdt_histFastJets10WidthLam800,*h_mmdt_histFastJets10MassLam800;
+
+  
+
+    TH1D * h_ArrayOfHist[5][54];
+    TH2D * h_ArrayOfHist2[5][39];
+    TH1D * h_mmdt_ArrayOfHist[5][54];
+    TH2D * h_mmdt_ArrayOfHist2[5][39];
+
     ////root stuff
     TFile * rfile;
     TTree * ttree;
-
+//
     vector<double> v_ArrayOfHist[5][53];
     vector<double> v_mmdt_ArrayOfHist[5][53];
-
-    vector<double> v_no_cut_ArrayOfHist[5][9];
-    vector<double> v_no_cut_mmdt_ArrayOfHist[5][9];
 
     vector<double> v_PDGID;
     vector<double> v_GluonFractionPt;
     vector<double> v_QuarkFractionPt;
     vector<double> v_GluonAndQuarkFractionPt;
-    vector<double> v_GluonFractionEta;
-    vector<double> v_QuarkFractionEta;
-    vector<double> v_GluonAndQuarkFractionEta;
     vector<double> v_OthersThenGluonAndQuarkFractionPt;
     vector<double> v_PartonFractionPt;
     vector<double> v_GluonMulti;
