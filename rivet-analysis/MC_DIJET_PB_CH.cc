@@ -12,6 +12,14 @@
 #include "ThePEG/Repository/CurrentGenerator.h"
 #include "ThePEG/Repository/EventGenerator.h"
 #include "ThePEG/Handlers/EventHandler.h"
+#include "ThePEG/Repository/BaseRepository.h"
+#include "ThePEG/Repository/Repository.h"
+#include "ThePEG/Repository/UseRandom.h"
+#include "ThePEG/Utilities/Current.h"
+
+//Utilities/Current.h
+
+
 #include "Herwig/Shower/ShowerHandler.h"
 
 #include "TTree.h"
@@ -33,7 +41,7 @@ using namespace std;
 //#endif
 
 using namespace fastjet; 
-using namespace ThePEG;
+//using namespace ThePEG;
 //using namespace ROOT;
 
 namespace Rivet {
@@ -76,15 +84,19 @@ namespace Rivet {
     }
 
     void init() {
-      cout << "FileName = " << CurrentGenerator::current().filename() << endl;
-      cout << "FilePath = " << CurrentGenerator::current().path() << endl;
-      string FileName = CurrentGenerator::current().filename();
-      FileName.erase(0,2);
-      FileName.append(".root");
+      //cout << "FileName = " << ThePEG::CurrentGenerator::current().filename() << endl;
+      //auto a = ThePEG::CurrentGenerator();//::current();//.filename();
+      //for now cout << "FilePath = " << CurrentGenerator::current().path() << endl;
+      TString FileName = "test.root";//TString::Format("%s.root",ThePEG::CurrentGenerator::current().filename());
+      FileName = FileName.ReplaceAll("./", "");
+      //string FileName = "/disk0/QGjetsPetr/Petr_Pythia/test";
+      //FileName.erase(0,2);
+//      FileName.append(".root");
       //need to add extension .root
       //cout << "FileName = " << FileName.Data() << endl;
       //cout << "FilePath = " << FilePath.Data() << endl;
-      rfile = new TFile(FileName.c_str(),"recreate");
+      //rfile = new TFile(FileName.c_str(),"recreate");
+      rfile = new TFile(FileName.Data(),"recreate");
       rfile->cd();
       ttree = new TTree("MC_DIJET_PB_CH", "MC_DIJET_PB_CH");
       
@@ -97,6 +109,10 @@ namespace Rivet {
  ttree->Branch("GluonFractionEta", &v_GluonFractionEta );
  ttree->Branch("QuarkFractionEta", &v_QuarkFractionEta );
  ttree->Branch("GluonAndQuarkFractionEta", &v_GluonAndQuarkFractionEta );
+ ttree->Branch("QuarkFractionPhi", &v_QuarkFractionPhi );
+ ttree->Branch("GluonAndQuarkFractionPhi", &v_GluonAndQuarkFractionPhi );
+ ttree->Branch("QuarkFractionE", &v_QuarkFractionE );
+ ttree->Branch("GluonAndQuarkFractionE", &v_GluonAndQuarkFractionE );
  ttree->Branch("OthersThenGluonAndQuarkFractionPt", &v_OthersThenGluonAndQuarkFractionPt);
  ttree->Branch("PartonFractionPt", &v_PartonFractionPt);
  ttree->Branch("GluonMulti", &v_GluonMulti);
@@ -1975,6 +1991,8 @@ void analyze(const Event& event) {
           _histQuarkFractionPt->fill(p.pT(),event.weight());
           v_QuarkFractionPt.push_back(p.pT());
           v_QuarkFractionEta.push_back(p.eta());
+          v_QuarkFractionPhi.push_back(p.phi());
+          v_QuarkFractionE.push_back(p.E()/GeV);
         } else{
           NumberOfOthersThanGluonsAndQuars++;
           //if (p.pdgId() != 82){
@@ -1988,6 +2006,8 @@ void analyze(const Event& event) {
                 _histGluonAndQuarkFractionPt->fill(p.pT(), event.weight());          
                 v_GluonAndQuarkFractionPt.push_back(p.pT());
                 v_GluonAndQuarkFractionEta.push_back(p.eta());
+                v_GluonAndQuarkFractionPhi.push_back(p.phi());
+                v_GluonAndQuarkFractionE.push_back(p.E()/GeV);
         }
         NumberOfPartons++;
         _histPartonFractionPt->fill(p.pT(), event.weight());
@@ -2028,10 +2048,13 @@ void analyze(const Event& event) {
 
       for (size_t i = 0; i < NumberOfRadiuses; ++i) {
       JetDefinition jet_def(antikt_algorithm, radius[i]);
-      vector<PseudoJet> jets = (SelectorNHardest(2) * SelectorAbsRapMax(JET_RAPMAX) * SelectorPtMin(ptmin_jet))(jet_def(particles));
-      vector<PseudoJet> jets_no_pt_cut = (SelectorNHardest(2) * SelectorAbsRapMax(JET_RAPMAX) * SelectorPtMin(0.0))(jet_def(particles));
-
+      //vector<PseudoJet> jets = (SelectorNHardest(2) * SelectorAbsRapMax(JET_RAPMAX) * SelectorPtMin(ptmin_jet))(jet_def(particles));
+      //vector<PseudoJet> jets_no_pt_cut = (SelectorNHardest(2) * SelectorAbsRapMax(JET_RAPMAX) * SelectorPtMin(0.0))(jet_def(particles));
+      vector<PseudoJet> jets = ( SelectorAbsRapMax(JET_RAPMAX) * SelectorPtMin(ptmin_jet))(jet_def(particles));
+      vector<PseudoJet> jets_no_pt_cut = ( SelectorAbsRapMax(JET_RAPMAX) * SelectorPtMin(0.0))(jet_def(particles));
+      //std::cout << "PB DEBUG" << jets.size() << std::endl;
       if(jets_no_pt_cut.size()>=2){
+      //if(jets_no_pt_cut.size()==2){
         // impose the cuts
         PseudoJet no_cut_orig_jet1 = jets_no_pt_cut[0];
         PseudoJet no_cut_orig_jet2 = jets_no_pt_cut[1];
@@ -2125,7 +2148,7 @@ void analyze(const Event& event) {
         }
 
       } else{
-      ttree->Fill();
+      //ttree->Fill();//comment if running hadr  to save time
 
       // clearing vercots
       v_weight.clear();
@@ -2136,6 +2159,10 @@ void analyze(const Event& event) {
       v_GluonFractionEta.clear();
       v_QuarkFractionEta.clear();
       v_GluonAndQuarkFractionEta.clear();
+      v_QuarkFractionPhi.clear();
+      v_GluonAndQuarkFractionPhi.clear();
+      v_QuarkFractionE.clear();
+      v_GluonAndQuarkFractionE.clear();
       v_OthersThenGluonAndQuarkFractionPt.clear();
       v_PartonFractionPt.clear();
       v_GluonMulti.clear();
@@ -2159,7 +2186,8 @@ void analyze(const Event& event) {
       }
 
         if(jets.size()<2) {
-              ttree->Fill();
+      //if(jets.size()!=2) {
+      //ttree->Fill();//comment if running hadr  to save time
 
       // clearing vercots
       v_weight.clear();
@@ -2170,6 +2198,10 @@ void analyze(const Event& event) {
       v_GluonFractionEta.clear();
       v_QuarkFractionEta.clear();
       v_GluonAndQuarkFractionEta.clear();
+      v_QuarkFractionPhi.clear();
+      v_GluonAndQuarkFractionPhi.clear();
+      v_QuarkFractionE.clear();
+      v_GluonAndQuarkFractionE.clear();
       v_OthersThenGluonAndQuarkFractionPt.clear();
       v_PartonFractionPt.clear();
       v_GluonMulti.clear();
@@ -2209,7 +2241,7 @@ void analyze(const Event& event) {
             (std::abs(orig_jet1.rap()-orig_jet2.rap())>DELTA_RAP_MAX_DIJET) )
              {
               
-            ttree->Fill();
+            //ttree->Fill();//comment if running hadr  to save time
 
       // clearing vercots
       v_weight.clear();
@@ -2220,6 +2252,10 @@ void analyze(const Event& event) {
       v_GluonFractionEta.clear();
       v_QuarkFractionEta.clear();
       v_GluonAndQuarkFractionEta.clear();
+      v_QuarkFractionPhi.clear();
+      v_GluonAndQuarkFractionPhi.clear();
+      v_QuarkFractionE.clear();
+      v_GluonAndQuarkFractionE.clear();
       v_OthersThenGluonAndQuarkFractionPt.clear();
       v_PartonFractionPt.clear();
       v_GluonMulti.clear();
@@ -2245,18 +2281,27 @@ void analyze(const Event& event) {
         // grooming
         PseudoJet jet1 = ca_wta_recluster(orig_jet1);
         PseudoJet jet2 = ca_wta_recluster(orig_jet2);
-        vector<PseudoJet> JetPair(2);
-        JetPair[0]=jet1;
-        JetPair[1]=jet2;
+        //vector<PseudoJet> JetPair(2);
+        vector<PseudoJet> JetPair;
+        for (int h=0;h<jets.size();h++){
+            JetPair.push_back(ca_wta_recluster(jets[h]) );
+        }
+        //JetPair[0]=jet1;
+        //JetPair[1]=jet2;
 
         PseudoJet mmdt_jet1 = (*mmdt)(jet1);
         PseudoJet mmdt_jet2 = (*mmdt)(jet2);
-        vector<PseudoJet> mmdt_JetPair(2);
-        mmdt_JetPair[0]=mmdt_jet1;
-        mmdt_JetPair[1]=mmdt_jet2;
+        //vector<PseudoJet> mmdt_JetPair(2);
+        vector<PseudoJet> mmdt_JetPair;
+        for (int h=0;h<jets.size();h++){
+            mmdt_JetPair.push_back((*mmdt)(ca_wta_recluster(jets[h])) );
+        }
+        //mmdt_JetPair[0]=mmdt_jet1;
+        //mmdt_JetPair[1]=mmdt_jet2;
 
         //
-        for (int k=0; k<=1; k++) {
+        //for (int k=0; k<=1; k++) {
+        for (int k=0; k<JetPair.size(); k++) {
         ArrayOfHist[i][3]->fill(JetPair[k].pt()/GeV, event.weight());
         ArrayOfHist[i][8]->fill(JetPair[k].phi(), event.weight());
         ArrayOfHist[i][6]->fill(JetPair[k].eta() , event.weight());
@@ -2686,7 +2731,8 @@ void analyze(const Event& event) {
         // 
         //looping over groomed jets
         
-        for (int k=0; k<=1; k++) {
+        //for (int k=0; k<=1; k++) {
+        for (int k=0; k<mmdt_JetPair.size(); k++) {
         mmdt_ArrayOfHist[i][3]->fill(mmdt_JetPair[k].pt()/GeV, event.weight());
         mmdt_ArrayOfHist[i][8]->fill(mmdt_JetPair[k].phi(), event.weight());
         mmdt_ArrayOfHist[i][6]->fill(mmdt_JetPair[k].eta() , event.weight());
@@ -3121,6 +3167,10 @@ void analyze(const Event& event) {
       v_GluonFractionEta.clear();
       v_QuarkFractionEta.clear();
       v_GluonAndQuarkFractionEta.clear();
+      v_QuarkFractionPhi.clear();
+      v_GluonAndQuarkFractionPhi.clear();
+      v_QuarkFractionE.clear();
+      v_GluonAndQuarkFractionE.clear();
       v_OthersThenGluonAndQuarkFractionPt.clear();
       v_PartonFractionPt.clear();
       v_GluonMulti.clear();
@@ -3381,6 +3431,10 @@ void analyze(const Event& event) {
     vector<double> v_GluonFractionEta;
     vector<double> v_QuarkFractionEta;
     vector<double> v_GluonAndQuarkFractionEta;
+    vector<double> v_QuarkFractionPhi;
+    vector<double> v_GluonAndQuarkFractionPhi;
+    vector<double> v_QuarkFractionE;
+    vector<double> v_GluonAndQuarkFractionE;
     vector<double> v_OthersThenGluonAndQuarkFractionPt;
     vector<double> v_PartonFractionPt;
     vector<double> v_GluonMulti;

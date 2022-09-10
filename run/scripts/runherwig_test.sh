@@ -1,7 +1,8 @@
 #!/bin/bash
 source /root/.bashrc
 source /disk0/QGjetsPetr/setup.sh
-source /disk0/ROOT/root/bin/thisroot.sh
+#source /disk0/ROOT/root/bin/thisroot.sh
+source /disk0/opt/root/bin/thisroot.sh
 echo "Arguments are: Energy [900, 2360, 7000, 13000], "
 echo "               Events [1-10000000], "
 echo "               Seed [61972970 23354883 88615218 70896900 18669684 71917516 25202807 62914023 20426705 23209777],"
