@@ -1,0 +1,6 @@
+alias rm='rm -i'
+#alias cp='cp -i'
+alias mv='mv -i'
+alias lt='ls -lhrt --color=auto'
+alias work='cd /data/QGjets/QGjetsPetr/'
+alias squeue='squeue --format="%.18i %.9P %.30j %.8u %.8T %.10M %.9l %.6D %R"'

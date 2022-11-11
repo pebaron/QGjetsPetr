@@ -163,8 +163,8 @@ echo "# set MEHiggsJet:Process qqbar" >> $FileName
 
 if [ "$Hadronization" = "hadr" ]; then
     # change for low pt
-    echo "Running hadronization, pt cut > 25.0 GeV."
-    echo "set /Herwig/Cuts/JetKtCut:MinKT 25.0*GeV" >> $FileName
+    echo "Running hadronization, pt cut > 95.0 GeV."
+    echo "set /Herwig/Cuts/JetKtCut:MinKT 95.0*GeV" >> $FileName
 else 
     given_Pt=(0 25 50 75 100 125 150 175)
     lower_Pt=(0 15 40 65 90 115 140 165)

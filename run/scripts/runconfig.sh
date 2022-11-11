@@ -17,7 +17,7 @@
 #seeds: 61972970 23354883 88615218 70896900 18669684 71917516 25202807 62914023 20426705 23209777
 
 #N=500000
-N=1000000
+N=100000
 index=0
 for j in 61972970 23354883 88615218 70896900 18669684 71917516 25202807 62914023 20426705 23209777; do 
 #seeds for now 61972970 23354883 88615218 70896900 18669684
@@ -29,8 +29,9 @@ for j in 61972970 23354883 88615218 70896900 18669684 71917516 25202807 62914023
         for e in 900 2360 7000 13000;do
 	#for e in 7000 13000;do
 
-            #sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_${e}_${N}_${j}_0_${PDF}_hadr ./runherwig_test.sh $e $N $j 0 $PDF hadr
-            #sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_noMPI_noISR_${e}_${N}_${j}_0_${PDF}_hadr ./runherwig_test_noMPI_noISR.sh $e $N $j 0 $PDF hadr
+            
+            sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_${e}_${N}_${j}_0_${PDF}_hadr ./runherwig_test.sh $e $N $j 0 $PDF hadr
+            sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_noMPI_noISR_${e}_${N}_${j}_0_${PDF}_hadr ./runherwig_test_noMPI_noISR.sh $e $N $j 0 $PDF hadr
             sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_trim_${e}_${N}_${j}_0_${PDF}_hadr ./runherwig_test_trim.sh $e $N $j 0 $PDF hadr
             sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_trim_noMPI_noISR_${e}_${N}_${j}_0_${PDF}_hadr ./runherwig_test_noMPI_noISR_trim.sh $e $N $j 0 $PDF hadr
             # original echo sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_${e}_${N}_${j}_0_${PDF}_hadr ./runherwig.sh $e $N $j 0 $PDF hadr
@@ -40,10 +41,10 @@ for j in 61972970 23354883 88615218 70896900 18669684 71917516 25202807 62914023
             #PB for now sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_${e}_${N}_${j}_0_${PDF}_hadr ./runherwig_nohadr_withMPI_and_part_shower.sh $e $N $j 0 $PDF hadr
 
             ## no hadr part
-            #for i in 0 25 50 75 100 125 150 175;do 
-            #    sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_${e}_${N}_${j}_${i}_${PDF}_nohadr ./runherwig_test.sh $e $N $j $i $PDF nohadr;
-            #    let "index++"
-            #    done;
+            ##for i in 0 25 50 75 100 125 150 175;do 
+            ##    sbatch -n1 -o /disk0/QGjetsPetr/run/logs/job_${e}_${N}_${j}_${i}_${PDF}_nohadr ./runherwig_test.sh $e $N $j $i $PDF nohadr;
+            ##    let "index++"
+            ##    done;
         done;
         #a=$(squeue | wc -l)
         #if [ "$a" -gt 100 ]; then

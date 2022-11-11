@@ -258,8 +258,10 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
 
     }
 
-    double fracA_no_cut = fracA->ProjectionX()->GetBinContent(fracA->ProjectionX()->GetXaxis()->FindBin(55.5) ) / 10.;
-    double fracB_no_cut = fracB->ProjectionX()->GetBinContent(fracB->ProjectionX()->GetXaxis()->FindBin(55.5) ) / 10.;
+    double fracA_no_cut;// = fracA->ProjectionX()->GetBinContent(fracA->ProjectionX()->GetXaxis()->FindBin(55.5) ) / 10.;
+    double fracB_no_cut;// = fracB->ProjectionX()->GetBinContent(fracB->ProjectionX()->GetXaxis()->FindBin(55.5) ) / 10.;
+    double fracA_no_cut_mmdt;
+    double fracB_no_cut_mmdt;
 
     TString Cut;
     TString CutSub;
@@ -290,6 +292,14 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
     TString CutNorm; 
     TString CutExtraJets;
     int neg_index;
+    TH1D * h_ptA;
+    TH1D * h_ptB;
+    TH1D * h_ptA_mmdt;
+    TH1D * h_ptB_mmdt;
+    TString Cut_ptA;
+    TString Cut_ptB;
+    TString Cut_ptA_mmdt;
+    TString Cut_ptB_mmdt;
     for (int k = 0; k<JetAng.size(); k++){
     //for (int k = 4; k<5; k++){
     for (int i = 1; i<=fracA->GetXaxis()->GetNbins(); i++){//thinking of starting from 13th bin 52Pt
@@ -311,6 +321,7 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
                                     CutEtaLow, 
                                     TreeMapA[JetEta[k]]->GetName(), JetEta[k].Data(), 
                                     CutEtaUp);
+            Cut_ptA = TString::Format("%s.%s", TreeMapA[JetPt[k]]->GetName(), JetPt[k].Data());
             CutSub = Cut.Copy();
             CutSub.ReplaceAll("[0]", "[1]");
             DRCut = GetDRCut(JetAng[k].Data());
@@ -339,11 +350,17 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
             if (JetAng[k].Contains("MultLam")){
                 TreeMapA[JetAng[k]]          ->Draw(TString::Format("%s[0] >> h_%s_%i_%i_%i(50,0,100)", JetAng[k].Data() , JetAng[k].Data(), i,j,k), Cut.Data() , "goff"); 
                 TreeMapA[JetAng[k]]          ->Draw(TString::Format("%s[1] >> h_sub_%s_%i_%i_%i(50,0,100)", JetAng[k].Data() , JetAng[k].Data(), i,j,k), CutSub.Data() , "goff"); 
-                if ((i==1)&&(j==6)) TreeMapA[JetAng[k]]->Draw(TString::Format("%s >> h_no_cut_%s(50,0,100)", JetAng[k].Data() , JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                if ((i==1)&&(j==6)) {
+                    TreeMapA[JetAng[k]]->Draw(TString::Format("%s >> h_no_cut_%s(50,0,100)", JetAng[k].Data() , JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                    TreeMapA[JetAng[k]]->Draw(TString::Format("%s >> h_ptA(500,0,500)", Cut_ptA.Data()), CutNorm.Data(), "goff" );
+                    }
             }else{
                 TreeMapA[JetAng[k]]          ->Draw(TString::Format("%s[0] >> h_%s_%i_%i_%i(50,0,1)", JetAng[k].Data() , JetAng[k].Data(), i,j,k), Cut.Data() , "goff"); 
                 TreeMapA[JetAng[k]]          ->Draw(TString::Format("%s[1] >> h_sub_%s_%i_%i_%i(50,0,1)", JetAng[k].Data() , JetAng[k].Data(), i,j,k), CutSub.Data() , "goff"); 
-                if ((i==1)&&(j==6)) TreeMapA[JetAng[k]]->Draw(TString::Format("%s >> h_no_cut_%s(50,0,1)", JetAng[k].Data() , JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                if ((i==1)&&(j==6)) {
+                    TreeMapA[JetAng[k]]->Draw(TString::Format("%s >> h_no_cut_%s(50,0,1)", JetAng[k].Data() , JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                    TreeMapA[JetAng[k]]->Draw(TString::Format("%s >> h_ptA(500,0,500)", Cut_ptA.Data()), CutNorm.Data(), "goff" );
+                }
             }
             h = (TH1D*)gDirectory->Get(TString::Format("h_%s_%i_%i_%i", JetAng[k].Data(), i,j,k));
             h_sub = (TH1D*)gDirectory->Get(TString::Format("h_sub_%s_%i_%i_%i", JetAng[k].Data(), i,j,k));
@@ -352,6 +369,9 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
                 h_no_cutA=(TH1D*)gDirectory->Get(TString::Format("h_no_cut_%s", JetAng[k].Data()));
                 NormFact1 = h_no_cutA->GetEntries();
                 h_no_cutA->Scale(1./h_no_cutA->GetEntries());
+                h_ptA = (TH1D*)gDirectory->Get("h_ptA");
+                fracA_no_cut = fracA->ProjectionX()->GetBinContent(fracA->ProjectionX()->GetXaxis()->FindBin( h_ptA->GetMean() ) ) / 10.;
+                cout << "Pt Mean A = " << h_ptA->GetMean() << endl;
             }
             //h->Scale(1./NormFact1);
             //if (h->GetEntries()>0) h->Scale(1./h->GetEntries());
@@ -379,6 +399,7 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
                                     CutEtaLow, 
                                     TreeMapA[mmdt_JetEta[k]]->GetName(), mmdt_JetEta[k].Data(), 
                                     CutEtaUp);
+            Cut_ptA_mmdt = TString::Format("%s.%s", TreeMapA[mmdt_JetPt[k]]->GetName(), mmdt_JetPt[k].Data());
             CutSub = Cut.Copy();
             CutSub.ReplaceAll("[0]", "[1]");
             DRCut = GetDRCut(mmdt_JetAng[k].Data());
@@ -406,11 +427,17 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
             if (mmdt_JetAng[k].Contains("MultLam")){
                 TreeMapA[mmdt_JetAng[k]]     ->Draw(TString::Format("%s[0] >> h_%s_%i_%i_%i(50,0,100)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data(), i,j,k), Cut.Data() , "goff");
                 TreeMapA[mmdt_JetAng[k]]     ->Draw(TString::Format("%s[1] >> h_sub_%s_%i_%i_%i(50,0,100)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data(), i,j,k), CutSub.Data() , "goff");
-                if ((i==1)&&(j==6))TreeMapA[mmdt_JetAng[k]]->Draw(TString::Format("%s >> h_no_cut_%s(50,0,100)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                if ((i==1)&&(j==6)){
+                    TreeMapA[mmdt_JetAng[k]]->Draw(TString::Format("%s >> h_no_cut_%s(50,0,100)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                    TreeMapA[mmdt_JetAng[k]]->Draw(TString::Format("%s >> h_ptA_mmdt(500,0,500)", Cut_ptA_mmdt.Data()), CutNorm.Data(), "goff" );
+                    }
             }else{
                 TreeMapA[mmdt_JetAng[k]]     ->Draw(TString::Format("%s[0] >> h_%s_%i_%i_%i(50,0,1)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data(), i,j,k), Cut.Data() , "goff");
                 TreeMapA[mmdt_JetAng[k]]     ->Draw(TString::Format("%s[1] >> h_sub_%s_%i_%i_%i(50,0,1)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data(), i,j,k), CutSub.Data() , "goff");
-                if ((i==1)&&(j==6))TreeMapA[mmdt_JetAng[k]]->Draw(TString::Format("%s >> h_no_cut_%s(50,0,1)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                if ((i==1)&&(j==6)){
+                    TreeMapA[mmdt_JetAng[k]]->Draw(TString::Format("%s >> h_no_cut_%s(50,0,1)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                    TreeMapA[mmdt_JetAng[k]]->Draw(TString::Format("%s >> h_ptA_mmdt(500,0,500)", Cut_ptA_mmdt.Data()), CutNorm.Data(), "goff" );
+                    }
             }
             h = (TH1D*)gDirectory->Get(TString::Format("h_%s_%i_%i_%i", mmdt_JetAng[k].Data(), i,j,k));
             h_sub = (TH1D*)gDirectory->Get(TString::Format("h_sub_%s_%i_%i_%i", mmdt_JetAng[k].Data(), i,j,k));
@@ -418,6 +445,9 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
                 h_no_cutA_mmdt=(TH1D*)gDirectory->Get(TString::Format("h_no_cut_%s", mmdt_JetAng[k].Data()));
                 NormFact2 = h_no_cutA_mmdt->GetEntries();
                 h_no_cutA_mmdt->Scale(1./h_no_cutA_mmdt->GetEntries());
+                h_ptA_mmdt = (TH1D*)gDirectory->Get("h_ptA_mmdt");
+                fracA_no_cut_mmdt = fracA->ProjectionX()->GetBinContent(fracA->ProjectionX()->GetXaxis()->FindBin( h_ptA_mmdt->GetMean() ) ) / 10.;
+                cout << "Pt Mean A mmdt = " << h_ptA_mmdt->GetMean() << endl;
             }
             h->Add(h_sub);
             //h->Scale(1./NormFact2);
@@ -442,6 +472,7 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
                                     CutEtaUp);
 
             //TreeMapB[JetAng[k]]          ->Draw(JetAng[k]          .Data(), Cut.Data() , "goff");
+            Cut_ptB = TString::Format("%s.%s", TreeMapB[JetPt[k]]->GetName(), JetPt[k].Data());
             CutSub = Cut.Copy();
             CutSub.ReplaceAll("[0]", "[1]");
             DRCut = GetDRCut(JetAng[k].Data());
@@ -470,11 +501,17 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
             if (JetAng[k].Contains("MultLam")){
                 TreeMapB[JetAng[k]]          ->Draw(TString::Format("%s[0] >> hB_%s_%i_%i_%i(50,0,100)", JetAng[k].Data() , JetAng[k].Data(), i,j,k), Cut.Data() , "goff"); 
                 TreeMapB[JetAng[k]]          ->Draw(TString::Format("%s[1] >> hB_sub_%s_%i_%i_%i(50,0,100)", JetAng[k].Data() , JetAng[k].Data(), i,j,k), CutSub.Data() , "goff"); 
-                if ((i==1)&&(j==6))TreeMapB[JetAng[k]]->Draw(TString::Format("%s >> hB_no_cut_%s(50,0,100)", JetAng[k].Data() , JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                if ((i==1)&&(j==6)){
+                    TreeMapB[JetAng[k]]->Draw(TString::Format("%s >> hB_no_cut_%s(50,0,100)", JetAng[k].Data() , JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                    TreeMapB[JetAng[k]]->Draw(TString::Format("%s >> h_ptB(500,0,500)", Cut_ptB.Data()), CutNorm.Data(), "goff" );
+                    }
             } else{
                 TreeMapB[JetAng[k]]          ->Draw(TString::Format("%s[0] >> hB_%s_%i_%i_%i(50,0,1)", JetAng[k].Data() , JetAng[k].Data(), i,j,k), Cut.Data() , "goff"); 
                 TreeMapB[JetAng[k]]          ->Draw(TString::Format("%s[1] >> hB_sub_%s_%i_%i_%i(50,0,1)", JetAng[k].Data() , JetAng[k].Data(), i,j,k), CutSub.Data() , "goff"); 
-                if ((i==1)&&(j==6))TreeMapB[JetAng[k]]->Draw(TString::Format("%s >> hB_no_cut_%s(50,0,1)", JetAng[k].Data() , JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                if ((i==1)&&(j==6)){
+                    TreeMapB[JetAng[k]]->Draw(TString::Format("%s >> hB_no_cut_%s(50,0,1)", JetAng[k].Data() , JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                    TreeMapB[JetAng[k]]->Draw(TString::Format("%s >> h_ptB(500,0,500)", Cut_ptB.Data()), CutNorm.Data(), "goff" );
+                    }
             }
             h = (TH1D*)gDirectory->Get(TString::Format("hB_%s_%i_%i_%i", JetAng[k].Data(), i,j,k));
             h_sub = (TH1D*)gDirectory->Get(TString::Format("hB_sub_%s_%i_%i_%i", JetAng[k].Data(), i,j,k));
@@ -482,6 +519,9 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
                 h_no_cutB=(TH1D*)gDirectory->Get(TString::Format("hB_no_cut_%s", JetAng[k].Data()));
                 NormFact3 = h_no_cutB->GetEntries();
                 h_no_cutB->Scale(1./h_no_cutB->GetEntries());
+                h_ptB = (TH1D*)gDirectory->Get("h_ptB");
+                fracB_no_cut = fracB->ProjectionX()->GetBinContent(fracB->ProjectionX()->GetXaxis()->FindBin( h_ptB->GetMean() ) ) / 10.;
+                cout << "Pt Mean B = " << h_ptB->GetMean() << endl;
             }
             h->Add(h_sub);
             //h->Scale(1./NormFact3);
@@ -506,6 +546,7 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
                         TreeMapB[mmdt_JetEta[k]]->GetName(), mmdt_JetEta[k].Data(), 
                         CutEtaUp);
             //TreeMapB[mmdt_JetAng[k]]     ->Draw(mmdt_JetAng[k]     .Data(), Cut.Data() , "goff");
+            Cut_ptB_mmdt = TString::Format("%s.%s", TreeMapB[mmdt_JetPt[k]]->GetName(), mmdt_JetPt[k].Data());
             CutSub = Cut.Copy();
             CutSub.ReplaceAll("[0]", "[1]");
             DRCut = GetDRCut(mmdt_JetAng[k].Data());
@@ -534,11 +575,17 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
             if (mmdt_JetAng[k].Contains("MultLam")){
                 TreeMapB[mmdt_JetAng[k]]          ->Draw(TString::Format("%s[0] >> hB_%s_%i_%i_%i(50,0,100)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data(), i,j,k), Cut.Data() , "goff"); 
                 TreeMapB[mmdt_JetAng[k]]          ->Draw(TString::Format("%s[1] >> hB_sub_%s_%i_%i_%i(50,0,100)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data(), i,j,k), CutSub.Data() , "goff"); 
-                if ((i==1)&&(j==6))TreeMapB[mmdt_JetAng[k]]->Draw(TString::Format("%s >> hB_no_cut_%s(50,0,100)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                if ((i==1)&&(j==6)){
+                    TreeMapB[mmdt_JetAng[k]]->Draw(TString::Format("%s >> hB_no_cut_%s(50,0,100)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                    TreeMapB[mmdt_JetAng[k]]->Draw(TString::Format("%s >> h_ptB_mmdt(500,0,500)", Cut_ptB_mmdt.Data()), CutNorm.Data(), "goff" );
+                    }
             }else{
                 TreeMapB[mmdt_JetAng[k]]          ->Draw(TString::Format("%s[0] >> hB_%s_%i_%i_%i(50,0,1)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data(), i,j,k), Cut.Data() , "goff"); 
                 TreeMapB[mmdt_JetAng[k]]          ->Draw(TString::Format("%s[1] >> hB_sub_%s_%i_%i_%i(50,0,1)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data(), i,j,k), CutSub.Data() , "goff"); 
-                if ((i==1)&&(j==6))TreeMapB[mmdt_JetAng[k]]->Draw(TString::Format("%s >> hB_no_cut_%s(50,0,1)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                if ((i==1)&&(j==6)){
+                    TreeMapB[mmdt_JetAng[k]]->Draw(TString::Format("%s >> hB_no_cut_%s(50,0,1)", mmdt_JetAng[k].Data() , mmdt_JetAng[k].Data()), CutNorm.Data() , "goff"); 
+                    TreeMapB[mmdt_JetAng[k]]->Draw(TString::Format("%s >> h_ptB_mmdt(500,0,500)", Cut_ptB_mmdt.Data()), CutNorm.Data(), "goff" );
+                }
             }
             h = (TH1D*)gDirectory->Get(TString::Format("hB_%s_%i_%i_%i", mmdt_JetAng[k].Data(), i,j,k));
             h_sub = (TH1D*)gDirectory->Get(TString::Format("hB_sub_%s_%i_%i_%i", mmdt_JetAng[k].Data(), i,j,k));
@@ -546,6 +593,9 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
                 h_no_cutB_mmdt =(TH1D*)gDirectory->Get(TString::Format("hB_no_cut_%s", mmdt_JetAng[k].Data()));
                 NormFact4 = h_no_cutB_mmdt->GetEntries();
                 h_no_cutB_mmdt->Scale(1./h_no_cutB_mmdt->GetEntries());
+                h_ptB_mmdt = (TH1D*)gDirectory->Get("h_ptB_mmdt");
+                fracB_no_cut_mmdt = fracB->ProjectionX()->GetBinContent(fracB->ProjectionX()->GetXaxis()->FindBin( h_ptB_mmdt->GetMean() ) ) / 10.;
+                cout << "Pt Mean B mmdt = " << h_ptB_mmdt->GetMean() << endl;
             }
             h->Add(h_sub);
             //h->Scale(1./NormFact4);
@@ -567,15 +617,15 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
                     h_no_cutB_clone = (TH1D*)h_no_cutB->Clone(TString::Format("clone_%s", h_no_cutB->GetName()));
                     h_no_cutB_mmdt_clone = (TH1D*)h_no_cutB_mmdt->Clone(TString::Format("clone_%s", h_no_cutB_mmdt->GetName()));
                     h_no_cutA_clone->Scale(-1.*fracB_no_cut);
-                    h_no_cutA_mmdt_clone->Scale(-1.*fracB_no_cut);
+                    h_no_cutA_mmdt_clone->Scale(-1.*fracB_no_cut_mmdt);
                     h_no_cutB_clone->Scale(fracA_no_cut);
-                    h_no_cutB_mmdt_clone->Scale(fracA_no_cut);
+                    h_no_cutB_mmdt_clone->Scale(fracA_no_cut_mmdt);
 
                     h_no_cutA_clone->Add(h_no_cutB_clone);
                     h_no_cutA_mmdt_clone->Add(h_no_cutB_mmdt_clone);
 
                     h_no_cutA_clone->Scale(fracA_no_cut-fracB_no_cut);
-                    h_no_cutA_mmdt_clone->Scale(fracA_no_cut-fracB_no_cut);
+                    h_no_cutA_mmdt_clone->Scale(fracA_no_cut_mmdt-fracB_no_cut_mmdt);
 
                     h_no_cutA_clone->SetName( TString::Format("quark_%s", h_no_cutA_clone->GetName()));
                     h_no_cutA_mmdt_clone->SetName(TString::Format("quark_%s",h_no_cutA_mmdt_clone->GetName()));
@@ -585,15 +635,15 @@ int GenerateAngNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = "2360",
 
                     //
                     h_no_cutA->Scale(1.-fracB_no_cut);
-                    h_no_cutA_mmdt->Scale(1.-fracB_no_cut);
+                    h_no_cutA_mmdt->Scale(1.-fracB_no_cut_mmdt);
                     h_no_cutB->Scale(-1.*(1.-fracA_no_cut));
-                    h_no_cutB_mmdt->Scale(-1.*(1.-fracA_no_cut));
+                    h_no_cutB_mmdt->Scale(-1.*(1.-fracA_no_cut_mmdt));
 
                     h_no_cutA->Add(h_no_cutB);
                     h_no_cutA_mmdt->Add(h_no_cutB_mmdt);
 
                     h_no_cutA->Scale(fracA_no_cut-fracB_no_cut);
-                    h_no_cutA_mmdt->Scale(fracA_no_cut-fracB_no_cut);
+                    h_no_cutA_mmdt->Scale(fracA_no_cut_mmdt-fracB_no_cut_mmdt);
 
                     h_no_cutA->SetName(TString::Format("gluon_%s",h_no_cutA->GetName()));
                     h_no_cutA_mmdt->SetName(TString::Format("gluon_%s",h_no_cutA_mmdt->GetName()));

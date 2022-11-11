@@ -114,6 +114,9 @@ namespace Rivet {
  ttree->Branch("QuarkFractionE", &v_QuarkFractionE );
  ttree->Branch("GluonAndQuarkFractionE", &v_GluonAndQuarkFractionE );
  ttree->Branch("OthersThenGluonAndQuarkFractionPt", &v_OthersThenGluonAndQuarkFractionPt);
+ ttree->Branch("OthersThenGluonAndQuarkFractionEta", &v_OthersThenGluonAndQuarkFractionEta);
+ ttree->Branch("OthersThenGluonAndQuarkFractionPhi", &v_OthersThenGluonAndQuarkFractionPhi);
+ ttree->Branch("OthersThenGluonAndQuarkFractionE", &v_OthersThenGluonAndQuarkFractionE);
  ttree->Branch("PartonFractionPt", &v_PartonFractionPt);
  ttree->Branch("GluonMulti", &v_GluonMulti);
  ttree->Branch("QuarkMulti", &v_QuarkMulti);
@@ -1999,7 +2002,10 @@ void analyze(const Event& event) {
           //  myfile << p.pdgId() <<"\n";
           //  }
           _histOthersThenGluonAndQuarkFractionPt->fill(p.pT(),event.weight());                      
-          v_OthersThenGluonAndQuarkFractionPt.push_back(p.pT());                      
+          v_OthersThenGluonAndQuarkFractionPt.push_back(p.pT());
+          v_OthersThenGluonAndQuarkFractionPt.push_back(p.eta());
+          v_OthersThenGluonAndQuarkFractionPt.push_back(p.phi());
+          v_OthersThenGluonAndQuarkFractionPt.push_back(p.E()/GeV);                      
         }
         if ((p.pdgId() == 21) || (abs(p.pdgId()) < 7)){
                 NumberOfGluonAndQuark++;
@@ -2164,6 +2170,9 @@ void analyze(const Event& event) {
       v_QuarkFractionE.clear();
       v_GluonAndQuarkFractionE.clear();
       v_OthersThenGluonAndQuarkFractionPt.clear();
+      v_OthersThenGluonAndQuarkFractionEta.clear();
+      v_OthersThenGluonAndQuarkFractionPhi.clear();
+      v_OthersThenGluonAndQuarkFractionE.clear();
       v_PartonFractionPt.clear();
       v_GluonMulti.clear();
       v_QuarkMulti.clear();
@@ -2203,6 +2212,9 @@ void analyze(const Event& event) {
       v_QuarkFractionE.clear();
       v_GluonAndQuarkFractionE.clear();
       v_OthersThenGluonAndQuarkFractionPt.clear();
+      v_OthersThenGluonAndQuarkFractionEta.clear();
+      v_OthersThenGluonAndQuarkFractionPhi.clear();
+      v_OthersThenGluonAndQuarkFractionE.clear();
       v_PartonFractionPt.clear();
       v_GluonMulti.clear();
       v_QuarkMulti.clear();
@@ -2257,6 +2269,9 @@ void analyze(const Event& event) {
       v_QuarkFractionE.clear();
       v_GluonAndQuarkFractionE.clear();
       v_OthersThenGluonAndQuarkFractionPt.clear();
+      v_OthersThenGluonAndQuarkFractionEta.clear();
+      v_OthersThenGluonAndQuarkFractionPhi.clear();
+      v_OthersThenGluonAndQuarkFractionE.clear();
       v_PartonFractionPt.clear();
       v_GluonMulti.clear();
       v_QuarkMulti.clear();
@@ -3172,6 +3187,9 @@ void analyze(const Event& event) {
       v_QuarkFractionE.clear();
       v_GluonAndQuarkFractionE.clear();
       v_OthersThenGluonAndQuarkFractionPt.clear();
+      v_OthersThenGluonAndQuarkFractionEta.clear();
+      v_OthersThenGluonAndQuarkFractionPhi.clear();
+      v_OthersThenGluonAndQuarkFractionE.clear();
       v_PartonFractionPt.clear();
       v_GluonMulti.clear();
       v_QuarkMulti.clear();
@@ -3436,6 +3454,9 @@ void analyze(const Event& event) {
     vector<double> v_QuarkFractionE;
     vector<double> v_GluonAndQuarkFractionE;
     vector<double> v_OthersThenGluonAndQuarkFractionPt;
+    vector<double> v_OthersThenGluonAndQuarkFractionEta;
+    vector<double> v_OthersThenGluonAndQuarkFractionPhi;
+    vector<double> v_OthersThenGluonAndQuarkFractionE;
     vector<double> v_PartonFractionPt;
     vector<double> v_GluonMulti;
     vector<double> v_QuarkMulti;

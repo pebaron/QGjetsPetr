@@ -22,6 +22,7 @@ cp /disk0/Herwig7/src/pythia8240/examples/${1}_${2} .
 
 cp /disk0/QGjetsPetr/Andrzej/Runs/Pythia/QGjets.cmnd .
 sed -i "s/Random:seed = 0/Random:seed = ${2}/" QGjets.cmnd
+printf "PhaseSpace:pTHatMin = 95." >> QGjets.cmnd 
 mkfifo ${1}_${2}.fifo
 
 ./${1}_${2} &

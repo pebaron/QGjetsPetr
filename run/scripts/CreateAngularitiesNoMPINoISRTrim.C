@@ -16,8 +16,8 @@ int CreateAngularitiesNoMPINoISRTrim(TString EnergyA = "900", TString EnergyB = 
         fileA = new TFile(TString::Format("/disk0/QGjetsPetr/Petr_Pythia/noMPI_noISR/trim_%s_hadr_pythia_nompi_noisr.root", EnergyA.Data() ), "read" );
         fileB = new TFile(TString::Format("/disk0/QGjetsPetr/Petr_Pythia/noMPI_noISR/trim_%s_hadr_pythia_nompi_noisr.root", EnergyB.Data() ), "read" );
     }else{
-        fileA = new TFile(TString::Format("/disk0/QGjetsPetr/run/files_test_noMPI_noISR/trim_%s_hadr.root", EnergyA.Data() ), "read" );
-        fileB = new TFile(TString::Format("/disk0/QGjetsPetr/run/files_test_noMPI_noISR/trim_%s_hadr.root", EnergyB.Data() ), "read" );
+        fileA = new TFile(TString::Format("/disk0/QGjetsPetr/run/files_test_noMPI_noISR_trim/%s_hadr_trim.root", EnergyA.Data() ), "read" );
+        fileB = new TFile(TString::Format("/disk0/QGjetsPetr/run/files_test_noMPI_noISR_trim/%s_hadr_trim.root", EnergyB.Data() ), "read" );
     }
 
     TTree * treeA = (TTree*)fileA->Get("MC_DIJET_PB_CH");
